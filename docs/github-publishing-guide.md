@@ -9,6 +9,8 @@ This guide sets up a workflow where coworkers edit Google Sheets and Google Driv
 
 Coworkers do not edit HTML, CSS, JavaScript, Python, or GitHub Actions.
 
+For day-to-day editing instructions, use `docs/content-editor-handbook.md`.
+
 ## What GitHub Publishes
 
 The GitHub Action publishes only:

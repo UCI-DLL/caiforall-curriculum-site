@@ -15,6 +15,7 @@ Create one workbook with these exact tab names and columns.
 - Current curriculum pages use consistent kebab-case filenames:
   `act-1.html`, `act-2.html`, `act-3.html`, `act-4.html`, and `scratch-basics.html`.
 - `status`: use `published` for live pages or `hidden` to omit a page from navigation/build output.
+- To add a real new curriculum page, use `status` = `published`, use a slug ending in `.html`, and add at least one matching row in `Units`.
 - `image_asset_path`: path to the image in the shared Drive image folder, such as `curricula/act2/cover.png`.
 - Optional legacy column: `cover_image_drive_url`. If present, a direct URL in this column overrides `image_asset_path`.
 
@@ -57,6 +58,8 @@ Create one workbook with these exact tab names and columns.
 - For upcoming cards, use a future `curriculum_id`, set `status_label` to `In development`, and leave `button_label` blank.
 - `image_asset_path`: path to the homepage card image in the shared Drive image folder, such as `homepage/act2-card.png`.
 - Optional legacy column: `image_drive_url`. If present, a direct URL in this column overrides `image_asset_path`.
+
+Important: `Curricula` controls curriculum pages and navigation. `Homepage Cards` controls what appears on the homepage grid. Adding a row to `Curricula` alone does not add a homepage card.
 
 ## Reviewer Workflow
 

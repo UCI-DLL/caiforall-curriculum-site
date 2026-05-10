@@ -52,7 +52,8 @@ jobs:
         run: |
           rm -rf dist
           mkdir -p dist
-          cp index.html about.html act-*.html scratch-basics.html robots.txt dist/
+          find . -maxdepth 1 -name "*.html" -exec cp {} dist/ \;
+          cp robots.txt dist/
           cp -R assets dist/assets
           if grep -R -n -E "wixstatic|webpackJsonp|ssrInfo|renderBodyTime" dist; then
             echo "Unexpected Wix artifact found in public site output."

@@ -19,11 +19,11 @@ CONTENT_DIR = ROOT / "content"
 DEFAULT_CONFIG_FILE = ROOT / "config" / "cms.env"
 
 SHEET_TABS = {
-    "curricula": ["curricula", "Curricula"],
+    "curricula": ["Curriculum Pages", "curricula", "Curricula"],
     "units": ["units", "Units"],
     "lessons": ["lessons", "Lessons"],
-    "lesson_resources": ["lesson_resources", "Lesson Resources"],
-    "teacher_resources": ["teacher_resources", "Teacher Resources"],
+    "lesson_resources": ["Lesson Links", "lesson_resources", "Lesson Resources"],
+    "teacher_resources": ["Teacher Resource Links", "teacher_resources", "Teacher Resources"],
     "homepage_cards": ["homepage_cards", "Homepage Cards"],
 }
 
@@ -78,6 +78,59 @@ NONEMPTY_COLUMNS = {
     "lesson_resources": ["curriculum_id", "unit_id", "lesson_id", "label", "url", "display_order"],
     "teacher_resources": ["curriculum_id", "label", "url", "display_order"],
     "homepage_cards": ["title", "description", "display_order"],
+}
+
+COLUMN_ALIASES = {
+    "curricula": {
+        "curriculum_id": "id",
+        "navigation_title": "title",
+        "page_heading": "heading",
+        "short_description": "brief_description",
+        "page_filename": "slug",
+        "publish_status": "status",
+        "image_path": "image_asset_path",
+        "order": "display_order",
+    },
+    "units": {
+        "unit_title": "title",
+        "unit_description": "description",
+        "learning_objectives": "objectives",
+        "image_path": "image_asset_path",
+        "order": "display_order",
+    },
+    "lessons": {
+        "lesson_title": "title",
+        "lesson_description": "description",
+        "lesson_duration": "duration",
+        "order": "display_order",
+    },
+    "lesson_resources": {
+        "link_label": "label",
+        "resource_label": "label",
+        "resource_url": "url",
+        "link_url": "url",
+        "link_type": "resource_type",
+        "resource_kind": "resource_type",
+        "order": "display_order",
+    },
+    "teacher_resources": {
+        "link_label": "label",
+        "resource_label": "label",
+        "resource_url": "url",
+        "link_url": "url",
+        "link_type": "resource_type",
+        "resource_kind": "resource_type",
+        "order": "display_order",
+    },
+    "homepage_cards": {
+        "card_title": "title",
+        "card_description": "description",
+        "badge_text": "status_label",
+        "status_badge": "status_label",
+        "card_button_label": "button_label",
+        "image_path": "image_asset_path",
+        "order": "display_order",
+    },
 }
 
 
@@ -172,6 +225,22 @@ def clean(value: str | None) -> str:
     return re.sub(r"\s+", " ", value or "").strip()
 
 
+def canonical_column(table: str, column: str) -> str:
+    normalized = clean(column).lower()
+    normalized = re.sub(r"[^a-z0-9]+", "_", normalized).strip("_")
+    return COLUMN_ALIASES.get(table, {}).get(normalized, normalized)
+
+
+def normalize_row(table: str, row: dict[str, str]) -> dict[str, str]:
+    normalized: dict[str, str] = {}
+    for key, value in row.items():
+        canonical = canonical_column(table, key)
+        value = clean(value)
+        if canonical not in normalized or value:
+            normalized[canonical] = value
+    return normalized
+
+
 def row_label(table: str, index: int) -> str:
     return f"{table} row {index + 2}"
 
@@ -251,7 +320,7 @@ def read_csv_tables(content_dir: Path = CONTENT_DIR) -> dict[str, list[dict[str,
         if not path.exists():
             raise ContentError(f"Missing content file: {path}")
         with path.open(newline="", encoding="utf-8") as handle:
-            tables[key] = [{k: clean(v) for k, v in row.items()} for row in csv.DictReader(handle)]
+            tables[key] = [normalize_row(key, row) for row in csv.DictReader(handle)]
     return tables
 
 
@@ -418,14 +487,14 @@ def drive_image_resolver() -> DriveImageResolver:
     return _DRIVE_IMAGE_RESOLVER
 
 
-def sheet_rows(values: list[list[str]]) -> list[dict[str, str]]:
+def sheet_rows(table: str, values: list[list[str]]) -> list[dict[str, str]]:
     if not values:
         return []
-    headers = [clean(value) for value in values[0]]
+    headers = [canonical_column(table, value) for value in values[0]]
     rows: list[dict[str, str]] = []
     for raw in values[1:]:
         padded = raw + [""] * (len(headers) - len(raw))
-        rows.append({header: clean(value) for header, value in zip(headers, padded)})
+        rows.append(normalize_row(table, {header: value for header, value in zip(headers, padded)}))
     return rows
 
 
@@ -443,7 +512,7 @@ def read_google_tables(sheet_id: str | None = None) -> dict[str, list[dict[str, 
             url = f"https://sheets.googleapis.com/v4/spreadsheets/{sheet_id}/values/{quote(tab_name)}"
             response = requests.get(url, headers={"Authorization": f"Bearer {token}"}, timeout=30)
             if response.status_code < 400:
-                tables[key] = sheet_rows(response.json().get("values", []))
+                tables[key] = sheet_rows(key, response.json().get("values", []))
                 break
             last_error = f"{response.status_code} {response.text}"
         else:
@@ -468,7 +537,20 @@ def validate_tables(tables: dict[str, list[dict[str, str]]]) -> list[str]:
                     errors.append(f"{row_label(table, index)}: '{column}' is required.")
             order_value(row, table, index, errors)
 
+    for index, row in enumerate(tables.get("curricula", [])):
+        status = clean(row.get("status")).lower()
+        slug = clean(row.get("slug"))
+        if status not in {"published", "hidden"}:
+            errors.append(f"{row_label('curricula', index)}: status must be 'published' or 'hidden'.")
+        if slug and not slug.endswith(".html"):
+            errors.append(f"{row_label('curricula', index)}: slug must be an .html filename, such as 'test-remote.html'.")
+
     curricula = {row.get("id", "") for row in tables.get("curricula", [])}
+    published_curricula = {
+        row.get("id", "")
+        for row in tables.get("curricula", [])
+        if clean(row.get("status")).lower() == "published"
+    }
     units = {(row.get("curriculum_id", ""), row.get("unit_id", "")) for row in tables.get("units", [])}
     lesson_keys = {(row.get("curriculum_id", ""), row.get("unit_id", ""), row.get("lesson_id", "")) for row in tables.get("lessons", [])}
 
@@ -496,6 +578,19 @@ def validate_tables(tables: dict[str, list[dict[str, str]]]) -> list[str]:
         for index, row in enumerate(tables.get(table, [])):
             if row.get("url") and not looks_like_url(row["url"]):
                 errors.append(f"{row_label(table, index)}: url must start with http:// or https://.")
+
+    for index, row in enumerate(tables.get("homepage_cards", [])):
+        curriculum_id = clean(row.get("curriculum_id"))
+        button_label = clean(row.get("button_label"))
+        status_label = clean(row.get("status_label"))
+        if button_label and curriculum_id not in published_curricula:
+            errors.append(
+                f"{row_label('homepage_cards', index)}: button_label requires curriculum_id '{curriculum_id}' to be a published curriculum."
+            )
+        if curriculum_id and curriculum_id not in curricula and not status_label:
+            errors.append(
+                f"{row_label('homepage_cards', index)}: unknown curriculum_id '{curriculum_id}' needs a status_label such as 'In development'."
+            )
 
     for table in ["curricula", "units", "homepage_cards"]:
         column = "cover_image_drive_url" if table == "curricula" else "image_drive_url"
