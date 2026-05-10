@@ -1,0 +1,7 @@
+# Local CMS credentials/config.
+config/cms.env
+*.json
+
+# Local caches.
+__pycache__/
+.DS_Store

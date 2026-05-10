@@ -1,0 +1,75 @@
+name: Publish Website
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Validate, build, and publish
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    env:
+      CONTENT_SOURCE: google
+      GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+      GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+      GOOGLE_DRIVE_IMAGE_ROOT_ID: ${{ secrets.GOOGLE_DRIVE_IMAGE_ROOT_ID }}
+      SITE_LOGO_ASSET_PATH: site/logo.png
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: python -m pip install --upgrade requests
+
+      - name: Validate content rows
+        run: python tools/validate_content.py
+
+      - name: Validate Drive image paths
+        run: python tools/check_drive_image_paths.py
+
+      - name: Build static website
+        run: python tools/build_refined_site.py
+
+      - name: Prepare public site artifact
+        run: |
+          rm -rf dist
+          mkdir -p dist
+          cp index.html about.html act-*.html scratch-basics.html robots.txt dist/
+          cp -R assets dist/assets
+          if grep -R -n -E "wixstatic|webpackJsonp|ssrInfo|renderBodyTime" dist; then
+            echo "Unexpected Wix artifact found in public site output."
+            exit 1
+          fi
+          test -f dist/assets/site.css
+          test -f dist/assets/site.js
+          test -d dist/assets/generated-images
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

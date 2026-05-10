@@ -1,0 +1,35 @@
+local_file,source_url,sheet_tab,row_hint,sheet_column,suggested_drive_folder,content_type
+site/logo.png,,site,navigation logo,image_asset_path,CAIforALL Curriculum Images/site,image/png
+homepage/act1-card.jpg,,homepage_cards,act1,image_asset_path,CAIforALL Curriculum Images/homepage,image/jpeg
+homepage/act2-card.png,,homepage_cards,act2,image_asset_path,CAIforALL Curriculum Images/homepage,image/png
+homepage/act3-card.png,,homepage_cards,act3,image_asset_path,CAIforALL Curriculum Images/homepage,image/png
+homepage/act4-card.jpg,,homepage_cards,act4,image_asset_path,CAIforALL Curriculum Images/homepage,image/jpeg
+homepage/scratch-card.jpg,,homepage_cards,scratch,image_asset_path,CAIforALL Curriculum Images/homepage,image/jpeg
+curricula/act1/cover.jpg,,curricula,act1,image_asset_path,CAIforALL Curriculum Images/curricula/act1,image/jpeg
+curricula/act1/units/unit-1-unit-0-setting-up-scratch-accounts.jpg,,units,act1 / unit-1,image_asset_path,CAIforALL Curriculum Images/curricula/act1/units,image/jpeg
+curricula/act1/units/unit-2-unit-1-computer-science-scratch-basics.png,,units,act1 / unit-2,image_asset_path,CAIforALL Curriculum Images/curricula/act1/units,image/png
+curricula/act1/units/unit-3-unit-2-sequence.png,,units,act1 / unit-3,image_asset_path,CAIforALL Curriculum Images/curricula/act1/units,image/png
+curricula/act1/units/unit-4-unit-3-events.png,,units,act1 / unit-4,image_asset_path,CAIforALL Curriculum Images/curricula/act1/units,image/png
+curricula/act1/units/unit-5-unit-4-loop.png,,units,act1 / unit-5,image_asset_path,CAIforALL Curriculum Images/curricula/act1/units,image/png
+curricula/act2/cover.png,,curricula,act2,image_asset_path,CAIforALL Curriculum Images/curricula/act2,image/png
+curricula/act2/units/unit-1-unit-1-animation.png,,units,act2 / unit-1,image_asset_path,CAIforALL Curriculum Images/curricula/act2/units,image/png
+curricula/act2/units/unit-2-unit-2-loops-with-conditions.png,,units,act2 / unit-2,image_asset_path,CAIforALL Curriculum Images/curricula/act2/units,image/png
+curricula/act2/units/unit-3-unit-3-parallelism-and-synchronization.png,,units,act2 / unit-3,image_asset_path,CAIforALL Curriculum Images/curricula/act2/units,image/png
+curricula/act2/units/unit-4-unit-4-variables.png,,units,act2 / unit-4,image_asset_path,CAIforALL Curriculum Images/curricula/act2/units,image/png
+curricula/act3/cover.png,,curricula,act3,image_asset_path,CAIforALL Curriculum Images/curricula/act3,image/png
+curricula/act3/units/unit-1-unit-1-learning-scratch.png,,units,act3 / unit-1,image_asset_path,CAIforALL Curriculum Images/curricula/act3/units,image/png
+curricula/act3/units/unit-2-unit-2-modeling-an-ecosystem.png,,units,act3 / unit-2,image_asset_path,CAIforALL Curriculum Images/curricula/act3/units,image/png
+curricula/act3/units/unit-3-unit-3-variables-conditionals-and-functions.png,,units,act3 / unit-3,image_asset_path,CAIforALL Curriculum Images/curricula/act3/units,image/png
+curricula/act3/units/unit-4-unit-4-visualizing-data.png,,units,act3 / unit-4,image_asset_path,CAIforALL Curriculum Images/curricula/act3/units,image/png
+curricula/act3/units/unit-5-unit-5-communicating-science.png,,units,act3 / unit-5,image_asset_path,CAIforALL Curriculum Images/curricula/act3/units,image/png
+curricula/act4/cover.jpg,,curricula,act4,image_asset_path,CAIforALL Curriculum Images/curricula/act4,image/jpeg
+curricula/act4/units/unit-1-unit-0-prerequisites.jpg,,units,act4 / unit-1,image_asset_path,CAIforALL Curriculum Images/curricula/act4/units,image/jpeg
+curricula/act4/units/unit-2-unit-1-generative-ai-tools.jpg,,units,act4 / unit-2,image_asset_path,CAIforALL Curriculum Images/curricula/act4/units,image/jpeg
+curricula/act4/units/unit-3-unit-2-basic-generative-ai-apps.png,,units,act4 / unit-3,image_asset_path,CAIforALL Curriculum Images/curricula/act4/units,image/png
+curricula/act4/units/unit-4-unit-3-voice-and-vision-ai-apps.png,,units,act4 / unit-4,image_asset_path,CAIforALL Curriculum Images/curricula/act4/units,image/png
+curricula/act4/units/unit-5-unit-4-advanced-generative-ai-apps.jpg,,units,act4 / unit-5,image_asset_path,CAIforALL Curriculum Images/curricula/act4/units,image/jpeg
+curricula/act4/units/unit-6-unit-5-advanced-ai-topics.jpg,,units,act4 / unit-6,image_asset_path,CAIforALL Curriculum Images/curricula/act4/units,image/jpeg
+curricula/scratch/cover.jpg,,curricula,scratch,image_asset_path,CAIforALL Curriculum Images/curricula/scratch,image/jpeg
+curricula/scratch/units/unit-1-overview.jpg,,units,scratch / unit-1,image_asset_path,CAIforALL Curriculum Images/curricula/scratch/units,image/jpeg
+curricula/scratch/units/unit-2-scratch-projects-and-lessons.png,,units,scratch / unit-2,image_asset_path,CAIforALL Curriculum Images/curricula/scratch/units,image/png
+curricula/scratch/units/unit-3-change-maker-project.png,,units,scratch / unit-3,image_asset_path,CAIforALL Curriculum Images/curricula/scratch/units,image/png
