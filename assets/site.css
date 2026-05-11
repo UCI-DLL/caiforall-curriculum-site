@@ -701,8 +701,7 @@ img {
 }
 
 .home-hero .page-shell {
-  min-height: 520px;
-  padding: 64px 0 54px;
+  padding: 54px 0 60px;
 }
 
 .home-hero h1 {
@@ -717,6 +716,10 @@ img {
 .home-hero p {
   max-width: 690px;
   font-size: 20px;
+}
+
+.home-hero p:last-child {
+  margin-bottom: 0;
 }
 
 .home-hero a {
