@@ -1,0 +1,219 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&family=Poppins:wght@600;700;800&display=swap");
+
+:root {
+  --blue: #0A64A5;
+  --sky: #B7D8EA;
+  --gold: #FFCA35;
+  --butter: #FFEB94;
+  --cream: #FFFDF8;
+  --mist: #EEF4F8;
+  --navy: #1F2A44;
+  --ink: #1F2A44;
+  --muted: #5e6878;
+  --line: rgba(31, 42, 68, .18);
+}
+
+@page {
+  size: Letter;
+  margin: 0.58in;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--cream);
+}
+
+body {
+  margin: 0 auto;
+  max-width: 980px;
+  color: var(--ink);
+  background: var(--cream);
+  font: 13.5px/1.58 "Open Sans", Arial, sans-serif;
+}
+
+h1,
+h2,
+h3,
+strong,
+th {
+  font-family: "Poppins", "Open Sans", Arial, sans-serif;
+}
+
+h1 {
+  margin: 0 0 18px;
+  padding: 26px 0 18px;
+  border-top: 7px solid var(--gold);
+  border-bottom: 2px solid var(--sky);
+  color: var(--navy);
+  font-size: 38px;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+h1::after {
+  content: "A practical guide for editing Google Sheets, managing Drive images, and publishing website updates.";
+  display: block;
+  max-width: 720px;
+  margin-top: 10px;
+  color: var(--muted);
+  font: 600 14px/1.45 "Open Sans", Arial, sans-serif;
+}
+
+h2 {
+  break-after: avoid;
+  margin: 28px 0 12px;
+  padding-left: 12px;
+  border-left: 7px solid var(--gold);
+  color: var(--navy);
+  font-size: 21px;
+  line-height: 1.25;
+}
+
+h3 {
+  break-after: avoid;
+  margin: 22px 0 10px;
+  color: var(--blue);
+  font-size: 16px;
+}
+
+p {
+  margin: 8px 0 12px;
+}
+
+a {
+  color: var(--blue);
+  font-weight: 700;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+code {
+  padding: 1px 5px;
+  border-radius: 5px;
+  color: var(--navy);
+  background: var(--mist);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .94em;
+}
+
+pre {
+  margin: 10px 0 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--blue);
+  border-radius: 8px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  background: white;
+}
+
+pre code {
+  padding: 0;
+  background: transparent;
+}
+
+table {
+  width: 100%;
+  margin: 12px 0 20px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+}
+
+th,
+td {
+  padding: 8px 10px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  text-align: left;
+}
+
+th:last-child,
+td:last-child {
+  border-right: 0;
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+th {
+  color: var(--navy);
+  background: var(--mist);
+  font-size: 12px;
+}
+
+td {
+  font-size: 10.8px;
+}
+
+ul,
+ol {
+  margin: 8px 0 16px 23px;
+  padding: 0;
+}
+
+li {
+  margin: 5px 0;
+}
+
+blockquote {
+  margin: 12px 0;
+  padding: 10px 14px;
+  border-left: 6px solid var(--gold);
+  border-radius: 8px;
+  background: white;
+}
+
+img {
+  display: block;
+  width: 100%;
+  max-width: 920px;
+  height: auto;
+  margin: 12px auto 20px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: white;
+}
+
+img.screenshot-small {
+  width: auto;
+  max-width: 240px;
+  margin-left: 0;
+}
+
+img.screenshot-medium {
+  width: auto;
+  max-width: 430px;
+  margin-left: 0;
+}
+
+hr {
+  height: 1px;
+  margin: 24px 0;
+  border: 0;
+  background: var(--line);
+}
+
+@media print {
+  body {
+    max-width: none;
+  }
+
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  img,
+  pre {
+    break-inside: avoid;
+  }
+}

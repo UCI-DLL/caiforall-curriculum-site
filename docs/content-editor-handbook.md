@@ -1,8 +1,8 @@
 # Content Editor Handbook
 
-This handbook explains the required protocol for updating the Computing and AI for All Curriculum website through Google Sheets and Google Drive.
+This handbook explains how to update the Computing and AI for All Curriculum website with Google Sheets, Google Drive images, and GitHub Actions.
 
-The editor is responsible for both content edits and publishing. After editing the Sheet or image folder, the editor runs the GitHub workflow and checks the public website.
+The editor makes the content change, runs the publishing workflow, and checks the public website. The website layout, colors, and interaction design are controlled by the codebase. Editors only change structured content and image files.
 
 ```text
 Edit Google Sheet and/or Google Drive images
@@ -10,9 +10,21 @@ Run GitHub Actions > Publish Website > Run workflow
 Check the public website
 ```
 
+## Core Editing Rules
+
+These rules keep the website predictable. Follow them for every content update, even for small edits.
+
+1. Edit only the existing Sheet tabs listed in this handbook.
+2. Do not rename Sheet tabs.
+3. Do not add new tabs for routine edits.
+4. Do not paste Google Drive share links into image fields.
+5. Use image file paths such as `homepage/act2-card.png`.
+6. Run `Publish Website` after editing content or images.
+7. Check the public website after the workflow finishes.
+
 ## Required Sheet Tabs
 
-The Google Sheet must use these exact tab names. Do not rename them.
+The Google Sheet tab names must exactly match the CSV file names used by the website. The website reads these exact names.
 
 | Tab name | Purpose |
 |---|---|
@@ -23,32 +35,40 @@ The Google Sheet must use these exact tab names. Do not rename them.
 | `teacher_resources` | Creates curriculum-level resource buttons below the unit browser. |
 | `homepage_cards` | Creates cards on the homepage. |
 
-Do not add extra tabs for routine edits. New units, lessons, links, homepage cards, and images must be added as new rows in the existing tabs.
+New units, lessons, links, homepage cards, and images are added as new rows in the existing tabs.
 
-A new tab is allowed only when creating a new curriculum data area outside the current standard structure, and that requires a code update before the website can read it. For normal new curriculum pages, do not add a new tab; add rows to `curricula`, `units`, `lessons`, `lesson_resources`, `teacher_resources`, and `homepage_cards` as needed.
+A new tab is allowed only when the website needs a new type of structured content that does not fit the current tabs. That requires a code update before the website can read it. A new curriculum page does not need a new tab; it needs new rows in the existing tabs.
 
 ## Image File Paths
 
-Images are stored in the shared Google Drive image folder. The Sheet must use file paths relative to that image folder, not Google Drive share links.
+Images are stored in the shared Google Drive image folder. The Sheet uses file paths relative to that folder.
+
+For example, if an image is placed in the Drive folder like this:
+
+```text
+drive-image-library/homepage/data-stories-card.png
+```
+
+the Sheet value must be:
+
+```text
+homepage/data-stories-card.png
+```
+
+Common image path examples:
 
 | Image use | Example `image_asset_path` |
 |---|---|
 | Homepage card image | `homepage/act2-card.png` |
 | Curriculum cover image | `curricula/act2/cover.png` |
-| Unit image | `curricula/act2/units/unit-1-unit-1-animation.png` |
+| Unit image | `curricula/act2/units/unit-1-animation.png` |
 | Shared temporary image | `homepage/smile.webp` |
 
-A file path must match the folder name, file name, and extension exactly. For example, if the file in Drive is named `act2-card-2026.png`, the Sheet value must be:
-
-```text
-homepage/act2-card-2026.png
-```
-
-Do not paste a full Google Drive URL into `image_asset_path`.
+The path must match the folder name, file name, and extension exactly. `act2-card.png`, `act2-card.PNG`, and `act2-card-2026.png` are different file names.
 
 ## Tab Protocol: `curricula`
 
-One row in `curricula` creates one curriculum page.
+Use `curricula` for curriculum pages. One row creates one page and one navigation entry.
 
 Required columns:
 
@@ -72,14 +92,14 @@ Example row:
 
 Rules:
 
-- `status` must be exactly `published` or `hidden`.
-- `slug` must end in `.html`.
-- A published curriculum page needs at least one matching row in `units`.
-- A row in `curricula` does not create a homepage card. Use `homepage_cards` for homepage cards.
+1. `status` must be exactly `published` or `hidden`.
+2. `slug` must end in `.html`.
+3. A published curriculum page needs at least one matching row in `units`.
+4. A row in `curricula` does not create a homepage card. Use `homepage_cards` for homepage cards.
 
 ## Tab Protocol: `units`
 
-One row in `units` creates one unit tab/block inside a curriculum page.
+Use `units` for the unit browser inside each curriculum page. One row creates one unit tab and one unit content block.
 
 Required columns:
 
@@ -101,13 +121,14 @@ Example row:
 
 Rules:
 
-- `curriculum_id` must already exist in `curricula`.
-- `unit_id` must be unique within the curriculum.
-- Use new rows for new units. Do not create a separate tab for a new unit.
+1. `curriculum_id` must already exist in `curricula`.
+2. `unit_id` must be unique within the curriculum.
+3. Use new rows for new units.
+4. Do not create a separate tab for a new unit.
 
 ## Tab Protocol: `lessons`
 
-One row in `lessons` creates one lesson accordion inside a unit.
+Use `lessons` for lesson accordions inside each unit. One row creates one lesson.
 
 Required columns:
 
@@ -130,13 +151,14 @@ Example row:
 
 Rules:
 
-- `objective_bullets` uses `|` between bullet items.
-- Keep each objective concise and action-focused.
-- Use new rows for new lessons. Do not create a separate tab for a new lesson.
+1. `objective_bullets` uses `|` between bullet items.
+2. Keep each objective concise and action-focused.
+3. Use new rows for new lessons.
+4. Do not create a separate tab for a new lesson.
 
 ## Tab Protocol: `lesson_resources`
 
-One row in `lesson_resources` creates one resource button.
+Use `lesson_resources` for buttons connected to units and lessons. One row creates one resource button.
 
 Required columns:
 
@@ -164,14 +186,14 @@ Example unit-level row:
 
 Rules:
 
-- Use `lesson_id = __unit__` for resources shown near the unit description.
-- Use a real `lesson_id` for resources shown inside a lesson accordion.
-- Resource labels containing `Español`, `Espanol`, or `Spanish` display on a separate resource row.
-- `url` must begin with `http://` or `https://`.
+1. Use `lesson_id = __unit__` for resources shown near the unit description.
+2. Use a real `lesson_id` for resources shown inside a lesson accordion.
+3. Resource labels containing `Español`, `Espanol`, or `Spanish` display on a separate resource row.
+4. `url` must begin with `http://` or `https://`.
 
 ## Tab Protocol: `teacher_resources`
 
-One row in `teacher_resources` creates one curriculum-level resource button below the unit browser.
+Use `teacher_resources` for curriculum-level links below the unit browser.
 
 Required columns:
 
@@ -191,11 +213,12 @@ Example row:
 
 Rules:
 
-- Do not add `CreatiCode Platform`, `Give Feedback`, `Give Feedback Form`, or `Feedback Form` to this tab. These labels are filtered from the website output.
+1. Do not add `CreatiCode Platform`, `Give Feedback`, `Give Feedback Form`, or `Feedback Form` to this tab.
+2. These labels are filtered from the website output.
 
 ## Tab Protocol: `homepage_cards`
 
-One row in `homepage_cards` creates one homepage card.
+Use `homepage_cards` for homepage curriculum cards. A homepage card is separate from a curriculum page.
 
 Required columns:
 
@@ -220,136 +243,217 @@ Example upcoming card:
 
 | curriculum_id | title | description | card_bullet_points | status_label | image_asset_path | button_label | display_order |
 |---|---|---|---|---|---|---|---:|
+| `agentic-coding` | `Agentic Coding` | `A future pathway for students to design, test, and reflect on AI-assisted coding projects.` | `Coming soon|AI literacy|Project-based learning` | `In development` | `homepage/agentic-coding-card.png` |  | `8` |
 
 Rules:
 
-- A live card with `button_label` requires a matching curriculum row with `status = published`.
-- An upcoming card must use `status_label` and leave `button_label` empty.
-- A row in `homepage_cards` does not create a curriculum page. Use `curricula`, `units`, and `lessons` for pages.
+1. A live card with `button_label` requires a matching curriculum row with `status = published`.
+2. An upcoming card must use `status_label` and leave `button_label` empty.
+3. A row in `homepage_cards` does not create a curriculum page. Use `curricula`, `units`, and `lessons` for pages.
 
-## Workflow: Change a Curriculum Page Description
+## Workflow Examples
 
-| Step | Action |
-|---:|---|
-| 1 | Open the `curricula` tab. |
-| 2 | Find the row by `id`. Example: `act2`. |
-| 3 | Edit `brief_description`. |
-| 4 | Run `Publish Website` in GitHub Actions. |
-| 5 | Open the public curriculum page and confirm the hero description changed. |
+The following workflows are examples of common edits. Use them as models when changing real website content.
 
-Note: This does not change the homepage card. To change the homepage card, edit `homepage_cards.description`.
+Each workflow ends with the same publishing step: run `Publish Website` in GitHub Actions and check the public website.
 
-## Workflow: Change a Homepage Card
+## Workflow Example: Change a Curriculum Page Description
 
-| Step | Action |
-|---:|---|
-| 1 | Open the `homepage_cards` tab. |
-| 2 | Find the row by `curriculum_id`. Example: `act2`. |
-| 3 | Edit `description` or `card_bullet_points`. |
-| 4 | Run `Publish Website` in GitHub Actions. |
-| 5 | Open the homepage and confirm the card changed. |
+Use this workflow when the text at the top of a curriculum page needs to change.
 
-## Workflow: Replace an Image
+1. Open the `curricula` tab.
+2. Find the row for the curriculum. Use the `id` column to identify the row. For example, Act 2 uses `act2`.
+3. Edit the `brief_description` cell. Keep this text short because it appears in the page header.
+4. Run `Publish Website` in GitHub Actions.
+5. Open the public curriculum page and confirm the header description changed.
 
-| Step | Action |
-|---:|---|
-| 1 | Open the shared Google Drive image folder. |
-| 2 | Upload the new image into the correct folder. Example folder: `homepage/`. |
-| 3 | Use a clear filename. Example: `data-stories-card.png`. |
-| 4 | Open the relevant Sheet tab. Example: `homepage_cards`. |
-| 5 | Update `image_asset_path`. Example: `homepage/data-stories-card.png`. |
-| 6 | Run `Publish Website` in GitHub Actions. |
-| 7 | Confirm the image changed on the public website. |
+This workflow changes only the curriculum page. It does not change the homepage card. To change the homepage card, edit `homepage_cards.description`.
+
+## Workflow Example: Change a Homepage Card
+
+Use this workflow when a card on the homepage needs new text, bullets, image, or button text.
+
+1. Open the `homepage_cards` tab.
+2. Find the row by `curriculum_id`. For example, Act 2 uses `act2`.
+3. Edit `description` for the short paragraph shown on the card.
+4. Edit `card_bullet_points` if the bullet list should change. Separate bullets with `|`.
+5. Run `Publish Website` in GitHub Actions.
+6. Open the homepage and confirm the card changed.
+
+The homepage card and curriculum page are controlled by different tabs. The homepage uses `homepage_cards`; the curriculum page uses `curricula`, `units`, `lessons`, and resource tabs.
+
+## Workflow Example: Replace an Image
+
+Use this workflow when the same content should remain but the image should change.
+
+1. Open the shared Google Drive image folder.
+2. Upload the new image into the correct folder. Example folder path: `drive-image-library/homepage/`.
+3. Use a clear filename. Example: `data-stories-card.png`.
+4. Open the relevant Sheet tab. For a homepage image, use `homepage_cards`. For a unit image, use `units`. For a curriculum cover image, use `curricula`.
+5. Update `image_asset_path` with the relative path. Example: `homepage/data-stories-card.png`.
+6. Run `Publish Website` in GitHub Actions.
+7. Confirm the image changed on the public website.
 
 The GitHub workflow checks that the image path exists. If the path is wrong, publishing fails with an image asset error.
 
-## Workflow: Add a New Published Curriculum
+## Workflow Example: Add a New Published Curriculum
 
-Use the existing tabs. Do not create a new tab.
+Use this workflow when a new curriculum is ready to appear as a live page on the public website.
 
-### Step 1: Add a row in `curricula`
+Do not create a new Sheet tab. Add rows to the existing tabs.
 
-| id | title | heading | grade_label | brief_description | slug | status | display_order | image_asset_path |
-|---|---|---|---|---|---|---|---:|---|
-| `data-stories` | `Data Stories` | `Data Stories Curriculum` | `Middle School` | `Students investigate data, build visual explanations, and communicate findings through interactive projects.` | `data-stories.html` | `published` | `6` | `curricula/data-stories/cover.png` |
+First, add the curriculum page row in `curricula`. Fill the row with these example values:
 
-### Step 2: Add a row in `units`
+```text
+id: data-stories
+title: Data Stories
+heading: Data Stories Curriculum
+grade_label: Middle School
+brief_description: Students investigate data, build visual explanations, and communicate findings through interactive projects.
+slug: data-stories.html
+status: published
+display_order: 6
+image_asset_path: curricula/data-stories/cover.png
+```
 
-| curriculum_id | unit_id | title | description | objectives | display_order | image_asset_path |
-|---|---|---|---|---|---:|---|
-| `data-stories` | `unit-1` | `Unit 1: Asking Questions With Data` | `Students learn how to ask investigable questions, inspect a dataset, and identify patterns worth explaining.` | `Define a data question\nIdentify variables\nDescribe an initial pattern` | `1` | `curricula/data-stories/units/unit-1-asking-questions.png` |
+Next, add at least one unit row in `units`. Fill the row with these example values:
 
-### Step 3: Add a row in `lessons`
+```text
+curriculum_id: data-stories
+unit_id: unit-1
+title: Unit 1: Asking Questions With Data
+description: Students learn how to ask investigable questions, inspect a dataset, and identify patterns worth explaining.
+objectives: Define a data question\nIdentify variables\nDescribe an initial pattern
+display_order: 1
+image_asset_path: curricula/data-stories/units/unit-1-asking-questions.png
+```
 
-| curriculum_id | unit_id | lesson_id | title | description | objective_bullets | duration | display_order |
-|---|---|---|---|---|---|---|---:|
-| `data-stories` | `unit-1` | `lesson-1` | `Lesson 1.1: What Makes a Good Data Question?` | `Students compare sample questions and revise them into questions that can be investigated with data.` | `Compare question types|Revise a data question|Explain what makes a question investigable` | `45 minutes` | `1` |
+Then, add at least one lesson row in `lessons`. Fill the row with these example values:
 
-### Step 4: Add a row in `homepage_cards`
+```text
+curriculum_id: data-stories
+unit_id: unit-1
+lesson_id: lesson-1
+title: Lesson 1.1: What Makes a Good Data Question?
+description: Students compare sample questions and revise them into questions that can be investigated with data.
+objective_bullets: Compare question types|Revise a data question|Explain what makes a question investigable
+duration: 45 minutes
+display_order: 1
+```
 
-| curriculum_id | title | description | card_bullet_points | status_label | image_asset_path | button_label | display_order |
-|---|---|---|---|---|---|---|---:|
-| `data-stories` | `Data Stories` | `A middle-school pathway for data investigation, visual explanation, and interactive storytelling.` | `Middle School|Data literacy|Interactive storytelling` |  | `homepage/data-stories-card.png` | `Open Data Stories` | `6` |
+After the page has content, add a homepage card in `homepage_cards`. Fill the row with these example values:
 
-### Step 5: Add resources as needed
+```text
+curriculum_id: data-stories
+title: Data Stories
+description: A middle-school pathway for data investigation, visual explanation, and interactive storytelling.
+card_bullet_points: Middle School|Data literacy|Interactive storytelling
+status_label:
+image_asset_path: homepage/data-stories-card.png
+button_label: Open Data Stories
+display_order: 6
+```
 
-Add rows to `lesson_resources` and `teacher_resources` as needed. These rows are optional, but most published curricula should include teacher-facing resources.
+Add rows to `lesson_resources` and `teacher_resources` when the curriculum has resource links. Then run `Publish Website`.
 
-Expected result:
+After publishing, confirm these results:
 
-- `data-stories.html` is generated.
-- The homepage shows a `Data Stories` card.
-- The card opens the new page.
-- The navigation dropdown includes `Data Stories`.
+1. `data-stories.html` is generated.
+2. The homepage shows a `Data Stories` card.
+3. The card opens the new page.
+4. The navigation dropdown includes `Data Stories`.
 
-## Workflow: Add a Unit to an Existing Curriculum
+## Workflow Example: Add a Unit to an Existing Curriculum
 
-| Step | Action |
-|---:|---|
-| 1 | Open the `units` tab. |
-| 2 | Add a row with the existing `curriculum_id`. Example: `act2`. |
-| 3 | Use a new `unit_id`. Example: `unit-5`. |
-| 4 | Add at least one matching row in `lessons`. |
-| 5 | Run `Publish Website` in GitHub Actions. |
-| 6 | Open the curriculum page and confirm the new unit tab appears. |
+Use this workflow when a curriculum page needs another unit tab.
 
-Example `units` row:
+1. Open the `units` tab.
+2. Add a row using an existing `curriculum_id`. For example, Act 2 uses `act2`.
+3. Create a new `unit_id`. For example, if the page already has `unit-1` through `unit-4`, use `unit-5`.
+4. Fill in `title`, `description`, `objectives`, `display_order`, and `image_asset_path`.
+5. Add at least one matching row in `lessons`.
+6. Run `Publish Website` in GitHub Actions.
+7. Open the curriculum page and confirm the new unit tab appears.
 
-| curriculum_id | unit_id | title | description | objectives | display_order | image_asset_path |
-|---|---|---|---|---|---:|---|
-| `act2` | `unit-5` | `Unit 5: Extension Project` | `Students extend their Scratch design work with an independent project.` | `Plan a project\nBuild and test an interactive Scratch artifact` | `5` | `homepage/smile.webp` |
+Example `units` row values:
 
-## Workflow: Add a Lesson Resource Link
+```text
+curriculum_id: act2
+unit_id: unit-5
+title: Unit 5: Extension Project
+description: Students extend their Scratch design work with an independent project.
+objectives: Plan a project\nBuild and test an interactive Scratch artifact
+display_order: 5
+image_asset_path: homepage/smile.webp
+```
 
-| Step | Action |
-|---:|---|
-| 1 | Open the `lesson_resources` tab. |
-| 2 | Add a row using an existing `curriculum_id`, `unit_id`, and `lesson_id`. |
-| 3 | Run `Publish Website` in GitHub Actions. |
-| 4 | Open the lesson accordion and confirm the new button appears. |
+## Workflow Example: Add a Lesson Resource Link
 
-Example row:
+Use this workflow when a lesson needs a new button such as `Slide Deck`, `Lesson Plan`, or `Student Workbook`.
 
-| curriculum_id | unit_id | lesson_id | label | url | resource_type | display_order |
-|---|---|---|---|---|---|---:|
-| `act2` | `unit-1` | `lesson-1` | `Slide Deck` | `https://docs.google.com/presentation/d/example/edit` | `Lesson Resource` | `2` |
+1. Open the `lesson_resources` tab.
+2. Add a row using an existing `curriculum_id`, `unit_id`, and `lesson_id`.
+3. Fill in `label`, `url`, `resource_type`, and `display_order`.
+4. Run `Publish Website` in GitHub Actions.
+5. Open the lesson accordion and confirm the new button appears.
 
-## Publishing Protocol
+Example `lesson_resources` row values:
 
-| Step | Action |
-|---:|---|
-| 1 | Open the GitHub repository. |
-| 2 | Click `Actions`. |
-| 3 | Click `Publish Website` in the left sidebar. |
-| 4 | Click `Run workflow`. |
-| 5 | Select branch `main`. |
-| 6 | Click `Run workflow`. |
-| 7 | Wait for the green check. |
-| 8 | Open the public website and confirm the update. |
+```text
+curriculum_id: act2
+unit_id: unit-1
+lesson_id: lesson-1
+label: Slide Deck
+url: https://docs.google.com/presentation/d/example/edit
+resource_type: Lesson Resource
+display_order: 2
+```
+
+## Publishing With GitHub Actions
+
+GitHub Actions publishes the website from the latest Google Sheet and Google Drive image folder. Run it after every content update that should appear on the public website.
+
+Use the steps below each time you want the Sheet and Drive changes to become visible on the public website.
+
+1. Open the GitHub repository page.
+
+The repository page shows the website files and the main GitHub navigation bar. This is the starting place for publishing.
+
+![GitHub repository page for the curriculum website.](../handbook_image/action_1.png)
+
+2. Click `Actions` in the top navigation bar.
+
+The `Actions` tab is where GitHub keeps the publishing workflow.
+
+<img src="../handbook_image/action_2.png" alt="Actions tab in the GitHub navigation bar." class="screenshot-small" />
+
+3. Select `Publish Website` in the left sidebar.
+
+This page lists the previous publishing runs. Use the workflow named `Publish Website`; this is the workflow connected to the public website.
+
+![GitHub Actions page with Publish Website selected.](../handbook_image/action_3.png)
+
+4. Click `Run workflow`.
+
+The button is on the right side of the `Publish Website` workflow page. This starts a new publishing run from the current repository and the latest connected content.
+
+![GitHub Actions Publish Website page showing the Run workflow button.](../handbook_image/action_4.png)
+
+5. Keep the branch set to `main`, then click the green `Run workflow` button.
+
+The branch must be `main`. After clicking the green button, GitHub starts validating the Sheet, building the pages, copying images, and publishing the site.
+
+<img src="../handbook_image/action_5.png" alt="Run workflow menu with branch main and green Run workflow button." class="screenshot-medium" />
+
+6. Wait for the workflow to finish.
+
+A successful run shows a green check. After the green check appears, open the public website and confirm the content or image changed.
 
 Do not use `Re-run all jobs` to publish new edits. Re-running an old job republishes the old commit from that old run and can make the public website look unchanged or outdated.
 
 ## Common Validation Errors
+
+If publishing fails, open the failed GitHub Actions run and read the error message. The message usually points to the tab and row that need to be fixed.
 
 | Error | Required fix |
 |---|---|

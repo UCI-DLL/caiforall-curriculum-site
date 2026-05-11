@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Content Editor Handbook</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="handbook-theme.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Content Editor Handbook</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#content-editor-handbook"
+id="toc-content-editor-handbook">Content Editor Handbook</a>
+<ul>
+<li><a href="#core-editing-rules" id="toc-core-editing-rules">Core
+Editing Rules</a></li>
+<li><a href="#required-sheet-tabs" id="toc-required-sheet-tabs">Required
+Sheet Tabs</a></li>
+<li><a href="#image-file-paths" id="toc-image-file-paths">Image File
+Paths</a></li>
+<li><a href="#tab-protocol-curricula"
+id="toc-tab-protocol-curricula">Tab Protocol:
+<code>curricula</code></a></li>
+<li><a href="#tab-protocol-units" id="toc-tab-protocol-units">Tab
+Protocol: <code>units</code></a></li>
+<li><a href="#tab-protocol-lessons" id="toc-tab-protocol-lessons">Tab
+Protocol: <code>lessons</code></a></li>
+<li><a href="#tab-protocol-lesson_resources"
+id="toc-tab-protocol-lesson_resources">Tab Protocol:
+<code>lesson_resources</code></a></li>
+<li><a href="#tab-protocol-teacher_resources"
+id="toc-tab-protocol-teacher_resources">Tab Protocol:
+<code>teacher_resources</code></a></li>
+<li><a href="#tab-protocol-homepage_cards"
+id="toc-tab-protocol-homepage_cards">Tab Protocol:
+<code>homepage_cards</code></a></li>
+<li><a href="#workflow-examples" id="toc-workflow-examples">Workflow
+Examples</a></li>
+<li><a href="#workflow-example-change-a-curriculum-page-description"
+id="toc-workflow-example-change-a-curriculum-page-description">Workflow
+Example: Change a Curriculum Page Description</a></li>
+<li><a href="#workflow-example-change-a-homepage-card"
+id="toc-workflow-example-change-a-homepage-card">Workflow Example:
+Change a Homepage Card</a></li>
+<li><a href="#workflow-example-replace-an-image"
+id="toc-workflow-example-replace-an-image">Workflow Example: Replace an
+Image</a></li>
+<li><a href="#workflow-example-add-a-new-published-curriculum"
+id="toc-workflow-example-add-a-new-published-curriculum">Workflow
+Example: Add a New Published Curriculum</a></li>
+<li><a href="#workflow-example-add-a-unit-to-an-existing-curriculum"
+id="toc-workflow-example-add-a-unit-to-an-existing-curriculum">Workflow
+Example: Add a Unit to an Existing Curriculum</a></li>
+<li><a href="#workflow-example-add-a-lesson-resource-link"
+id="toc-workflow-example-add-a-lesson-resource-link">Workflow Example:
+Add a Lesson Resource Link</a></li>
+<li><a href="#publishing-with-github-actions"
+id="toc-publishing-with-github-actions">Publishing With GitHub
+Actions</a></li>
+<li><a href="#common-validation-errors"
+id="toc-common-validation-errors">Common Validation Errors</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="content-editor-handbook">Content Editor Handbook</h1>
+<p>This handbook explains how to update the Computing and AI for All
+Curriculum website with Google Sheets, Google Drive images, and GitHub
+Actions.</p>
+<p>The editor makes the content change, runs the publishing workflow,
+and checks the public website. The website layout, colors, and
+interaction design are controlled by the codebase. Editors only change
+structured content and image files.</p>
+<pre class="text"><code>Edit Google Sheet and/or Google Drive images
+Run GitHub Actions &gt; Publish Website &gt; Run workflow
+Check the public website</code></pre>
+<h2 id="core-editing-rules">Core Editing Rules</h2>
+<p>These rules keep the website predictable. Follow them for every
+content update, even for small edits.</p>
+<ol type="1">
+<li>Edit only the existing Sheet tabs listed in this handbook.</li>
+<li>Do not rename Sheet tabs.</li>
+<li>Do not add new tabs for routine edits.</li>
+<li>Do not paste Google Drive share links into image fields.</li>
+<li>Use image file paths such as
+<code>homepage/act2-card.png</code>.</li>
+<li>Run <code>Publish Website</code> after editing content or
+images.</li>
+<li>Check the public website after the workflow finishes.</li>
+</ol>
+<h2 id="required-sheet-tabs">Required Sheet Tabs</h2>
+<p>The Google Sheet tab names must exactly match the CSV file names used
+by the website. The website reads these exact names.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Tab name</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curricula</code></td>
+<td>Creates curriculum pages and curriculum navigation entries.</td>
+</tr>
+<tr>
+<td><code>units</code></td>
+<td>Creates unit tabs/blocks inside curriculum pages.</td>
+</tr>
+<tr>
+<td><code>lessons</code></td>
+<td>Creates lesson accordions inside units.</td>
+</tr>
+<tr>
+<td><code>lesson_resources</code></td>
+<td>Creates lesson-level and unit-level resource buttons.</td>
+</tr>
+<tr>
+<td><code>teacher_resources</code></td>
+<td>Creates curriculum-level resource buttons below the unit
+browser.</td>
+</tr>
+<tr>
+<td><code>homepage_cards</code></td>
+<td>Creates cards on the homepage.</td>
+</tr>
+</tbody>
+</table>
+<p>New units, lessons, links, homepage cards, and images are added as
+new rows in the existing tabs.</p>
+<p>A new tab is allowed only when the website needs a new type of
+structured content that does not fit the current tabs. That requires a
+code update before the website can read it. A new curriculum page does
+not need a new tab; it needs new rows in the existing tabs.</p>
+<h2 id="image-file-paths">Image File Paths</h2>
+<p>Images are stored in the shared Google Drive image folder. The Sheet
+uses file paths relative to that folder.</p>
+<p>For example, if an image is placed in the Drive folder like this:</p>
+<pre class="text"><code>drive-image-library/homepage/data-stories-card.png</code></pre>
+<p>the Sheet value must be:</p>
+<pre class="text"><code>homepage/data-stories-card.png</code></pre>
+<p>Common image path examples:</p>
+<table>
+<thead>
+<tr>
+<th>Image use</th>
+<th>Example <code>image_asset_path</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Homepage card image</td>
+<td><code>homepage/act2-card.png</code></td>
+</tr>
+<tr>
+<td>Curriculum cover image</td>
+<td><code>curricula/act2/cover.png</code></td>
+</tr>
+<tr>
+<td>Unit image</td>
+<td><code>curricula/act2/units/unit-1-animation.png</code></td>
+</tr>
+<tr>
+<td>Shared temporary image</td>
+<td><code>homepage/smile.webp</code></td>
+</tr>
+</tbody>
+</table>
+<p>The path must match the folder name, file name, and extension
+exactly. <code>act2-card.png</code>, <code>act2-card.PNG</code>, and
+<code>act2-card-2026.png</code> are different file names.</p>
+<h2 id="tab-protocol-curricula">Tab Protocol:
+<code>curricula</code></h2>
+<p>Use <code>curricula</code> for curriculum pages. One row creates one
+page and one navigation entry.</p>
+<p>Required columns:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Column</th>
+<th>Required value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>Stable unique curriculum id, lowercase, no spaces. Example:
+<code>act2</code>.</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>Navigation/card title. Example:
+<code>ACT 2: Scratch Design</code>.</td>
+</tr>
+<tr>
+<td><code>heading</code></td>
+<td>Page hero heading. Example: <code>ACT 2: Scratch Design</code>.</td>
+</tr>
+<tr>
+<td><code>grade_label</code></td>
+<td>Short grade/category label. Example: <code>5th Grade</code>.</td>
+</tr>
+<tr>
+<td><code>brief_description</code></td>
+<td>Short page description shown in the curriculum hero.</td>
+</tr>
+<tr>
+<td><code>slug</code></td>
+<td>Page filename ending in <code>.html</code>. Example:
+<code>act-2.html</code>.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Use only <code>published</code> or <code>hidden</code>.</td>
+</tr>
+<tr>
+<td><code>display_order</code></td>
+<td>Number used for sorting.</td>
+</tr>
+<tr>
+<td><code>image_asset_path</code></td>
+<td>Image file path in the shared Drive image folder.</td>
+</tr>
+</tbody>
+</table>
+<p>Example row:</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 14%" />
+<col style="width: 10%" />
+</colgroup>
+<thead>
+<tr>
+<th>id</th>
+<th>title</th>
+<th>heading</th>
+<th>grade_label</th>
+<th>brief_description</th>
+<th>slug</th>
+<th>status</th>
+<th style="text-align: right;">display_order</th>
+<th>image_asset_path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-stories</code></td>
+<td><code>Data Stories</code></td>
+<td><code>Data Stories Curriculum</code></td>
+<td><code>Middle School</code></td>
+<td><code>Students investigate data, build visual explanations, and communicate findings through interactive projects.</code></td>
+<td><code>data-stories.html</code></td>
+<td><code>published</code></td>
+<td style="text-align: right;"><code>6</code></td>
+<td><code>curricula/data-stories/cover.png</code></td>
+</tr>
+</tbody>
+</table>
+<p>Rules:</p>
+<ol type="1">
+<li><code>status</code> must be exactly <code>published</code> or
+<code>hidden</code>.</li>
+<li><code>slug</code> must end in <code>.html</code>.</li>
+<li>A published curriculum page needs at least one matching row in
+<code>units</code>.</li>
+<li>A row in <code>curricula</code> does not create a homepage card. Use
+<code>homepage_cards</code> for homepage cards.</li>
+</ol>
+<h2 id="tab-protocol-units">Tab Protocol: <code>units</code></h2>
+<p>Use <code>units</code> for the unit browser inside each curriculum
+page. One row creates one unit tab and one unit content block.</p>
+<p>Required columns:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Column</th>
+<th>Required value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curriculum_id</code></td>
+<td>Must match <code>curricula.id</code>.</td>
+</tr>
+<tr>
+<td><code>unit_id</code></td>
+<td>Stable unit id inside that curriculum. Example:
+<code>unit-1</code>.</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>Unit title shown on the page.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Unit overview text.</td>
+</tr>
+<tr>
+<td><code>objectives</code></td>
+<td>Source/reference learning objectives.</td>
+</tr>
+<tr>
+<td><code>display_order</code></td>
+<td>Number used for sorting within the curriculum.</td>
+</tr>
+<tr>
+<td><code>image_asset_path</code></td>
+<td>Unit image file path.</td>
+</tr>
+</tbody>
+</table>
+<p>Example row:</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 18%" />
+<col style="width: 13%" />
+</colgroup>
+<thead>
+<tr>
+<th>curriculum_id</th>
+<th>unit_id</th>
+<th>title</th>
+<th>description</th>
+<th>objectives</th>
+<th style="text-align: right;">display_order</th>
+<th>image_asset_path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-stories</code></td>
+<td><code>unit-1</code></td>
+<td><code>Unit 1: Asking Questions With Data</code></td>
+<td><code>Students learn how to ask investigable questions, inspect a dataset, and identify patterns worth explaining.</code></td>
+<td><code>Define a data question\nIdentify variables\nDescribe an initial pattern</code></td>
+<td style="text-align: right;"><code>1</code></td>
+<td><code>curricula/data-stories/units/unit-1-asking-questions.png</code></td>
+</tr>
+</tbody>
+</table>
+<p>Rules:</p>
+<ol type="1">
+<li><code>curriculum_id</code> must already exist in
+<code>curricula</code>.</li>
+<li><code>unit_id</code> must be unique within the curriculum.</li>
+<li>Use new rows for new units.</li>
+<li>Do not create a separate tab for a new unit.</li>
+</ol>
+<h2 id="tab-protocol-lessons">Tab Protocol: <code>lessons</code></h2>
+<p>Use <code>lessons</code> for lesson accordions inside each unit. One
+row creates one lesson.</p>
+<p>Required columns:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Column</th>
+<th>Required value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curriculum_id</code></td>
+<td>Must match <code>curricula.id</code>.</td>
+</tr>
+<tr>
+<td><code>unit_id</code></td>
+<td>Must match <code>units.unit_id</code> for that curriculum.</td>
+</tr>
+<tr>
+<td><code>lesson_id</code></td>
+<td>Stable lesson id inside that unit. Example:
+<code>lesson-1</code>.</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>Lesson title shown in the accordion.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Lesson description stored in the Sheet.</td>
+</tr>
+<tr>
+<td><code>objective_bullets</code></td>
+<td>Objectives shown in the lesson accordion, separated with
+<code>|</code>.</td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td>Lesson duration. Example: <code>50 minutes</code>.</td>
+</tr>
+<tr>
+<td><code>display_order</code></td>
+<td>Number used for sorting within the unit.</td>
+</tr>
+</tbody>
+</table>
+<p>Example row:</p>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th>curriculum_id</th>
+<th>unit_id</th>
+<th>lesson_id</th>
+<th>title</th>
+<th>description</th>
+<th>objective_bullets</th>
+<th>duration</th>
+<th style="text-align: right;">display_order</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-stories</code></td>
+<td><code>unit-1</code></td>
+<td><code>lesson-1</code></td>
+<td><code>Lesson 1.1: What Makes a Good Data Question?</code></td>
+<td><code>Students compare sample questions and revise them into questions that can be investigated with data.</code></td>
+<td><code>Compare question types|Revise a data question|Explain what makes a question investigable</code></td>
+<td><code>45 minutes</code></td>
+<td style="text-align: right;"><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<p>Rules:</p>
+<ol type="1">
+<li><code>objective_bullets</code> uses <code>|</code> between bullet
+items.</li>
+<li>Keep each objective concise and action-focused.</li>
+<li>Use new rows for new lessons.</li>
+<li>Do not create a separate tab for a new lesson.</li>
+</ol>
+<h2 id="tab-protocol-lesson_resources">Tab Protocol:
+<code>lesson_resources</code></h2>
+<p>Use <code>lesson_resources</code> for buttons connected to units and
+lessons. One row creates one resource button.</p>
+<p>Required columns:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Column</th>
+<th>Required value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curriculum_id</code></td>
+<td>Must match <code>curricula.id</code>.</td>
+</tr>
+<tr>
+<td><code>unit_id</code></td>
+<td>Must match a unit in that curriculum.</td>
+</tr>
+<tr>
+<td><code>lesson_id</code></td>
+<td>Use a lesson id, or use <code>__unit__</code> for a unit-level
+resource.</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>Button text.</td>
+</tr>
+<tr>
+<td><code>url</code></td>
+<td>Full resource URL beginning with <code>http://</code> or
+<code>https://</code>.</td>
+</tr>
+<tr>
+<td><code>resource_type</code></td>
+<td>Resource category. Example: <code>Lesson Resource</code>.</td>
+</tr>
+<tr>
+<td><code>display_order</code></td>
+<td>Number used for sorting.</td>
+</tr>
+</tbody>
+</table>
+<p>Example lesson-level row:</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr>
+<th>curriculum_id</th>
+<th>unit_id</th>
+<th>lesson_id</th>
+<th>label</th>
+<th>url</th>
+<th>resource_type</th>
+<th style="text-align: right;">display_order</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-stories</code></td>
+<td><code>unit-1</code></td>
+<td><code>lesson-1</code></td>
+<td><code>Lesson Plan</code></td>
+<td><code>https://docs.google.com/document/d/example/edit</code></td>
+<td><code>Lesson Resource</code></td>
+<td style="text-align: right;"><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<p>Example unit-level row:</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr>
+<th>curriculum_id</th>
+<th>unit_id</th>
+<th>lesson_id</th>
+<th>label</th>
+<th>url</th>
+<th>resource_type</th>
+<th style="text-align: right;">display_order</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-stories</code></td>
+<td><code>unit-1</code></td>
+<td><code>__unit__</code></td>
+<td><code>Unit Overview</code></td>
+<td><code>https://docs.google.com/document/d/example/edit</code></td>
+<td><code>Unit Resource</code></td>
+<td style="text-align: right;"><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<p>Rules:</p>
+<ol type="1">
+<li>Use <code>lesson_id = __unit__</code> for resources shown near the
+unit description.</li>
+<li>Use a real <code>lesson_id</code> for resources shown inside a
+lesson accordion.</li>
+<li>Resource labels containing <code>Español</code>,
+<code>Espanol</code>, or <code>Spanish</code> display on a separate
+resource row.</li>
+<li><code>url</code> must begin with <code>http://</code> or
+<code>https://</code>.</li>
+</ol>
+<h2 id="tab-protocol-teacher_resources">Tab Protocol:
+<code>teacher_resources</code></h2>
+<p>Use <code>teacher_resources</code> for curriculum-level links below
+the unit browser.</p>
+<p>Required columns:</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Required value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curriculum_id</code></td>
+<td>Must match <code>curricula.id</code>.</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>Button text.</td>
+</tr>
+<tr>
+<td><code>url</code></td>
+<td>Full resource URL beginning with <code>http://</code> or
+<code>https://</code>.</td>
+</tr>
+<tr>
+<td><code>resource_type</code></td>
+<td>Resource category. Example: <code>Resource</code>.</td>
+</tr>
+<tr>
+<td><code>display_order</code></td>
+<td>Number used for sorting.</td>
+</tr>
+</tbody>
+</table>
+<p>Example row:</p>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>curriculum_id</th>
+<th>label</th>
+<th>url</th>
+<th>resource_type</th>
+<th style="text-align: right;">display_order</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-stories</code></td>
+<td><code>Lesson Plans</code></td>
+<td><code>https://drive.google.com/drive/folders/example</code></td>
+<td><code>Resource</code></td>
+<td style="text-align: right;"><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<p>Rules:</p>
+<ol type="1">
+<li>Do not add <code>CreatiCode Platform</code>,
+<code>Give Feedback</code>, <code>Give Feedback Form</code>, or
+<code>Feedback Form</code> to this tab.</li>
+<li>These labels are filtered from the website output.</li>
+</ol>
+<h2 id="tab-protocol-homepage_cards">Tab Protocol:
+<code>homepage_cards</code></h2>
+<p>Use <code>homepage_cards</code> for homepage curriculum cards. A
+homepage card is separate from a curriculum page.</p>
+<p>Required columns:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Column</th>
+<th>Required value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curriculum_id</code></td>
+<td>Matches <code>curricula.id</code> for published cards, or a future
+id for upcoming cards.</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>Card title shown on the homepage.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Card description shown on the homepage.</td>
+</tr>
+<tr>
+<td><code>card_bullet_points</code></td>
+<td>Optional bullets separated with <code>|</code>.</td>
+</tr>
+<tr>
+<td><code>status_label</code></td>
+<td>Empty for live cards. Use text like <code>In development</code> for
+upcoming cards.</td>
+</tr>
+<tr>
+<td><code>image_asset_path</code></td>
+<td>Homepage image file path.</td>
+</tr>
+<tr>
+<td><code>button_label</code></td>
+<td>Button text for live cards. Empty for upcoming cards.</td>
+</tr>
+<tr>
+<td><code>display_order</code></td>
+<td>Number used for sorting.</td>
+</tr>
+</tbody>
+</table>
+<p>Example live card:</p>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th>curriculum_id</th>
+<th>title</th>
+<th>description</th>
+<th>card_bullet_points</th>
+<th>status_label</th>
+<th>image_asset_path</th>
+<th>button_label</th>
+<th style="text-align: right;">display_order</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-stories</code></td>
+<td><code>Data Stories</code></td>
+<td><code>A middle-school pathway for data investigation, visual explanation, and interactive storytelling.</code></td>
+<td><code>Middle School|Data literacy|Interactive storytelling</code></td>
+<td></td>
+<td><code>homepage/data-stories-card.png</code></td>
+<td><code>Open Data Stories</code></td>
+<td style="text-align: right;"><code>6</code></td>
+</tr>
+</tbody>
+</table>
+<p>Example upcoming card:</p>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr>
+<th>curriculum_id</th>
+<th>title</th>
+<th>description</th>
+<th>card_bullet_points</th>
+<th>status_label</th>
+<th>image_asset_path</th>
+<th>button_label</th>
+<th style="text-align: right;">display_order</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>agentic-coding</code></td>
+<td><code>Agentic Coding</code></td>
+<td><code>A future pathway for students to design, test, and reflect on AI-assisted coding projects.</code></td>
+<td><code>Coming soon|AI literacy|Project-based learning</code></td>
+<td><code>In development</code></td>
+<td><code>homepage/agentic-coding-card.png</code></td>
+<td></td>
+<td style="text-align: right;"><code>8</code></td>
+</tr>
+</tbody>
+</table>
+<p>Rules:</p>
+<ol type="1">
+<li>A live card with <code>button_label</code> requires a matching
+curriculum row with <code>status = published</code>.</li>
+<li>An upcoming card must use <code>status_label</code> and leave
+<code>button_label</code> empty.</li>
+<li>A row in <code>homepage_cards</code> does not create a curriculum
+page. Use <code>curricula</code>, <code>units</code>, and
+<code>lessons</code> for pages.</li>
+</ol>
+<h2 id="workflow-examples">Workflow Examples</h2>
+<p>The following workflows are examples of common edits. Use them as
+models when changing real website content.</p>
+<p>Each workflow ends with the same publishing step: run
+<code>Publish Website</code> in GitHub Actions and check the public
+website.</p>
+<h2 id="workflow-example-change-a-curriculum-page-description">Workflow
+Example: Change a Curriculum Page Description</h2>
+<p>Use this workflow when the text at the top of a curriculum page needs
+to change.</p>
+<ol type="1">
+<li>Open the <code>curricula</code> tab.</li>
+<li>Find the row for the curriculum. Use the <code>id</code> column to
+identify the row. For example, Act 2 uses <code>act2</code>.</li>
+<li>Edit the <code>brief_description</code> cell. Keep this text short
+because it appears in the page header.</li>
+<li>Run <code>Publish Website</code> in GitHub Actions.</li>
+<li>Open the public curriculum page and confirm the header description
+changed.</li>
+</ol>
+<p>This workflow changes only the curriculum page. It does not change
+the homepage card. To change the homepage card, edit
+<code>homepage_cards.description</code>.</p>
+<h2 id="workflow-example-change-a-homepage-card">Workflow Example:
+Change a Homepage Card</h2>
+<p>Use this workflow when a card on the homepage needs new text,
+bullets, image, or button text.</p>
+<ol type="1">
+<li>Open the <code>homepage_cards</code> tab.</li>
+<li>Find the row by <code>curriculum_id</code>. For example, Act 2 uses
+<code>act2</code>.</li>
+<li>Edit <code>description</code> for the short paragraph shown on the
+card.</li>
+<li>Edit <code>card_bullet_points</code> if the bullet list should
+change. Separate bullets with <code>|</code>.</li>
+<li>Run <code>Publish Website</code> in GitHub Actions.</li>
+<li>Open the homepage and confirm the card changed.</li>
+</ol>
+<p>The homepage card and curriculum page are controlled by different
+tabs. The homepage uses <code>homepage_cards</code>; the curriculum page
+uses <code>curricula</code>, <code>units</code>, <code>lessons</code>,
+and resource tabs.</p>
+<h2 id="workflow-example-replace-an-image">Workflow Example: Replace an
+Image</h2>
+<p>Use this workflow when the same content should remain but the image
+should change.</p>
+<ol type="1">
+<li>Open the shared Google Drive image folder.</li>
+<li>Upload the new image into the correct folder. Example folder path:
+<code>drive-image-library/homepage/</code>.</li>
+<li>Use a clear filename. Example:
+<code>data-stories-card.png</code>.</li>
+<li>Open the relevant Sheet tab. For a homepage image, use
+<code>homepage_cards</code>. For a unit image, use <code>units</code>.
+For a curriculum cover image, use <code>curricula</code>.</li>
+<li>Update <code>image_asset_path</code> with the relative path.
+Example: <code>homepage/data-stories-card.png</code>.</li>
+<li>Run <code>Publish Website</code> in GitHub Actions.</li>
+<li>Confirm the image changed on the public website.</li>
+</ol>
+<p>The GitHub workflow checks that the image path exists. If the path is
+wrong, publishing fails with an image asset error.</p>
+<h2 id="workflow-example-add-a-new-published-curriculum">Workflow
+Example: Add a New Published Curriculum</h2>
+<p>Use this workflow when a new curriculum is ready to appear as a live
+page on the public website.</p>
+<p>Do not create a new Sheet tab. Add rows to the existing tabs.</p>
+<p>First, add the curriculum page row in <code>curricula</code>. Fill
+the row with these example values:</p>
+<pre class="text"><code>id: data-stories
+title: Data Stories
+heading: Data Stories Curriculum
+grade_label: Middle School
+brief_description: Students investigate data, build visual explanations, and communicate findings through interactive projects.
+slug: data-stories.html
+status: published
+display_order: 6
+image_asset_path: curricula/data-stories/cover.png</code></pre>
+<p>Next, add at least one unit row in <code>units</code>. Fill the row
+with these example values:</p>
+<pre class="text"><code>curriculum_id: data-stories
+unit_id: unit-1
+title: Unit 1: Asking Questions With Data
+description: Students learn how to ask investigable questions, inspect a dataset, and identify patterns worth explaining.
+objectives: Define a data question\nIdentify variables\nDescribe an initial pattern
+display_order: 1
+image_asset_path: curricula/data-stories/units/unit-1-asking-questions.png</code></pre>
+<p>Then, add at least one lesson row in <code>lessons</code>. Fill the
+row with these example values:</p>
+<pre class="text"><code>curriculum_id: data-stories
+unit_id: unit-1
+lesson_id: lesson-1
+title: Lesson 1.1: What Makes a Good Data Question?
+description: Students compare sample questions and revise them into questions that can be investigated with data.
+objective_bullets: Compare question types|Revise a data question|Explain what makes a question investigable
+duration: 45 minutes
+display_order: 1</code></pre>
+<p>After the page has content, add a homepage card in
+<code>homepage_cards</code>. Fill the row with these example values:</p>
+<pre class="text"><code>curriculum_id: data-stories
+title: Data Stories
+description: A middle-school pathway for data investigation, visual explanation, and interactive storytelling.
+card_bullet_points: Middle School|Data literacy|Interactive storytelling
+status_label:
+image_asset_path: homepage/data-stories-card.png
+button_label: Open Data Stories
+display_order: 6</code></pre>
+<p>Add rows to <code>lesson_resources</code> and
+<code>teacher_resources</code> when the curriculum has resource links.
+Then run <code>Publish Website</code>.</p>
+<p>After publishing, confirm these results:</p>
+<ol type="1">
+<li><code>data-stories.html</code> is generated.</li>
+<li>The homepage shows a <code>Data Stories</code> card.</li>
+<li>The card opens the new page.</li>
+<li>The navigation dropdown includes <code>Data Stories</code>.</li>
+</ol>
+<h2 id="workflow-example-add-a-unit-to-an-existing-curriculum">Workflow
+Example: Add a Unit to an Existing Curriculum</h2>
+<p>Use this workflow when a curriculum page needs another unit tab.</p>
+<ol type="1">
+<li>Open the <code>units</code> tab.</li>
+<li>Add a row using an existing <code>curriculum_id</code>. For example,
+Act 2 uses <code>act2</code>.</li>
+<li>Create a new <code>unit_id</code>. For example, if the page already
+has <code>unit-1</code> through <code>unit-4</code>, use
+<code>unit-5</code>.</li>
+<li>Fill in <code>title</code>, <code>description</code>,
+<code>objectives</code>, <code>display_order</code>, and
+<code>image_asset_path</code>.</li>
+<li>Add at least one matching row in <code>lessons</code>.</li>
+<li>Run <code>Publish Website</code> in GitHub Actions.</li>
+<li>Open the curriculum page and confirm the new unit tab appears.</li>
+</ol>
+<p>Example <code>units</code> row values:</p>
+<pre class="text"><code>curriculum_id: act2
+unit_id: unit-5
+title: Unit 5: Extension Project
+description: Students extend their Scratch design work with an independent project.
+objectives: Plan a project\nBuild and test an interactive Scratch artifact
+display_order: 5
+image_asset_path: homepage/smile.webp</code></pre>
+<h2 id="workflow-example-add-a-lesson-resource-link">Workflow Example:
+Add a Lesson Resource Link</h2>
+<p>Use this workflow when a lesson needs a new button such as
+<code>Slide Deck</code>, <code>Lesson Plan</code>, or
+<code>Student Workbook</code>.</p>
+<ol type="1">
+<li>Open the <code>lesson_resources</code> tab.</li>
+<li>Add a row using an existing <code>curriculum_id</code>,
+<code>unit_id</code>, and <code>lesson_id</code>.</li>
+<li>Fill in <code>label</code>, <code>url</code>,
+<code>resource_type</code>, and <code>display_order</code>.</li>
+<li>Run <code>Publish Website</code> in GitHub Actions.</li>
+<li>Open the lesson accordion and confirm the new button appears.</li>
+</ol>
+<p>Example <code>lesson_resources</code> row values:</p>
+<pre class="text"><code>curriculum_id: act2
+unit_id: unit-1
+lesson_id: lesson-1
+label: Slide Deck
+url: https://docs.google.com/presentation/d/example/edit
+resource_type: Lesson Resource
+display_order: 2</code></pre>
+<h2 id="publishing-with-github-actions">Publishing With GitHub
+Actions</h2>
+<p>GitHub Actions publishes the website from the latest Google Sheet and
+Google Drive image folder. Run it after every content update that should
+appear on the public website.</p>
+<p>Use the steps below each time you want the Sheet and Drive changes to
+become visible on the public website.</p>
+<ol type="1">
+<li>Open the GitHub repository page.</li>
+</ol>
+<p>The repository page shows the website files and the main GitHub
+navigation bar. This is the starting place for publishing.</p>
+<figure>
+<img src="../handbook_image/action_1.png"
+alt="GitHub repository page for the curriculum website." />
+<figcaption aria-hidden="true">GitHub repository page for the curriculum
+website.</figcaption>
+</figure>
+<ol start="2" type="1">
+<li>Click <code>Actions</code> in the top navigation bar.</li>
+</ol>
+<p>The <code>Actions</code> tab is where GitHub keeps the publishing
+workflow.</p>
+<p><img src="../handbook_image/action_2.png" alt="Actions tab in the GitHub navigation bar." class="screenshot-small" /></p>
+<ol start="3" type="1">
+<li>Select <code>Publish Website</code> in the left sidebar.</li>
+</ol>
+<p>This page lists the previous publishing runs. Use the workflow named
+<code>Publish Website</code>; this is the workflow connected to the
+public website.</p>
+<figure>
+<img src="../handbook_image/action_3.png"
+alt="GitHub Actions page with Publish Website selected." />
+<figcaption aria-hidden="true">GitHub Actions page with Publish Website
+selected.</figcaption>
+</figure>
+<ol start="4" type="1">
+<li>Click <code>Run workflow</code>.</li>
+</ol>
+<p>The button is on the right side of the <code>Publish Website</code>
+workflow page. This starts a new publishing run from the current
+repository and the latest connected content.</p>
+<figure>
+<img src="../handbook_image/action_4.png"
+alt="GitHub Actions Publish Website page showing the Run workflow button." />
+<figcaption aria-hidden="true">GitHub Actions Publish Website page
+showing the Run workflow button.</figcaption>
+</figure>
+<ol start="5" type="1">
+<li>Keep the branch set to <code>main</code>, then click the green
+<code>Run workflow</code> button.</li>
+</ol>
+<p>The branch must be <code>main</code>. After clicking the green
+button, GitHub starts validating the Sheet, building the pages, copying
+images, and publishing the site.</p>
+<p><img src="../handbook_image/action_5.png" alt="Run workflow menu with branch main and green Run workflow button." class="screenshot-medium" /></p>
+<ol start="6" type="1">
+<li>Wait for the workflow to finish.</li>
+</ol>
+<p>A successful run shows a green check. After the green check appears,
+open the public website and confirm the content or image changed.</p>
+<p>Do not use <code>Re-run all jobs</code> to publish new edits.
+Re-running an old job republishes the old commit from that old run and
+can make the public website look unchanged or outdated.</p>
+<h2 id="common-validation-errors">Common Validation Errors</h2>
+<p>If publishing fails, open the failed GitHub Actions run and read the
+error message. The message usually points to the tab and row that need
+to be fixed.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Error</th>
+<th>Required fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status must be 'published' or 'hidden'</code></td>
+<td>Fix <code>curricula.status</code>.</td>
+</tr>
+<tr>
+<td><code>slug must be an .html filename</code></td>
+<td>Fix <code>curricula.slug</code>. Example:
+<code>data-stories.html</code>.</td>
+</tr>
+<tr>
+<td><code>unit_id does not exist</code></td>
+<td>The row references a unit that does not exist in
+<code>units</code>.</td>
+</tr>
+<tr>
+<td><code>lesson_id does not exist</code></td>
+<td>The row references a lesson that does not exist in
+<code>lessons</code>.</td>
+</tr>
+<tr>
+<td><code>button_label requires curriculum_id to be a published curriculum</code></td>
+<td>The homepage card has a button, but the curriculum page is missing
+or not published.</td>
+</tr>
+<tr>
+<td><code>Could not find image asset</code></td>
+<td>The <code>image_asset_path</code> does not match a file in the
+shared Drive image folder. Check spelling and extension.</td>
+</tr>
+<tr>
+<td>Website still looks old after workflow succeeds</td>
+<td>Confirm that <code>Run workflow</code> was used on branch
+<code>main</code>, not <code>Re-run all jobs</code> on an old run. Then
+hard-refresh the browser with <code>Cmd + Shift + R</code>.</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
