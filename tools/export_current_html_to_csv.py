@@ -14,7 +14,7 @@ PAGES = [
     ("act1", "act-1.html", "ACT 1", "published", 1),
     ("act2", "act-2.html", "ACT 2", "published", 2),
     ("act3", "act-3.html", "ACT 3", "published", 3),
-    ("act4", "act-4.html", "ACT 4", "published", 4),
+    ("act4", "act-4.html", "Coding+AI", "published", 4),
     ("scratch", "scratch-basics.html", "Scratch Basics", "published", 5),
 ]
 
@@ -28,16 +28,6 @@ HOMEPAGE_EXTRA = [
         "image_drive_url": "",
         "button_label": "",
         "display_order": "6",
-    },
-    {
-        "curriculum_id": "agentic_coding",
-        "title": "Agentic Coding",
-        "description": "An upcoming pathway for students to design, guide, and evaluate AI-supported coding workflows.",
-        "bullet_points": "",
-        "status_label": "In development",
-        "image_drive_url": "",
-        "button_label": "",
-        "display_order": "7",
     },
 ]
 

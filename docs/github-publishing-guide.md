@@ -102,6 +102,8 @@ The Google Cloud project must have these APIs enabled:
 5. Click **Run workflow**.
 6. Wait for the workflow to finish.
 
+Important: use **Run workflow** to publish the latest version from the `main` branch. Do not use **Re-run all jobs** on an old workflow run when you want the newest code or newest publishing workflow. Re-running an old job uses the old commit from that run, so it can successfully publish an outdated website.
+
 If the workflow succeeds, GitHub shows the public Pages URL in the deployment summary.
 
 If the workflow fails, open the failed step. The error usually says which Sheet row, resource URL, or Drive image path needs fixing.
@@ -112,12 +114,38 @@ On another laptop, the reviewer only needs GitHub access.
 
 1. Open the repository in a browser.
 2. Go to **Actions**.
-3. Run **Publish Website**.
+3. Click **Publish Website**, then click **Run workflow**.
 4. Check the result:
    - Green check: website published.
    - Red X: click the failed step and read the error.
 
 No local Python, terminal, or service account file is needed on that laptop.
+
+## Troubleshooting
+
+### The workflow succeeded, but the website still looks old
+
+Check whether you clicked **Re-run all jobs** on an old run. GitHub re-runs the exact old commit, not the newest `main` branch.
+
+Fix:
+
+1. Go to **Actions**.
+2. Click **Publish Website** in the left sidebar.
+3. Click **Run workflow**.
+4. Select branch `main`.
+5. Start a new run.
+
+Open the new run and confirm the commit shown at the top is the latest commit. In the build log, confirm it uses the expected current output, such as the current page count.
+
+### The page still looks old after a correct new run
+
+Hard-refresh the browser:
+
+```text
+Cmd + Shift + R
+```
+
+Also make sure you are opening the Pages URL from the latest deployment summary. If using a custom domain, confirm the domain points to GitHub Pages rather than an old server.
 
 ## Local Preview
 

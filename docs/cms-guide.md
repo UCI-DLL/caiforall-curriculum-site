@@ -1,4 +1,4 @@
-# Computing & AI for All Curriculum CMS Guide
+# Computing and AI for All Curriculum CMS Guide
 
 The site is now generated from structured curriculum content instead of hand-edited HTML. Coworkers should edit the Google Sheets workbook; reviewers validate and rebuild the static site.
 
@@ -49,7 +49,7 @@ Create one workbook with these exact tab names and columns.
 - Links with `Español`, `Espanol`, or `Spanish` in the label render on their own resource line.
 - `url` must start with `http://` or `https://`.
 
-### Resources
+### Teacher Resources
 
 `curriculum_id,label,url,resource_type,display_order`
 

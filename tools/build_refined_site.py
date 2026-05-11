@@ -15,10 +15,11 @@ GENERATED_IMAGE_DIR = ROOT / "assets" / "generated-images"
 
 FALLBACK_LOGO = "content/drive-image-library/site/logo.png"
 PROJECT_URL = "https://www.computingandaiforall.org/"
-SITE_TITLE = "Computing & AI for All Curriculum"
+SITE_TITLE = "Computing and AI for All Curriculum"
 HEADER_TITLE = "CAIforALL Curriculum"
 DIGITAL_LEARNING_LAB_URL = "https://www.digitallearninglab.org/"
 CONTACT_EMAIL = "ECforALL@uci.edu"
+CREATICODE_EMAIL = "info@creaticode.com"
 FEEDBACK_URL = "https://bit.ly/ECforALLfeedback"
 LOCALIZED_IMAGE_CACHE: dict[str, str] = {}
 
@@ -92,7 +93,8 @@ def display_title(value: str) -> str:
 
 def is_spanish_resource(label: str) -> bool:
     normalized = (label or "").casefold()
-    return "español" in normalized or "espanol" in normalized or "spanish" in normalized
+    markers = ("español", "espanol", "spanish", "cuaderno", "vocabulario")
+    return any(marker in normalized for marker in markers)
 
 
 def is_excluded_resource(label: str) -> bool:
@@ -170,6 +172,24 @@ def render_resource_links(links: list[Link], limit: int | None = None) -> str:
     return row_html(standard) + row_html(spanish, " spanish-resource-row")
 
 
+def render_quick_resources(links: list[Link]) -> str:
+    selected = [link for link in links if not is_excluded_resource(link.label)]
+    if not selected:
+        return ""
+    standard = [link for link in selected if not is_spanish_resource(link.label)]
+    spanish = [link for link in selected if is_spanish_resource(link.label)]
+
+    def row_html(row_links: list[Link], extra_class: str = "") -> str:
+        if not row_links:
+            return ""
+        return f'<div class="quick-resource-row{extra_class}">' + "".join(
+            f'<a href="{esc(link.href)}" target="_blank" rel="noopener">{esc(link.label)}</a>'
+            for link in row_links
+        ) + "</div>"
+
+    return row_html(standard) + row_html(spanish, " quick-resource-row-spanish")
+
+
 def render_objectives(text: str) -> str:
     text = (text or "").strip()
     if not text:
@@ -191,11 +211,7 @@ def render_curriculum(page: Page, all_pages: list[Page]) -> str:
         for i, unit in enumerate(page.units)
     )
     unit_html = "".join(render_unit(unit, i + 1) for i, unit in enumerate(page.units))
-    resource_links = "".join(
-        f'<a href="{esc(link.href)}" target="_blank" rel="noopener">{esc(link.label)}</a>'
-        for link in page.links
-        if not is_excluded_resource(link.label)
-    )
+    resource_links = render_quick_resources(page.links)
     resource_bar = f"""
     <section class="teacher-resources curriculum-block">
       <h2>Resources</h2>
@@ -279,7 +295,7 @@ def render_home_card(card: HomeCard) -> str:
     if card.image and card.image.src:
         image = f'<img src="{esc(card.image.src)}" alt="{esc(card.image.alt or card.title)}">'
     else:
-        image = f'<div class="upcoming-art">{esc(initials(card.title))}</div>'
+        image = f'<div class="upcoming-art">{esc(card.title)}</div>'
     status = f'<span class="status-chip">{esc(card.status_label)}</span>' if card.status_label else ""
     button = f'<a class="btn outline" href="{esc(card.page.file)}">{esc(card.button_label or "Open Curriculum")}</a>' if card.page else ""
     upcoming_class = " upcoming" if not card.page else ""
@@ -309,7 +325,7 @@ def render_home(pages: list[Page], cards: list[HomeCard]) -> str:
     <div>
       <h1>{esc(SITE_TITLE)}</h1>
       <p>Organized curriculum pathways for Scratch coding, computational thinking, environmental impact projects, and AI literacy.</p>
-      <p>Created by <a href="{PROJECT_URL}">Computing & AI for All</a> team @ UC Irvine <a href="{DIGITAL_LEARNING_LAB_URL}">Digital Learning Lab</a>.</p>
+      <p>Created by <a href="{PROJECT_URL}">Computing and AI for All</a> team @ UC Irvine <a href="{DIGITAL_LEARNING_LAB_URL}">Digital Learning Lab</a>.</p>
     </div>
     <div class="hero-panel">{hero_media}</div>
   </div>
@@ -317,7 +333,7 @@ def render_home(pages: list[Page], cards: list[HomeCard]) -> str:
 <section class="home-section" id="curricula">
   <div class="page-shell">
     <h2>Curriculum Pathways</h2>
-    <p>Choose the pathway that matches your grade band and teaching goals. Current pathways are ready to use; new pathways are being prepared.</p>
+    <p>Choose the pathway that matches your grade level and learning goals.</p>
     <div class="home-grid">{card_html}</div>
   </div>
 </section>
@@ -329,11 +345,11 @@ def render_about(pages: list[Page]) -> str:
 <main class="home-section">
   <div class="page-shell">
     <div class="about-card">
-      <h1 style="font-size:48px;line-height:1.05">About Computing & AI for All</h1>
-      <p>Computing & AI for All curriculum resources support teachers in bringing computing, AI literacy, computational thinking, collaboration, language development, and project-based learning into classrooms.</p>
-      <p>The curriculum collection is connected to the <a href="{PROJECT_URL}">Computing & AI for All</a> project. Visit the main project site to learn more about the team, goals, and broader work behind these materials.</p>
+      <h1 style="font-size:48px;line-height:1.05">About Computing and AI for All</h1>
+      <p>Computing and AI for All curriculum resources support teachers in bringing computing, AI literacy, computational thinking, collaboration, language development, and project-based learning into classrooms.</p>
+      <p>The curriculum collection is connected to the <a href="{PROJECT_URL}">Computing and AI for All</a> project. Visit the main project site to learn more about the team, goals, and broader work behind these materials.</p>
       <div class="btn-row">
-        <a class="btn" href="{PROJECT_URL}">Visit Computing & AI for All</a>
+        <a class="btn" href="{PROJECT_URL}">Visit Computing and AI for All</a>
         <a class="btn outline" href="index.html">Back to Curriculum Home</a>
       </div>
     </div>
@@ -350,8 +366,10 @@ def render_help(pages: list[Page]) -> str:
       <h1 style="font-size:48px;line-height:1.05">Help</h1>
       <section class="help-section">
         <h2>Contact Us</h2>
-        <p>For questions about the curriculum collection, email the Computing & AI for All team.</p>
+        <p>For questions about the curriculum collection, email the Computing and AI for All team.</p>
         <a class="btn outline" href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>
+        <p>For questions about CreatiCode or the CreatiCode curriculum, email the CreatiCode team.</p>
+        <a class="btn outline" href="mailto:{CREATICODE_EMAIL}">{CREATICODE_EMAIL}</a>
       </section>
       <section class="help-section">
         <h2>Feedback Form</h2>

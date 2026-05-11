@@ -1,6 +1,6 @@
 id,title,heading,grade_label,brief_description,slug,status,display_order,image_asset_path
-act1,ACT 1: Scratch Create,ACT 1: Scratch Create,4th grade,"Fourth-grade Scratch lessons that introduce computer science, creativity, and project sharing.",act-1.html,published,1,curricula/act1/cover.jpg
-act2,ACT 2: Scratch Design,ACT 2: Scratch Design,5th grade,"Fifth-grade Scratch lessons focused on animation, loops, games, and computational design.",act-2.html,published,2,curricula/act2/cover.png
-act3,ACT 3: Scratch Impact,ACT 3: Scratch Impact,5/6 grade,Scratch projects that connect coding with environmental science and community impact.,act-3.html,published,3,curricula/act3/cover.png
-act4,ACT 4: Coding + AI,ACT 4: Coding + AI,Middle school,"Middle-school AI literacy lessons using CreatiCode, generative tools, and project-based coding.",act-4.html,published,4,curricula/act4/cover.jpg
+act1,ACT 1: Scratch Create,ACT 1: Scratch Create,For 4th grade,Scratch Create pathway for elementary computing lessons.,act-1.html,published,1,curricula/act1/cover.jpg
+act2,ACT 2: Scratch Design,ACT 2: Scratch Design,For 5th grade,Scratch Design pathway for elementary computing lessons.,act-2.html,published,2,curricula/act2/cover.png
+act3,ACT 3: Scratch Impact,ACT 3: Scratch Impact,For 5/6 grade,Scratch Impact pathway for interdisciplinary computing lessons.,act-3.html,published,3,curricula/act3/cover.png
+act4,Coding+AI,Coding+AI,For 6-8th grade,"AI-assisted coding, agentic coding, computational thinking, and AI literacy lessons using CreatiCode.",act-4.html,published,4,curricula/act4/cover.jpg
 scratch,Scratch Basics,Scratch Basics,Elementary and middle school,Foundational Scratch projects and lessons for building core programming confidence.,scratch-basics.html,published,99,curricula/scratch/cover.jpg

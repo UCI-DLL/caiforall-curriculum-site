@@ -429,6 +429,17 @@ img {
   flex-wrap: wrap;
 }
 
+.quick-resource-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+
+.quick-resource-row-spanish {
+  margin-top: 6px;
+}
+
 .quick-title {
   display: inline-flex;
   align-items: center;
@@ -701,8 +712,9 @@ img {
 .home-hero h1 {
   margin-bottom: 20px;
   color: #000;
-  font-size: clamp(46px, 6vw, 82px);
+  font-size: 56px;
   line-height: 1;
+  white-space: nowrap;
   text-shadow: 3px 3px 0 rgba(255, 255, 255, .65);
 }
 
@@ -789,14 +801,17 @@ img {
   display: grid;
   height: 150px;
   place-items: center;
+  padding: 18px;
   margin-bottom: 14px;
   border: 1px dashed rgba(10, 100, 165, .32);
   border-radius: 16px;
   background: rgba(183, 216, 234, .42);
   color: var(--blue);
   font-family: "Poppins", sans-serif;
-  font-size: 40px;
+  font-size: 28px;
   font-weight: 800;
+  line-height: 1.12;
+  text-align: center;
 }
 
 .status-chip {
@@ -908,6 +923,10 @@ img {
     padding: 8px 6px;
     text-align: center;
     overflow-wrap: anywhere;
+  }
+
+  .home-hero h1 {
+    font-size: 40px;
   }
 
   .dropdown-menu {
@@ -1039,5 +1058,11 @@ img {
 
   .resource-chip {
     width: 100%;
+  }
+}
+
+@media (max-width: 520px) {
+  .home-hero h1 {
+    font-size: 28px;
   }
 }
