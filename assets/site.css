@@ -701,10 +701,6 @@ img {
 }
 
 .home-hero .page-shell {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 420px;
-  gap: 46px;
-  align-items: center;
   min-height: 520px;
   padding: 64px 0 54px;
 }

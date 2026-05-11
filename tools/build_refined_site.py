@@ -317,8 +317,6 @@ def render_home_card(card: HomeCard) -> str:
 
 def render_home(pages: list[Page], cards: list[HomeCard]) -> str:
     card_html = "".join(render_home_card(card) for card in cards)
-    hero_image = next((card.image for card in cards if card.image and card.page), None)
-    hero_media = f'<img src="{esc(hero_image.src)}" alt="{esc(hero_image.alt)}">' if hero_image else f'<img src="{site_logo_url()}" alt="">'
     return page_head("Home") + nav("index.html", pages) + f"""
 <section class="home-hero">
   <div class="page-shell">
@@ -327,7 +325,6 @@ def render_home(pages: list[Page], cards: list[HomeCard]) -> str:
       <p>Organized curriculum pathways for Scratch coding, computational thinking, environmental impact projects, and AI literacy.</p>
       <p>Created by <a href="{PROJECT_URL}">Computing and AI for All</a> team @ UC Irvine <a href="{DIGITAL_LEARNING_LAB_URL}">Digital Learning Lab</a>.</p>
     </div>
-    <div class="hero-panel">{hero_media}</div>
   </div>
 </section>
 <section class="home-section" id="curricula">
