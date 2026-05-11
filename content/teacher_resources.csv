@@ -1,33 +1,29 @@
 curriculum_id,label,url,resource_type,display_order
-act1,Curriculum Overview,https://docs.google.com/document/d/1XzD2OH29Q4iyqXdMirHn3In3kq8AbAYpciD6tt4iCV8/edit?usp=sharing,Teacher Resource,1
-act1,Lesson Plans,https://drive.google.com/file/d/1aAWTdCqg26jD6rgYvgxC7XHMJsl5Rw8t/view?usp=drive_link,Teacher Resource,2
-act1,Student Workbook,https://drive.google.com/file/d/1ByBOicWGwXTAZK_IzlbMDEGH9ZFg2pl9/view,Teacher Resource,3
-act1,Virtual Resources,https://drive.google.com/file/d/1Ikbl4kWX7tM1228idVuGWS8phk2Rf_2o/view?usp=sharing,Teacher Resource,4
-act1,Give feedback,https://docs.google.com/forms/d/e/1FAIpQLSdanfIDEKc_AuUEyf6TLBnDyqOeASWOIsh4jYZgVWH7213ZvA/viewform?usp=sf_link,Teacher Resource,5
-act1,Vocabulary,https://drive.google.com/file/d/1g6lMwltrnY30_oe1YySjr4ivz8WHkIK7/view?usp=sharing,Teacher Resource,6
-act1,Scratch Tutorials,https://docs.google.com/presentation/d/1FGkEaUi-dEqjyiZN7AweMLg97OxxgE5UsKzsTYYVnfw/edit#slide=id.gdf19f5b3e4_0_84,Teacher Resource,7
-act1,Student Links,https://docs.google.com/document/d/1PI2zEeucJEZLIqaLx4fM6j-puv4XobwlAFf6arvtptg/edit,Teacher Resource,8
-act1,Cuaderno de Estudiante,https://docs.google.com/presentation/d/1xkDaO9--aqNZhdowrj8wnFs8t5ISeKLE4__vthPUBpE/edit?usp=sharing,Teacher Resource,9
-act1,Vocabulario,https://docs.google.com/document/d/1KunvOyo52GqAQVQ5pN_GlWGt8FOLDn5nKfSW818jstk/edit#heading=h.gjdgxs,Teacher Resource,10
-act1,Project Checker,https://ecforall.github.io/createprojects.html,Teacher Resource,11
-act1,Studio Grader,https://ecforall.github.io/createstudio.html,Teacher Resource,12
-act2,Curriculum Overview,https://docs.google.com/document/d/1XzD2OH29Q4iyqXdMirHn3In3kq8AbAYpciD6tt4iCV8/edit?usp=sharing,Teacher Resource,1
-act2,Lesson Plans,https://drive.google.com/file/d/12vpN8PHgPMZuQDuYZOQxJCcqjiuEDnDF/view?usp=sharing,Teacher Resource,2
-act2,Student Workbook,https://docs.google.com/presentation/d/1WwZeidqJFrNoWMHiXmT2RkbQF5Cu1kShQxqM8Xf8tOI/edit?slide=id.g824718ee2d_0_821#slide=id.g824718ee2d_0_821,Teacher Resource,3
-act2,Student Links,https://docs.google.com/document/d/1mJzpL1GVZ-dSeL1k3J8ino6e_Vk1VKkcYQ9Jcqp3u6s/edit,Teacher Resource,4
-act2,Scratch Tutorials,https://docs.google.com/presentation/d/1FGkEaUi-dEqjyiZN7AweMLg97OxxgE5UsKzsTYYVnfw/edit#slide=id.gdf19f5b3e4_0_84,Teacher Resource,5
-act2,Cuaderno de Estudiante,https://docs.google.com/presentation/d/13lWldWFkaGc2OyM8VRp4qXNQs4t_fjn3_0tBdzYbl0M/edit?usp=sharing,Teacher Resource,6
-act3,Lesson Plans,https://docs.google.com/document/d/12jL-IXkYsHYWjp-QGCtXe2daJv2fG7gU8DjfxoE2TvM/edit?usp=sharing,Teacher Resource,1
-act3,Cuaderno de Estudiante,https://docs.google.com/presentation/d/117YL9nIpihR63oj8Gb75tCN6bG85zhlsAu-reYS_XxA/edit?usp=sharing,Teacher Resource,2
-act3,Student Workbook,https://drive.google.com/file/d/1BUTNV_xFhMEZm-wiEJ8-0YQgQRvN7Kax/view?usp=sharing,Teacher Resource,3
-act3,Project Checker,https://ecforall.github.io/impactprojects.html,Teacher Resource,4
-act3,Scratch Tutorials,https://docs.google.com/presentation/d/1FGkEaUi-dEqjyiZN7AweMLg97OxxgE5UsKzsTYYVnfw/edit#slide=id.gdf19f5b3e4_0_84,Teacher Resource,5
-act3,Give Feedback,https://forms.gle/PD4Ydpoci3V8bW6f9,Teacher Resource,6
-act3,Studio Grader,https://ecforall.github.io/impactstudio.html,Teacher Resource,7
-act4,CreatiCode Platform,http://creaticode.com,Teacher Resource,1
-act4,Lesson Plans,https://drive.google.com/drive/folders/1ky9BGiNfQLPU7vsFcTXiNRmridBIg8QW,Teacher Resource,2
-act4,CreatiCode Tutorials,https://www.forum.creaticode.com/category/17/tutorials,Teacher Resource,3
-act4,Give Feedback,https://docs.google.com/forms/d/e/1FAIpQLSdxrljABi0zd1TtO4DEDjSWHkcHy1tiQb54payLDJZX5jJ8xQ/viewform,Teacher Resource,4
-scratch,Lesson Plans,https://docs.google.com/document/d/1MqXhJWhParPcZ0Mr9PVLWkYcVmUYOMgbQ-qNK3Jr2-U/edit?usp=share_link,Teacher Resource,1
-scratch,Student Workbook,https://drive.google.com/file/d/1Yv0hnLwo6-7eq3CQGN6eK4Hr6J0WzyYU/view?usp=share_link,Teacher Resource,2
-scratch,Scratch Tutorials,https://docs.google.com/presentation/d/1FGkEaUi-dEqjyiZN7AweMLg97OxxgE5UsKzsTYYVnfw/edit#slide=id.gdf19f5b3e4_0_84,Teacher Resource,3
+act1,Curriculum Overview,https://docs.google.com/document/d/1XzD2OH29Q4iyqXdMirHn3In3kq8AbAYpciD6tt4iCV8/edit?usp=sharing,Resource,1
+act1,Lesson Plans,https://drive.google.com/file/d/1aAWTdCqg26jD6rgYvgxC7XHMJsl5Rw8t/view?usp=drive_link,Resource,2
+act1,Student Workbook,https://drive.google.com/file/d/1ByBOicWGwXTAZK_IzlbMDEGH9ZFg2pl9/view,Resource,3
+act1,Virtual Resources,https://drive.google.com/file/d/1Ikbl4kWX7tM1228idVuGWS8phk2Rf_2o/view?usp=sharing,Resource,4
+act1,Vocabulary,https://drive.google.com/file/d/1g6lMwltrnY30_oe1YySjr4ivz8WHkIK7/view?usp=sharing,Resource,6
+act1,Scratch Tutorials,https://docs.google.com/presentation/d/1FGkEaUi-dEqjyiZN7AweMLg97OxxgE5UsKzsTYYVnfw/edit#slide=id.gdf19f5b3e4_0_84,Resource,7
+act1,Student Links,https://docs.google.com/document/d/1PI2zEeucJEZLIqaLx4fM6j-puv4XobwlAFf6arvtptg/edit,Resource,8
+act1,Cuaderno de Estudiante,https://docs.google.com/presentation/d/1xkDaO9--aqNZhdowrj8wnFs8t5ISeKLE4__vthPUBpE/edit?usp=sharing,Resource,9
+act1,Vocabulario,https://docs.google.com/document/d/1KunvOyo52GqAQVQ5pN_GlWGt8FOLDn5nKfSW818jstk/edit#heading=h.gjdgxs,Resource,10
+act1,Project Checker,https://ecforall.github.io/createprojects.html,Resource,11
+act1,Studio Grader,https://ecforall.github.io/createstudio.html,Resource,12
+act2,Curriculum Overview,https://docs.google.com/document/d/1XzD2OH29Q4iyqXdMirHn3In3kq8AbAYpciD6tt4iCV8/edit?usp=sharing,Resource,1
+act2,Lesson Plans,https://drive.google.com/file/d/12vpN8PHgPMZuQDuYZOQxJCcqjiuEDnDF/view?usp=sharing,Resource,2
+act2,Student Workbook,https://docs.google.com/presentation/d/1WwZeidqJFrNoWMHiXmT2RkbQF5Cu1kShQxqM8Xf8tOI/edit?slide=id.g824718ee2d_0_821#slide=id.g824718ee2d_0_821,Resource,3
+act2,Student Links,https://docs.google.com/document/d/1mJzpL1GVZ-dSeL1k3J8ino6e_Vk1VKkcYQ9Jcqp3u6s/edit,Resource,4
+act2,Scratch Tutorials,https://docs.google.com/presentation/d/1FGkEaUi-dEqjyiZN7AweMLg97OxxgE5UsKzsTYYVnfw/edit#slide=id.gdf19f5b3e4_0_84,Resource,5
+act2,Cuaderno de Estudiante,https://docs.google.com/presentation/d/13lWldWFkaGc2OyM8VRp4qXNQs4t_fjn3_0tBdzYbl0M/edit?usp=sharing,Resource,6
+act3,Lesson Plans,https://docs.google.com/document/d/12jL-IXkYsHYWjp-QGCtXe2daJv2fG7gU8DjfxoE2TvM/edit?usp=sharing,Resource,1
+act3,Cuaderno de Estudiante,https://docs.google.com/presentation/d/117YL9nIpihR63oj8Gb75tCN6bG85zhlsAu-reYS_XxA/edit?usp=sharing,Resource,2
+act3,Student Workbook,https://drive.google.com/file/d/1BUTNV_xFhMEZm-wiEJ8-0YQgQRvN7Kax/view?usp=sharing,Resource,3
+act3,Project Checker,https://ecforall.github.io/impactprojects.html,Resource,4
+act3,Scratch Tutorials,https://docs.google.com/presentation/d/1FGkEaUi-dEqjyiZN7AweMLg97OxxgE5UsKzsTYYVnfw/edit#slide=id.gdf19f5b3e4_0_84,Resource,5
+act3,Studio Grader,https://ecforall.github.io/impactstudio.html,Resource,7
+act4,Lesson Plans,https://drive.google.com/drive/folders/1ky9BGiNfQLPU7vsFcTXiNRmridBIg8QW,Resource,2
+act4,CreatiCode Tutorials,https://www.forum.creaticode.com/category/17/tutorials,Resource,3
+scratch,Lesson Plans,https://docs.google.com/document/d/1MqXhJWhParPcZ0Mr9PVLWkYcVmUYOMgbQ-qNK3Jr2-U/edit?usp=share_link,Resource,1
+scratch,Student Workbook,https://drive.google.com/file/d/1Yv0hnLwo6-7eq3CQGN6eK4Hr6J0WzyYU/view?usp=share_link,Resource,2
+scratch,Scratch Tutorials,https://docs.google.com/presentation/d/1FGkEaUi-dEqjyiZN7AweMLg97OxxgE5UsKzsTYYVnfw/edit#slide=id.gdf19f5b3e4_0_84,Resource,3

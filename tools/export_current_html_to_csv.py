@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONTENT = ROOT / "content"
 
 PAGES = [
-    ("act1", "act-1.html", "Act 1", "published", 1),
+    ("act1", "act-1.html", "ACT 1", "published", 1),
     ("act2", "act-2.html", "ACT 2", "published", 2),
     ("act3", "act-3.html", "ACT 3", "published", 3),
     ("act4", "act-4.html", "ACT 4", "published", 4),
@@ -23,6 +23,7 @@ HOMEPAGE_EXTRA = [
         "curriculum_id": "science_inquiry_studio",
         "title": "Science Inquiry Studio",
         "description": "A new curriculum pathway for science investigation, data-rich inquiry, and classroom-ready exploration.",
+        "bullet_points": "",
         "status_label": "In development",
         "image_drive_url": "",
         "button_label": "",
@@ -32,6 +33,7 @@ HOMEPAGE_EXTRA = [
         "curriculum_id": "agentic_coding",
         "title": "Agentic Coding",
         "description": "An upcoming pathway for students to design, guide, and evaluate AI-supported coding workflows.",
+        "bullet_points": "",
         "status_label": "In development",
         "image_drive_url": "",
         "button_label": "",
@@ -86,6 +88,7 @@ def main() -> None:
                 "curriculum_id": curriculum_id,
                 "title": title,
                 "description": summary,
+                "bullet_points": "",
                 "status_label": "",
                 "image_drive_url": cover,
                 "button_label": f"Open {quick_title}",
@@ -128,7 +131,8 @@ def main() -> None:
                         "unit_id": unit_id,
                         "lesson_id": lesson_id,
                         "title": text(lesson.select_one(".lesson-summary")),
-                        "description": text(lesson.select_one(".lesson-body p")),
+                        "description": "",
+                        "objective_bullets": "|".join(text(li) for li in lesson.select(".lesson-objectives li")),
                         "duration": text(lesson.select_one(".duration")),
                         "display_order": str(lesson_index),
                     }
@@ -152,7 +156,7 @@ def main() -> None:
                     "curriculum_id": curriculum_id,
                     "label": text(link),
                     "url": link.get("href", ""),
-                    "resource_type": "Teacher Resource",
+                    "resource_type": "Resource",
                     "display_order": str(resource_order),
                 }
             )
@@ -165,7 +169,7 @@ def main() -> None:
         curricula,
     )
     write_csv("units.csv", ["curriculum_id", "unit_id", "title", "description", "objectives", "image_drive_url", "display_order"], units)
-    write_csv("lessons.csv", ["curriculum_id", "unit_id", "lesson_id", "title", "description", "duration", "display_order"], lessons)
+    write_csv("lessons.csv", ["curriculum_id", "unit_id", "lesson_id", "title", "description", "objective_bullets", "duration", "display_order"], lessons)
     write_csv(
         "lesson_resources.csv",
         ["curriculum_id", "unit_id", "lesson_id", "label", "url", "resource_type", "display_order"],
@@ -174,7 +178,7 @@ def main() -> None:
     write_csv("teacher_resources.csv", ["curriculum_id", "label", "url", "resource_type", "display_order"], teacher_resources)
     write_csv(
         "homepage_cards.csv",
-        ["curriculum_id", "title", "description", "status_label", "image_drive_url", "button_label", "display_order"],
+        ["curriculum_id", "title", "description", "bullet_points", "status_label", "image_drive_url", "button_label", "display_order"],
         homepage_cards,
     )
     print(f"Wrote seed CSV content to {CONTENT}")

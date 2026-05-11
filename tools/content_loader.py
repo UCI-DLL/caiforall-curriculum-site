@@ -23,7 +23,7 @@ SHEET_TABS = {
     "units": ["units", "Units"],
     "lessons": ["lessons", "Lessons"],
     "lesson_resources": ["Lesson Links", "lesson_resources", "Lesson Resources"],
-    "teacher_resources": ["Teacher Resource Links", "teacher_resources", "Teacher Resources"],
+    "teacher_resources": ["Resource Links", "Teacher Resource Links", "teacher_resources", "Teacher Resources"],
     "homepage_cards": ["homepage_cards", "Homepage Cards"],
 }
 
@@ -64,6 +64,7 @@ REQUIRED_COLUMNS = {
         "curriculum_id",
         "title",
         "description",
+        "bullet_points",
         "status_label",
         "image_asset_path",
         "button_label",
@@ -95,12 +96,17 @@ COLUMN_ALIASES = {
         "unit_title": "title",
         "unit_description": "description",
         "learning_objectives": "objectives",
+        "objective_bullets": "objective_bullets",
+        "learning_objective_bullets": "objective_bullets",
         "image_path": "image_asset_path",
         "order": "display_order",
     },
     "lessons": {
         "lesson_title": "title",
         "lesson_description": "description",
+        "lesson_objective_bullets": "objective_bullets",
+        "objective_bullets": "objective_bullets",
+        "learning_objective_bullets": "objective_bullets",
         "lesson_duration": "duration",
         "order": "display_order",
     },
@@ -125,6 +131,7 @@ COLUMN_ALIASES = {
     "homepage_cards": {
         "card_title": "title",
         "card_description": "description",
+        "card_bullet_points": "bullet_points",
         "badge_text": "status_label",
         "status_badge": "status_label",
         "card_button_label": "button_label",
@@ -170,6 +177,7 @@ class Lesson:
     id: str
     title: str
     description: str = ""
+    objective_bullets: list[str] = field(default_factory=list)
     duration: str = ""
     links: list[Link] = field(default_factory=list)
 
@@ -180,6 +188,7 @@ class Unit:
     title: str
     description: str = ""
     objectives: str = ""
+    objective_bullets: list[str] = field(default_factory=list)
     image: Image | None = None
     links: list[Link] = field(default_factory=list)
     lessons: list[Lesson] = field(default_factory=list)
@@ -194,6 +203,7 @@ class Page:
     grade: str
     quick_title: str
     summary: str = ""
+    hero_pills: list[str] = field(default_factory=list)
     status: str = "published"
     cover_image: Image | None = None
     links: list[Link] = field(default_factory=list)
@@ -205,6 +215,7 @@ class HomeCard:
     curriculum_id: str
     title: str
     description: str
+    bullet_points: list[str] = field(default_factory=list)
     status_label: str = ""
     image: Image | None = None
     button_label: str = ""
@@ -223,6 +234,77 @@ class ContentError(Exception):
 
 def clean(value: str | None) -> str:
     return re.sub(r"\s+", " ", value or "").strip()
+
+
+def bullet_points(value: str | None) -> list[str]:
+    text = value or ""
+    parts = re.split(r"\s*(?:\||;|\n)\s*", text)
+    return [clean(part) for part in parts if clean(part)]
+
+
+def normalize_objective_bullet(value: str) -> str:
+    text = clean(value)
+    text = re.sub(r"^[\s:：.-]+", "", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\s+be\s+introduced\s+to\b", "Introduce", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\s+learn\s+how\s+to\b", "Learn how to", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\s+learn\s+to\b", "Learn to", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\s+learn\b", "Learn", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\s+understand\b", "Understand", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\s+practice\b", "Practice", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\s+use\b", "Use", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\s+create\b", "Create", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\s+build\b", "Build", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\s+develop\b", "Develop", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\s+explore\b", "Explore", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\s+identify\b", "Identify", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\s+recognize\b", "Recognize", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\s+apply\b", "Apply", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\s+explain\b", "Explain", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\s+work\b", "Work", text)
+    text = re.sub(r"\b[Ss]tudents?\s+will\b", "", text)
+    text = re.sub(r"^[Bb]e introduced to\b", "Introduce", text)
+    text = re.sub(r"^[Ii]ntroduce students to\b", "Introduce", text)
+    text = re.sub(r"\b[Ss]tudents?\s+also\s+", "Also ", text)
+    text = re.sub(r"\b[Ss]tudents?\s+may\s+also\s+", "Optionally ", text)
+    text = re.sub(r"\b[Ss]tudents?\s+work\b", "Work", text)
+    text = re.sub(r"\b[Ss]tudents?\s+familiarize\b", "Familiarize", text)
+    text = re.sub(r"\b[Ss]tudents?\s+enjoy\b", "Enjoy", text)
+    text = re.sub(r"\b[Tt]hey\s+also\s+", "", text)
+    text = re.sub(r"\b[Tt]hey\s+will\s+", "", text)
+    text = re.sub(r"^[Ss]tudents?\s+play\b", "Play", text)
+    text = re.sub(r"^[Ss]tudents?\s+understand\b", "Understand", text)
+    text = re.sub(r"^[Ss]tudents?\s+code\b", "Code", text)
+    text = re.sub(r"^[Ss]tudents?\s+do\b", "Do", text)
+    text = re.sub(r"^[Ss]tudents?\s+plan\b", "Plan", text)
+    text = re.sub(r"^[Ss]tudents?\s+view\b", "View", text)
+    text = re.sub(r"^[Ss]tudents?\s+self-reflect\b", "Self-reflect", text)
+    text = re.sub(r"^[Ss]tudents?\s+define\b", "Define", text)
+    text = re.sub(r"^[Ss]tudents?\s+animate\b", "Animate", text)
+    text = re.sub(r"^[Ss]tudents?\s+work\b", "Work", text)
+    text = re.sub(r"^[Ss]tudents?\s+may\s+also\s+", "Optionally ", text)
+    text = re.sub(r"^[Ii]ntroduces students to\b", "Introduce", text)
+    text = re.sub(r"^[Ii]ntroduces the\b", "Introduce the", text)
+    text = re.sub(r"^[Ww]alks students through\b", "Walk through", text)
+    text = re.sub(r"^[Tt]hese lessons teach students that\b", "Teach that", text)
+    text = re.sub(r"^[Aa]n existing project by\b", "Modify an existing project by", text)
+    text = re.sub(r"^[Aa] Scratch [Pp]roject to\b", "Explore a Scratch project to", text)
+    text = re.sub(r"^[Tt]hrough a\b", "Explore through a", text)
+    text = re.sub(r"^[Tt]heir\b", "Build their", text)
+    text = re.sub(r"\bwill be introduced through\b", "through", text)
+    text = re.sub(r"\bwill be introduced\b", "", text)
+    text = re.sub(r"\band will play\b", "and play", text)
+    text = re.sub(r"\bthey need to understand\b", "needed", text)
+    text = re.sub(r"\bfor students to work on\b", "for independent practice", text)
+    text = re.sub(r"\bstudents to work on\b", "independent practice", text)
+    text = re.sub(r"\bstudents to\b", "", text)
+    text = re.sub(r"\bstudents\b", "learners", text)
+    text = re.sub(r":\s*([a-z])", lambda match: ": " + match.group(1).upper(), text)
+    text = clean(text)
+    return text[:1].upper() + text[1:] if text else text
+
+
+def objective_bullet_points(value: str | None) -> list[str]:
+    return [item for item in (normalize_objective_bullet(part) for part in bullet_points(value)) if item]
 
 
 def canonical_column(table: str, column: str) -> str:
@@ -583,6 +665,9 @@ def validate_tables(tables: dict[str, list[dict[str, str]]]) -> list[str]:
         curriculum_id = clean(row.get("curriculum_id"))
         button_label = clean(row.get("button_label"))
         status_label = clean(row.get("status_label"))
+        bullets = bullet_points(row.get("bullet_points"))
+        if len(bullets) > 3:
+            errors.append(f"{row_label('homepage_cards', index)}: bullet_points should contain 3 or fewer items.")
         if button_label and curriculum_id not in published_curricula:
             errors.append(
                 f"{row_label('homepage_cards', index)}: button_label requires curriculum_id '{curriculum_id}' to be a published curriculum."
@@ -648,20 +733,37 @@ def build_content(tables: dict[str, list[dict[str, str]]], resolve_images: bool 
             if row.get("image_drive_url") or row.get("image_asset_path")
             else None
         )
-        unit = Unit(row["unit_id"], row["title"], row.get("description", ""), row.get("objectives", ""), image)
+        unit = Unit(
+            row["unit_id"],
+            row["title"],
+            row.get("description", ""),
+            row.get("objectives", ""),
+            bullet_points(row.get("objective_bullets")),
+            image,
+        )
         units_by_key[(row["curriculum_id"], row["unit_id"])] = unit
         pages_by_id[row["curriculum_id"]].units.append(unit)
 
     lessons_by_key: dict[tuple[str, str, str], Lesson] = {}
     for row in sorted_rows(tables["lessons"], "lessons", []):
-        lesson = Lesson(row["lesson_id"], row["title"], row.get("description", ""), row.get("duration", ""))
+        lesson = Lesson(
+            row["lesson_id"],
+            row["title"],
+            row.get("description", ""),
+            objective_bullet_points(row.get("objective_bullets")),
+            row.get("duration", ""),
+        )
         lessons_by_key[(row["curriculum_id"], row["unit_id"], row["lesson_id"])] = lesson
         units_by_key[(row["curriculum_id"], row["unit_id"])].lessons.append(lesson)
 
     for row in sorted_rows(tables["lesson_resources"], "lesson_resources", []):
         link = Link(row["label"], row["url"], row.get("resource_type", "Resource"))
         if row["lesson_id"] == "__unit__":
-            units_by_key[(row["curriculum_id"], row["unit_id"])].links.append(link)
+            unit = units_by_key[(row["curriculum_id"], row["unit_id"])]
+            if clean(row["label"]).lower() == "teacher manual":
+                unit.lessons.insert(0, Lesson("__teacher_manual__", "Teacher Manual", "", [], "", [link]))
+            else:
+                unit.links.append(link)
         else:
             lessons_by_key[(row["curriculum_id"], row["unit_id"], row["lesson_id"])].links.append(link)
 
@@ -683,12 +785,15 @@ def build_content(tables: dict[str, list[dict[str, str]]], resolve_images: bool 
                 curriculum_id=row.get("curriculum_id", ""),
                 title=row["title"],
                 description=row["description"],
+                bullet_points=bullet_points(row.get("bullet_points")),
                 status_label=row.get("status_label", ""),
                 image=image,
                 button_label=row.get("button_label", ""),
                 page=page if page and page.status.lower() == "published" else None,
             )
         )
+        if page and row.get("bullet_points"):
+            page.hero_pills = bullet_points(row.get("bullet_points"))
 
     return SiteContent(pages, cards)
 

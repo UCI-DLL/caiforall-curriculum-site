@@ -15,6 +15,11 @@ GENERATED_IMAGE_DIR = ROOT / "assets" / "generated-images"
 
 FALLBACK_LOGO = "content/drive-image-library/site/logo.png"
 PROJECT_URL = "https://www.computingandaiforall.org/"
+SITE_TITLE = "Computing & AI for All Curriculum"
+HEADER_TITLE = "CAIforALL Curriculum"
+DIGITAL_LEARNING_LAB_URL = "https://www.digitallearninglab.org/"
+CONTACT_EMAIL = "ECforALL@uci.edu"
+FEEDBACK_URL = "https://bit.ly/ECforALLfeedback"
 LOCALIZED_IMAGE_CACHE: dict[str, str] = {}
 
 
@@ -80,13 +85,28 @@ def esc(value: str | None) -> str:
     return html.escape(value or "", quote=True)
 
 
+def display_title(value: str) -> str:
+    value = re.sub(r"\bAct\b", "ACT", value or "")
+    return re.sub(r"\s+Curriculum\b", "", value).strip()
+
+
+def is_spanish_resource(label: str) -> bool:
+    normalized = (label or "").casefold()
+    return "español" in normalized or "espanol" in normalized or "spanish" in normalized
+
+
+def is_excluded_resource(label: str) -> bool:
+    normalized = (label or "").casefold().strip()
+    return normalized in {"creaticode platform", "give feedback", "give feedback form", "feedback form"}
+
+
 def page_head(title: str) -> str:
     return f"""<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{esc(title)} | CAIforALL Curriculum</title>
+  <title>{esc(title)} | {esc(SITE_TITLE)}</title>
   <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
@@ -95,29 +115,22 @@ def page_head(title: str) -> str:
 
 def nav(active_file: str, pages: list[Page]) -> str:
     logo = site_logo_url()
-    curricula_links = "\n".join(f'<a href="{page.file}">{esc(page.title)}</a>' for page in pages if page.status.lower() == "published")
+    curricula_links = "\n".join(f'<a href="{page.file}">{esc(display_title(page.title))}</a>' for page in pages if page.status.lower() == "published")
     home_class = ' aria-current="page"' if active_file == "index.html" else ""
     about_class = ' aria-current="page"' if active_file == "about.html" else ""
+    help_class = ' aria-current="page"' if active_file == "help.html" else ""
     return f"""
 <header class="site-header">
   <div class="nav-inner">
-    <a class="brand" href="index.html"><img alt="" src="{logo}"><span>CAIforALL Curriculum</span></a>
+    <a class="brand" href="index.html"><img alt="" src="{logo}"><span>{esc(HEADER_TITLE)}</span></a>
     <nav class="site-nav" aria-label="Site">
       <a href="index.html"{home_class}>Home</a>
       <div class="dropdown">
         <button class="dropdown-toggle" type="button">Curricula</button>
         <div class="dropdown-menu">{curricula_links}</div>
       </div>
-      <a href="about.html"{about_class}>About CAIforALL</a>
-      <div class="dropdown">
-        <button class="dropdown-toggle" type="button">More</button>
-        <div class="dropdown-menu">
-          <a href="{PROJECT_URL}">Computing & AI for All</a>
-          <a href="https://www.elementarycomputingforall.org/">Elementary Computing for All</a>
-          <a href="https://scratch.mit.edu/">Scratch</a>
-          <a href="https://bit.ly/ECforALLfeedback">Feedback Form</a>
-        </div>
-      </div>
+      <a href="about.html"{about_class}>About</a>
+      <a href="help.html"{help_class}>Help</a>
     </nav>
   </div>
 </header>
@@ -125,10 +138,12 @@ def nav(active_file: str, pages: list[Page]) -> str:
 
 
 def footer() -> str:
-    return f"""
+    return """
 <footer class="footer">
   <div class="page-shell">
-    <p>CAIforALL Curriculum. Created in affiliation with <a href="{PROJECT_URL}">Computing & AI for All</a>.</p>
+    <p>Computing and AI for All and its curriculum and other materials are licensed under a Creative Commons Attribution NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0).</p>
+    <p>Under this license, you may use and adapt this work non-commercially as long as you attribute the work to Computing and AI for All and license it under identical terms. You may not use or adapt this work for commercial purposes.</p>
+    <p>© 2025, Computing and AI for All</p>
   </div>
 </footer>
 <script src="assets/site.js"></script>
@@ -141,10 +156,18 @@ def render_resource_links(links: list[Link], limit: int | None = None) -> str:
     selected = links[:limit] if limit else links
     if not selected:
         return ""
-    return '<div class="unit-resource-row">' + "".join(
-        f'<a class="resource-chip {"primary" if i < 2 else ""}" href="{esc(link.href)}" target="_blank" rel="noopener">{esc(link.label)}</a>'
-        for i, link in enumerate(selected)
-    ) + "</div>"
+    standard = [link for link in selected if not is_spanish_resource(link.label)]
+    spanish = [link for link in selected if is_spanish_resource(link.label)]
+
+    def row_html(row_links: list[Link], extra_class: str = "") -> str:
+        if not row_links:
+            return ""
+        return f'<div class="unit-resource-row{extra_class}">' + "".join(
+            f'<a class="resource-chip" href="{esc(link.href)}" target="_blank" rel="noopener">{esc(link.label)}</a>'
+            for link in row_links
+        ) + "</div>"
+
+    return row_html(standard) + row_html(spanish, " spanish-resource-row")
 
 
 def render_objectives(text: str) -> str:
@@ -171,10 +194,11 @@ def render_curriculum(page: Page, all_pages: list[Page]) -> str:
     resource_links = "".join(
         f'<a href="{esc(link.href)}" target="_blank" rel="noopener">{esc(link.label)}</a>'
         for link in page.links
+        if not is_excluded_resource(link.label)
     )
     resource_bar = f"""
     <section class="teacher-resources curriculum-block">
-      <h2>Teacher resources</h2>
+      <h2>Resources</h2>
       <div class="quick-resources" aria-label="Curriculum resources">
         {resource_links}
       </div>
@@ -183,8 +207,8 @@ def render_curriculum(page: Page, all_pages: list[Page]) -> str:
 <main>
   <div class="page-shell">
     <section class="curriculum-hero">
-      <div class="hero-kicker">{esc(page.grade)} curriculum</div>
-      <h1>{esc(page.heading)}</h1>
+      <div class="hero-pills">{"".join(f'<span>{esc(pill)}</span>' for pill in page.hero_pills)}</div>
+      <h1>{esc(display_title(page.heading))}</h1>
       <p>{esc(page.summary)}</p>
     </section>
     <section class="unit-browser curriculum-block" data-unit-browser>
@@ -204,21 +228,18 @@ def render_curriculum(page: Page, all_pages: list[Page]) -> str:
 def render_unit(unit: Unit, index: int) -> str:
     image = f'<img src="{esc(unit.image.src)}" alt="{esc(unit.image.alt or unit.title)}">' if unit.image and unit.image.src else '<div class="image-placeholder">Curriculum image</div>'
     lessons = "".join(render_lesson(lesson, i == 0) for i, lesson in enumerate(unit.lessons))
+    overview = f'<p class="unit-overview">{esc(unit.description)}</p>' if unit.description else ""
     hidden = "" if index == 1 else " hidden"
     active = " active" if index == 1 else ""
     return f"""
 <section class="unit-card unit-panel{active}" id="unit-{index}" role="tabpanel" aria-labelledby="unit-tab-{index}"{hidden}>
   <aside class="unit-media">
     {image}
-    <div class="objectives">
-      <h3>Learning Objectives</h3>
-      {render_objectives(unit.objectives)}
-    </div>
   </aside>
   <div class="unit-main">
     <h2>{esc(unit.title)}</h2>
+    {overview}
     {render_resource_links(unit.links, 4)}
-    <p class="unit-overview">{esc(unit.description)}</p>
     <div class="lessons">{lessons}</div>
   </div>
 </section>
@@ -228,11 +249,19 @@ def render_unit(unit: Unit, index: int) -> str:
 def render_lesson(lesson, open_first: bool) -> str:
     open_attr = " open" if open_first else ""
     duration = f'<span class="duration">{esc(lesson.duration)}</span>' if lesson.duration else ""
+    objectives = lesson.objective_bullets or []
+    objective_html = (
+        '<div class="lesson-objectives"><h3>Learning Objectives</h3><ul>'
+        + "".join(f"<li>{esc(item)}</li>" for item in objectives[:5])
+        + "</ul></div>"
+        if objectives
+        else ""
+    )
     return f"""
 <details class="lesson"{open_attr}>
   <summary class="lesson-summary">{esc(lesson.title)}</summary>
   <div class="lesson-body">
-    <p>{esc(lesson.description)}</p>
+    {objective_html}
     {duration}
     {render_resource_links(lesson.links, 6)}
   </div>
@@ -254,12 +283,17 @@ def render_home_card(card: HomeCard) -> str:
     status = f'<span class="status-chip">{esc(card.status_label)}</span>' if card.status_label else ""
     button = f'<a class="btn outline" href="{esc(card.page.file)}">{esc(card.button_label or "Open Curriculum")}</a>' if card.page else ""
     upcoming_class = " upcoming" if not card.page else ""
+    summary = (
+        '<ul class="card-bullets">' + "".join(f"<li>{esc(point)}</li>" for point in card.bullet_points) + "</ul>"
+        if card.bullet_points
+        else f"<p>{esc(card.description)}</p>"
+    )
     return f"""
 <article class="pathway-card{upcoming_class}">
   {image}
   {status}
   <h3>{esc(card.title)}</h3>
-  <p>{esc(card.description)}</p>
+  {summary}
   {button}
 </article>
 """
@@ -273,14 +307,9 @@ def render_home(pages: list[Page], cards: list[HomeCard]) -> str:
 <section class="home-hero">
   <div class="page-shell">
     <div>
-      <div class="hero-kicker">Curriculum hub</div>
-      <h1>CAIforALL Curriculum</h1>
+      <h1>{esc(SITE_TITLE)}</h1>
       <p>Organized curriculum pathways for Scratch coding, computational thinking, environmental impact projects, and AI literacy.</p>
-      <p>Created by our curriculum team in affiliation with the <a href="{PROJECT_URL}">Computing & AI for All</a> project.</p>
-      <div class="btn-row">
-        <a class="btn" href="#curricula">Browse Curricula</a>
-        <a class="btn secondary" href="{PROJECT_URL}">Visit Main Project</a>
-      </div>
+      <p>Created by <a href="{PROJECT_URL}">Computing & AI for All</a> team @ UC Irvine <a href="{DIGITAL_LEARNING_LAB_URL}">Digital Learning Lab</a>.</p>
     </div>
     <div class="hero-panel">{hero_media}</div>
   </div>
@@ -296,17 +325,39 @@ def render_home(pages: list[Page], cards: list[HomeCard]) -> str:
 
 
 def render_about(pages: list[Page]) -> str:
-    return page_head("About CAIforALL") + nav("about.html", pages) + f"""
+    return page_head("About") + nav("about.html", pages) + f"""
 <main class="home-section">
   <div class="page-shell">
     <div class="about-card">
-      <h1 style="font-size:48px;line-height:1.05">About CAIforALL</h1>
-      <p>CAIforALL curriculum resources support teachers in bringing computing, AI literacy, computational thinking, collaboration, language development, and project-based learning into classrooms.</p>
+      <h1 style="font-size:48px;line-height:1.05">About Computing & AI for All</h1>
+      <p>Computing & AI for All curriculum resources support teachers in bringing computing, AI literacy, computational thinking, collaboration, language development, and project-based learning into classrooms.</p>
       <p>The curriculum collection is connected to the <a href="{PROJECT_URL}">Computing & AI for All</a> project. Visit the main project site to learn more about the team, goals, and broader work behind these materials.</p>
       <div class="btn-row">
         <a class="btn" href="{PROJECT_URL}">Visit Computing & AI for All</a>
         <a class="btn outline" href="index.html">Back to Curriculum Home</a>
       </div>
+    </div>
+  </div>
+</main>
+""" + footer()
+
+
+def render_help(pages: list[Page]) -> str:
+    return page_head("Help") + nav("help.html", pages) + f"""
+<main class="home-section">
+  <div class="page-shell">
+    <div class="about-card">
+      <h1 style="font-size:48px;line-height:1.05">Help</h1>
+      <section class="help-section">
+        <h2>Contact Us</h2>
+        <p>For questions about the curriculum collection, email the Computing & AI for All team.</p>
+        <a class="btn outline" href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>
+      </section>
+      <section class="help-section">
+        <h2>Feedback Form</h2>
+        <p>Share curriculum feedback, report issues, or suggest improvements using the feedback form.</p>
+        <a class="btn" href="{FEEDBACK_URL}">Open Feedback Form</a>
+      </section>
     </div>
   </div>
 </main>
@@ -331,7 +382,8 @@ def main() -> None:
             (ROOT / page.file).write_text(render_curriculum(page, content.pages), encoding="utf-8")
     (ROOT / "index.html").write_text(render_home(content.pages, content.homepage_cards), encoding="utf-8")
     (ROOT / "about.html").write_text(render_about(content.pages), encoding="utf-8")
-    print(f"Built {len(content.pages) + 2} pages from structured content")
+    (ROOT / "help.html").write_text(render_help(content.pages), encoding="utf-8")
+    print(f"Built {len(content.pages) + 3} pages from structured content")
 
 
 if __name__ == "__main__":

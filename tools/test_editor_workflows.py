@@ -41,10 +41,10 @@ def base_tables() -> dict[str, list[dict[str, str]]]:
         "curricula": [
             {
                 "curriculum_id": "act2",
-                "navigation_title": "Act 2: Scratch Design",
-                "page_heading": "Act 2: Scratch Design Curriculum",
+                "navigation_title": "ACT 2: Scratch Design",
+                "page_heading": "ACT 2: Scratch Design Curriculum",
                 "grade_label": "5th Grade",
-                "short_description": "Original Act 2 description.",
+                "short_description": "Original ACT 2 description.",
                 "page_filename": "act-2.html",
                 "publish_status": "published",
                 "display_order": "1",
@@ -69,6 +69,7 @@ def base_tables() -> dict[str, list[dict[str, str]]]:
                 "lesson_id": "lesson-1",
                 "lesson_title": "Lesson 1.1: Scratch Basics",
                 "lesson_description": "Original lesson description.",
+                "lesson_objective_bullets": "Review Scratch basics|Practice sequence and events",
                 "lesson_duration": "50 minutes",
                 "display_order": "1",
             }
@@ -96,11 +97,12 @@ def base_tables() -> dict[str, list[dict[str, str]]]:
         "homepage_cards": [
             {
                 "curriculum_id": "act2",
-                "card_title": "Act 2: Scratch Design",
+                "card_title": "ACT 2: Scratch Design",
                 "card_description": "Original homepage card.",
+                "card_bullet_points": "5th Grade|Scratch|Animation",
                 "status_label": "",
                 "image_asset_path": "homepage/act2-card.png",
-                "card_button_label": "Open Act 2",
+                "card_button_label": "Open ACT 2",
                 "display_order": "1",
             }
         ],
@@ -149,6 +151,7 @@ def test_add_new_curriculum() -> None:
             "lesson_id": "lesson-1",
             "lesson_title": "Lesson 1: Test Lesson",
             "lesson_description": "This lesson confirms that accordions render correctly.",
+            "lesson_objective_bullets": "Confirm the accordion renders|Review generated content",
             "lesson_duration": "10 minutes",
             "display_order": "1",
         }
@@ -158,6 +161,7 @@ def test_add_new_curriculum() -> None:
             "curriculum_id": "test_remote",
             "card_title": "Test Remote",
             "card_description": "A temporary card for testing remote publishing.",
+            "card_bullet_points": "Test Grade|Remote publishing|Validation",
             "status_label": "",
             "image_asset_path": "homepage/smile.webp",
             "card_button_label": "Open Test Remote",
@@ -192,6 +196,7 @@ def test_add_unit_and_resource() -> None:
             "lesson_id": "lesson-1",
             "lesson_title": "Lesson 2.1: Plan",
             "lesson_description": "Students plan their project.",
+            "lesson_objective_bullets": "Plan a project",
             "lesson_duration": "45 minutes",
             "display_order": "1",
         }

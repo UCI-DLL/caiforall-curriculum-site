@@ -1,6 +1,6 @@
 # Content Editor Handbook
 
-This handbook explains how to update the CAIforALL Curriculum website without editing code.
+This handbook explains how to update the Computing & AI for All Curriculum website without editing code.
 
 The website content comes from two places:
 
@@ -25,7 +25,7 @@ Curriculum Pages = which curriculum pages exist
 Units = the unit tabs/blocks inside a curriculum page
 Lessons = the lesson accordions inside a unit
 Lesson Links = buttons inside lessons or unit summaries
-Teacher Resource Links = resource buttons below a curriculum page
+Resource Links = resource buttons below a curriculum page
 ```
 
 Most edits happen in only one or two tabs.
@@ -38,7 +38,7 @@ The recommended tab names are:
 - `Units`
 - `Lessons`
 - `Lesson Links`
-- `Teacher Resource Links`
+- `Resource Links`
 - `Homepage Cards`
 
 Older technical tab names, such as `curricula` and `lesson_resources`, still work, but the names above are easier for editors.
@@ -79,8 +79,8 @@ Example:
 
 ```text
 curriculum_id: act2
-navigation_title: Act 2: Scratch Design
-page_heading: Act 2: Scratch Design Curriculum
+navigation_title: ACT 2: Scratch Design
+page_heading: ACT 2: Scratch Design
 grade_label: 5th Grade
 short_description: Fifth-grade Scratch lessons focused on animation, loops, games, and computational design.
 page_filename: act-2.html
@@ -109,8 +109,8 @@ unit_id
 unit_title
 unit_description
 learning_objectives
-image_asset_path
 display_order
+image_asset_path
 ```
 
 Example:
@@ -124,15 +124,16 @@ learning_objectives:
   Define sequence, event, and loop
   Modify an existing animation project
   Create an animated story in Scratch
-image_asset_path: curricula/act2/units/unit-1-unit-1-animation.png
 display_order: 1
+image_asset_path: curricula/act2/units/unit-1-unit-1-animation.png
 ```
 
 Rules:
 
 - `curriculum_id` must match a row in `Curriculum Pages`.
 - `unit_id` must be unique within that curriculum.
-- Put each learning objective on a new line in the same cell.
+- `unit_description` is shown below the unit title on the curriculum page.
+- `learning_objectives` is kept for source/reference content.
 
 ## Tab 3: Lessons
 
@@ -146,6 +147,7 @@ unit_id
 lesson_id
 lesson_title
 lesson_description
+objective_bullets
 lesson_duration
 display_order
 ```
@@ -158,6 +160,7 @@ unit_id: unit-1
 lesson_id: lesson-1
 lesson_title: Lesson 1.1: Scratch Basics, Sequence and Events Review
 lesson_description: Students review Scratch basics and the CS concepts of sequence and event.
+objective_bullets: Review Scratch basics|Practice sequence and events
 lesson_duration: 50 minutes
 display_order: 1
 ```
@@ -167,6 +170,9 @@ Rules:
 - `curriculum_id` must match a curriculum page.
 - `unit_id` must match a unit in that curriculum.
 - `lesson_id` must be unique within that unit.
+- `lesson_description` preserves the original lesson description in the sheet.
+- `objective_bullets` is shown inside the lesson accordion under `Learning Objectives`. Separate bullets with `|`.
+- Write each objective as a concise action phrase, such as `Introduce Scratch basics`, `Practice sequence and events`, or `Build an interactive project`. Avoid future-tense sentence framing.
 
 ## Tab 4: Lesson Links
 
@@ -212,9 +218,11 @@ Rules:
 
 - Use `lesson_id = __unit__` for a button near the unit description.
 - Use a real lesson id for a button inside a lesson.
+- Use `lesson_id = __unit__` and `link_label = Teacher Manual` when a unit needs a Teacher Manual accordion.
+- Resource labels containing `Español`, `Espanol`, or `Spanish` appear on a separate line.
 - `resource_url` must start with `http://` or `https://`.
 
-## Tab 5: Teacher Resource Links
+## Tab 5: Resource Links
 
 One row creates one curriculum-level resource button below the curriculum browser.
 
@@ -234,9 +242,11 @@ Example:
 curriculum_id: act2
 link_label: Lesson Plans
 resource_url: https://drive.google.com/drive/folders/example
-resource_type: Teacher Resource
+resource_type: Resource
 display_order: 1
 ```
+
+Do not add `CreatiCode Platform`, `Give Feedback`, `Give Feedback Form`, or `Feedback Form` to this tab. These links are filtered out when the site is built.
 
 ## Tab 6: Homepage Cards
 
@@ -248,6 +258,7 @@ Recommended columns:
 curriculum_id
 card_title
 card_description
+card_bullet_points
 status_label
 image_asset_path
 card_button_label
@@ -258,11 +269,12 @@ Example card for a published curriculum:
 
 ```text
 curriculum_id: act2
-card_title: Act 2: Scratch Design
+card_title: ACT 2: Scratch Design
 card_description: Fifth-grade Scratch lessons focused on animation, loops, games, and computational design.
+card_bullet_points: 5th Grade|Scratch|Animation and games
 status_label:
 image_asset_path: homepage/act2-card.png
-card_button_label: Open Act 2
+card_button_label: Open ACT 2
 display_order: 2
 ```
 
@@ -272,6 +284,7 @@ Example upcoming card:
 curriculum_id: science_inquiry_studio
 card_title: Science Inquiry Studio
 card_description: A new pathway for science investigation and data-rich classroom inquiry.
+card_bullet_points:
 status_label: In development
 image_asset_path: homepage/smile.webp
 card_button_label:
@@ -312,7 +325,7 @@ Expected result:
 
 ## Workflow 3: Replace an Image
 
-Goal: replace the Act 2 homepage card image.
+Goal: replace the ACT 2 homepage card image.
 
 1. Open the shared Google Drive image folder.
 2. Go to `homepage/`.
@@ -344,7 +357,7 @@ Add a row in `Curriculum Pages`:
 ```text
 curriculum_id: test_remote
 navigation_title: Test Remote
-page_heading: Test Remote Curriculum
+page_heading: Test Remote
 grade_label: Test Grade
 short_description: A test curriculum used to confirm remote publishing.
 page_filename: test-remote.html
@@ -365,8 +378,8 @@ unit_description: This unit confirms that a new curriculum page can be published
 learning_objectives:
   Confirm the page renders
   Confirm the unit appears
-image_asset_path: homepage/smile.webp
 display_order: 1
+image_asset_path: homepage/smile.webp
 ```
 
 ### Step C: Add at least one lesson
@@ -379,6 +392,7 @@ unit_id: unit-1
 lesson_id: lesson-1
 lesson_title: Lesson 1: Test Lesson
 lesson_description: This lesson confirms that accordions render correctly.
+objective_bullets: Confirm the accordion renders|Review generated content
 lesson_duration: 10 minutes
 display_order: 1
 ```
@@ -406,7 +420,7 @@ Expected result:
 
 ## Workflow 5: Add a Unit to an Existing Curriculum
 
-Goal: add a new unit to Act 2.
+Goal: add a new unit to ACT 2.
 
 1. Open `Units`.
 2. Add a row:
@@ -419,8 +433,8 @@ unit_description: Students extend their Scratch design work with an independent 
 learning_objectives:
   Plan a project
   Build and test an interactive Scratch artifact
-image_asset_path: homepage/smile.webp
 display_order: 5
+image_asset_path: homepage/smile.webp
 ```
 
 3. Add at least one matching row in `Lessons`.
@@ -428,7 +442,7 @@ display_order: 5
 
 Expected result:
 
-- Act 2 gets a new Unit 5 tab.
+- ACT 2 gets a new Unit 5 tab.
 - Clicking Unit 5 shows the new unit and lessons.
 
 ## Workflow 6: Add a Lesson Resource Link

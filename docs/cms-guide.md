@@ -1,4 +1,4 @@
-# CAIforALL Curriculum CMS Guide
+# Computing & AI for All Curriculum CMS Guide
 
 The site is now generated from structured curriculum content instead of hand-edited HTML. Coworkers should edit the Google Sheets workbook; reviewers validate and rebuild the static site.
 
@@ -21,19 +21,22 @@ Create one workbook with these exact tab names and columns.
 
 ### Units
 
-`curriculum_id,unit_id,title,description,objectives,image_asset_path,display_order`
+`curriculum_id,unit_id,title,description,objectives,display_order,image_asset_path`
 
 - `curriculum_id`: must match a `Curricula.id`.
 - `unit_id`: stable id inside that curriculum, such as `unit-1`.
-- `objectives`: plain text; put each objective on a new line.
+- `description`: unit overview text shown below the unit title.
+- `objectives`: legacy/source unit objectives; kept in the sheet for reference.
 - `image_asset_path`: path to the image in the shared Drive image folder, such as `curricula/act2/units/unit-1-unit-1-animation.png`.
 - Optional legacy column: `image_drive_url`. If present, a direct URL in this column overrides `image_asset_path`.
 
 ### Lessons
 
-`curriculum_id,unit_id,lesson_id,title,description,duration,display_order`
+`curriculum_id,unit_id,lesson_id,title,description,objective_bullets,duration,display_order`
 
 - `lesson_id`: stable id inside that unit, such as `lesson-1`.
+- `description`: original/source lesson description. It stays in the sheet for editing reference.
+- `objective_bullets`: lesson bullets shown under `Learning Objectives` inside the lesson accordion. Separate bullets with `|`. Write each bullet as a concise action phrase, such as `Introduce Scratch basics` or `Practice sequence and events`; avoid future-tense sentence framing.
 - `duration`: optional text, such as `50 minutes`.
 
 ### Lesson Resources
@@ -42,20 +45,24 @@ Create one workbook with these exact tab names and columns.
 
 - Use this for lesson-level resource chips.
 - For unit-level resource chips, set `lesson_id` to `__unit__`.
+- If a unit-level row has `label` = `Teacher Manual`, it renders as a lesson accordion titled `Teacher Manual`.
+- Links with `Español`, `Espanol`, or `Spanish` in the label render on their own resource line.
 - `url` must start with `http://` or `https://`.
 
-### Teacher Resources
+### Resources
 
 `curriculum_id,label,url,resource_type,display_order`
 
-- These appear in the Teacher resources block below the unit browser.
+- These appear in the Resources block below the unit browser.
+- Do not include `CreatiCode Platform`, `Give Feedback`, `Give Feedback Form`, or `Feedback Form`; those labels are filtered out of the generated page.
 
 ### Homepage Cards
 
-`curriculum_id,title,description,status_label,image_asset_path,button_label,display_order`
+`curriculum_id,title,description,bullet_points,status_label,image_asset_path,button_label,display_order`
 
 - For live curriculum cards, set `curriculum_id` to a published curriculum id and set `button_label`.
 - For upcoming cards, use a future `curriculum_id`, set `status_label` to `In development`, and leave `button_label` blank.
+- `bullet_points`: optional short homepage bullets separated by `|`, such as `5th Grade|Scratch|Animation and games`. Use 3 or fewer items.
 - `image_asset_path`: path to the homepage card image in the shared Drive image folder, such as `homepage/act2-card.png`.
 - Optional legacy column: `image_drive_url`. If present, a direct URL in this column overrides `image_asset_path`.
 

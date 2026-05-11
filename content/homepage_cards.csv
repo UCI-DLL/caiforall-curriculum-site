@@ -1,8 +1,8 @@
-curriculum_id,title,description,status_label,button_label,display_order,image_asset_path
-act1,Act 1: Scratch Create,"Fourth-grade Scratch lessons that introduce computer science, creativity, and project sharing.",,Open Act 1,1,homepage/act1-card.jpg
-act2,Act 2: Scratch Design,"Fifth-grade Scratch lessons focused on animation, loops, games, and computational design.",,Open ACT 2,2,homepage/act2-card.png
-act3,Act 3: Scratch Impact,Scratch projects that connect coding with environmental science and community impact.,,Open ACT 3,3,homepage/act3-card.png
-act4,Act 4: Code + AI,"Middle-school AI literacy lessons using CreatiCode, generative tools, and project-based coding.",,Open ACT 4,4,homepage/act4-card.jpg
-scratch,Scratch Basics,Foundational Scratch projects and lessons for building core programming confidence.,,Open Scratch Basics,5,homepage/scratch-card.jpg
-science_inquiry_studio,Science Inquiry Studio,"A new curriculum pathway for science investigation, data-rich inquiry, and classroom-ready exploration.",In development,,6,
-agentic_coding,Agentic Coding,"An upcoming pathway for students to design, guide, and evaluate AI-supported coding workflows.",In development,,7,
+curriculum_id,title,description,bullet_points,status_label,button_label,display_order,image_asset_path
+act1,ACT 1: Scratch Create,"Fourth-grade Scratch lessons that introduce computer science, creativity, and project sharing.",4th Grade|Scratch|Introductory,,Open ACT 1,1,homepage/act1-card.jpg
+act2,ACT 2: Scratch Design,"Fifth-grade Scratch lessons focused on animation, loops, games, and computational design.",5th Grade|Scratch|Animation and games,,Open ACT 2,2,homepage/act2-card.png
+act3,ACT 3: Scratch Impact,Scratch projects that connect coding with environmental science and community impact.,5/6 Grade|Scratch and environmental science|Data and community impact,,Open ACT 3,3,homepage/act3-card.png
+act4,ACT 4: Coding + AI,"Middle-school AI literacy lessons using CreatiCode, generative tools, and project-based coding.",Middle School|CreatiCode|Generative AI apps,,Open ACT 4,4,homepage/act4-card.jpg
+science_inquiry_studio,Science Inquiry Studio,"A new curriculum pathway for science investigation, data-rich inquiry, and classroom-ready exploration.",,In development,,6,
+agentic_coding,Agentic Coding,"An upcoming pathway for students to design, guide, and evaluate AI-supported coding workflows.",,In development,,7,
+scratch,Scratch Basics,Foundational Scratch projects and lessons for building core programming confidence.,Scratch foundations|Projects and lessons|Change-maker project,Extra content,Open Scratch Basics,99,homepage/scratch-card.jpg
