@@ -91,6 +91,20 @@ def display_title(value: str) -> str:
     return re.sub(r"\s+Curriculum\b", "", value).strip()
 
 
+HERO_PILLS_BY_ID = {
+    "act1": ["Scratch", "Grade 4", "Coding Fundamentals"],
+    "act2": ["Scratch", "Grade 5", "Animation & Variables"],
+    "act3": ["Scratch", "Grades 5–6", "Environment & Data"],
+    "act4": ["CreatiCode", "Grades 6–8", "Agentic Coding"],
+    "science_inquiry_studio": ["CreatiCode", "Grades 6–8", "Science & Coding"],
+    "scratch": ["Scratch", "Beginner", "Beginner Scratch"],
+}
+
+
+def hero_pills(page: Page) -> list[str]:
+    return HERO_PILLS_BY_ID.get(page.id, page.hero_pills)
+
+
 def is_spanish_resource(label: str) -> bool:
     normalized = (label or "").casefold()
     markers = ("español", "espanol", "spanish", "cuaderno", "vocabulario")
@@ -117,9 +131,11 @@ def page_head(title: str) -> str:
 
 def nav(active_file: str, pages: list[Page]) -> str:
     logo = site_logo_url()
-    curricula_links = "\n".join(f'<a href="{page.file}">{esc(display_title(page.title))}</a>' for page in pages if page.status.lower() == "published")
+    curricula_links = "\n".join(f'<a href="{page.file}">{esc(display_title(page.title))}</a>' for page in pages if page.status.lower() != "hidden")
     home_class = ' aria-current="page"' if active_file == "index.html" else ""
-    about_class = ' aria-current="page"' if active_file == "about.html" else ""
+    about_class = ' aria-current="page"' if active_file in {"about.html", "team.html"} else ""
+    about_overview_class = ' aria-current="page"' if active_file == "about.html" else ""
+    team_class = ' aria-current="page"' if active_file == "team.html" else ""
     help_class = ' aria-current="page"' if active_file == "help.html" else ""
     return f"""
 <header class="site-header">
@@ -131,8 +147,12 @@ def nav(active_file: str, pages: list[Page]) -> str:
         <button class="dropdown-toggle" type="button">Curricula</button>
         <div class="dropdown-menu">{curricula_links}</div>
       </div>
-      <a href="about.html"{about_class}>About</a>
-      <a href="help.html"{help_class}>Help</a>
+      <div class="dropdown">
+        <button class="dropdown-toggle" type="button"{about_class}>About</button>
+        <div class="dropdown-menu"><a href="about.html"{about_overview_class}>Project Overview</a>
+<a href="team.html"{team_class}>Team &amp; Partners</a></div>
+      </div>
+      <a href="help.html"{help_class}>Contact</a>
     </nav>
   </div>
 </header>
@@ -223,7 +243,7 @@ def render_curriculum(page: Page, all_pages: list[Page]) -> str:
 <main>
   <div class="page-shell">
     <section class="curriculum-hero">
-      <div class="hero-pills">{"".join(f'<span>{esc(pill)}</span>' for pill in page.hero_pills)}</div>
+      <div class="hero-pills">{"".join(f'<span>{esc(pill)}</span>' for pill in hero_pills(page))}</div>
       <h1>{esc(display_title(page.heading))}</h1>
       <p>{esc(page.summary)}</p>
     </section>
@@ -296,7 +316,8 @@ def render_home_card(card: HomeCard) -> str:
         image = f'<img src="{esc(card.image.src)}" alt="{esc(card.image.alt or card.title)}">'
     else:
         image = f'<div class="upcoming-art">{esc(card.title)}</div>'
-    status = f'<span class="status-chip">{esc(card.status_label)}</span>' if card.status_label else ""
+    status_class = " status-chip-supplementary" if card.status_label.lower() == "supplementary" else ""
+    status = f'<span class="status-chip{status_class}">{esc(card.status_label)}</span>' if card.status_label else ""
     button = f'<a class="btn outline" href="{esc(card.page.file)}">{esc(card.button_label or "Open Curriculum")}</a>' if card.page else ""
     upcoming_class = " upcoming" if not card.page else ""
     summary = (
@@ -307,8 +328,8 @@ def render_home_card(card: HomeCard) -> str:
     return f"""
 <article class="pathway-card{upcoming_class}">
   {image}
-  {status}
   <h3>{esc(card.title)}</h3>
+  {status}
   {summary}
   {button}
 </article>
@@ -322,8 +343,13 @@ def render_home(pages: list[Page], cards: list[HomeCard]) -> str:
   <div class="page-shell">
     <div>
       <h1>{esc(SITE_TITLE)}</h1>
-      <p>Organized curriculum pathways for Scratch coding, computational thinking, environmental impact projects, and AI literacy.</p>
-      <p>Created by <a href="{PROJECT_URL}">Computing and AI for All</a> team @ UC Irvine <a href="{DIGITAL_LEARNING_LAB_URL}">Digital Learning Lab</a>.</p>
+      <p>Grounded in research and built for real classrooms,<br>our free K–8 curricula are designed for any educator and learner with any background to use with confidence.</p>
+      <p class="hero-key-points">Project-based learning · Block-based coding · AI literacy · Culturally relevant · Free</p>
+      <div class="btn-row">
+        <a class="btn" href="#curricula">Explore the curriculum</a>
+        <a class="btn secondary" href="{PROJECT_URL}" target="_blank" rel="noopener">Learn about our research</a>
+      </div>
+      <p class="hero-credit">Created by the Computing and AI for All team at UC Irvine's <a href="{DIGITAL_LEARNING_LAB_URL}">Digital Learning Lab</a>.</p>
     </div>
   </div>
 </section>
@@ -334,6 +360,33 @@ def render_home(pages: list[Page], cards: list[HomeCard]) -> str:
     <div class="home-grid">{card_html}</div>
   </div>
 </section>
+""" + footer()
+
+
+def render_development_page(page: Page, all_pages: list[Page]) -> str:
+    return page_head(page.title) + nav(page.file, all_pages) + f"""
+<main>
+  <div class="page-shell">
+    <section class="curriculum-hero">
+      <div class="hero-pills">{"".join(f'<span>{esc(pill)}</span>' for pill in hero_pills(page))}</div>
+      <h1>{esc(display_title(page.heading))}</h1>
+      <p>{esc(page.summary)}</p>
+    </section>
+    <section class="development-panel curriculum-block">
+      <h2>Pathway Overview</h2>
+      <p>Science Inquiry Studio is being designed as a middle school pathway for science investigation, data-rich inquiry, and AI-assisted coding. The curriculum will support learners in using computing to ask questions, model systems, analyze evidence, and communicate scientific ideas.</p>
+      <ul class="card-bullets">
+        <li>Grades 6–8</li>
+        <li>Aligned with NGSS middle school standards</li>
+        <li>AI-assisted coding through science inquiry</li>
+      </ul>
+      <p>This pathway is currently in development. More units, classroom materials, and teacher resources will be added as they become ready.</p>
+      <div class="btn-row">
+        <a class="btn outline" href="index.html#curricula">Back to Curriculum Pathways</a>
+      </div>
+    </section>
+  </div>
+</main>
 """ + footer()
 
 
@@ -355,12 +408,18 @@ def render_about(pages: list[Page]) -> str:
 """ + footer()
 
 
+def render_team(pages: list[Page]) -> str:
+    team_body = (ROOT / "team.html").read_text(encoding="utf-8")
+    main = re.search(r"(<main.*?</main>)", team_body, re.S)
+    return page_head("Team") + nav("team.html", pages) + (main.group(1) if main else "") + footer()
+
+
 def render_help(pages: list[Page]) -> str:
-    return page_head("Help") + nav("help.html", pages) + f"""
+    return page_head("Contact") + nav("help.html", pages) + f"""
 <main class="home-section">
   <div class="page-shell">
     <div class="about-card">
-      <h1 style="font-size:48px;line-height:1.05">Help</h1>
+      <h1 style="font-size:48px;line-height:1.05">Contact</h1>
       <section class="help-section">
         <h2>Contact Us</h2>
         <p>For questions about the curriculum collection, email the Computing and AI for All team.</p>
@@ -395,8 +454,11 @@ def main() -> None:
     for page in content.pages:
         if page.status.lower() == "published":
             (ROOT / page.file).write_text(render_curriculum(page, content.pages), encoding="utf-8")
+        elif page.status.lower() == "development":
+            (ROOT / page.file).write_text(render_development_page(page, content.pages), encoding="utf-8")
     (ROOT / "index.html").write_text(render_home(content.pages, content.homepage_cards), encoding="utf-8")
     (ROOT / "about.html").write_text(render_about(content.pages), encoding="utf-8")
+    (ROOT / "team.html").write_text(render_team(content.pages), encoding="utf-8")
     (ROOT / "help.html").write_text(render_help(content.pages), encoding="utf-8")
     print(f"Built {len(content.pages) + 3} pages from structured content")
 

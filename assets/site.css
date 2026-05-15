@@ -309,6 +309,21 @@ img {
   font-size: 24px;
 }
 
+.development-panel {
+  max-width: 900px;
+  padding: 28px;
+}
+
+.development-panel h2 {
+  margin-bottom: 12px;
+}
+
+.development-panel .card-bullets {
+  flex: none;
+  margin-top: 8px;
+  margin-bottom: 18px;
+}
+
 .hero-stats {
   display: flex;
   justify-content: center;
@@ -701,20 +716,52 @@ img {
 }
 
 .home-hero .page-shell {
-  padding: 54px 0 60px;
+  padding: 64px 0 68px;
+  text-align: center;
+}
+
+.home-hero .page-shell > div {
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .home-hero h1 {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
   color: #000;
   font-size: 56px;
-  line-height: 1;
+  line-height: 1.12;
   text-shadow: 3px 3px 0 rgba(255, 255, 255, .65);
 }
 
 .home-hero p {
   max-width: 690px;
+  margin-right: auto;
+  margin-bottom: 14px;
+  margin-left: auto;
   font-size: 20px;
+  font-weight: 400;
+  line-height: 1.62;
+}
+
+.home-hero .hero-key-points {
+  max-width: 760px;
+  margin-bottom: 0;
+  color: rgba(31, 42, 68, .62);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.home-hero .hero-credit {
+  margin-top: 18px;
+  color: rgba(10, 100, 165, .84);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.home-hero .btn-row {
+  justify-content: center;
+  gap: 14px;
+  margin-top: 28px;
 }
 
 .home-hero p:last-child {
@@ -723,7 +770,21 @@ img {
 
 .home-hero a {
   color: var(--blue);
-  font-weight: 800;
+  font-weight: 400;
+}
+
+.home-hero .btn {
+  min-width: 210px;
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #fff;
+  font-weight: 400;
+}
+
+.home-hero .btn.secondary {
+  border-color: rgba(10, 100, 165, .32);
+  background: rgba(255, 253, 248, .74);
+  color: var(--blue);
 }
 
 .hero-panel {
@@ -775,7 +836,7 @@ img {
   margin: 0 0 18px;
   padding-left: 20px;
   color: var(--ink);
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .card-bullets li + li {
@@ -821,6 +882,11 @@ img {
   color: var(--blue);
   font-size: 13px;
   font-weight: 800;
+}
+
+.status-chip-supplementary {
+  background: var(--butter);
+  color: var(--navy);
 }
 
 .btn-row {
@@ -875,6 +941,99 @@ img {
 
 .help-section h2 {
   margin-bottom: 8px;
+}
+
+.section-note {
+  margin-bottom: 0;
+  color: rgba(31, 42, 68, .58);
+  font-size: 13px;
+}
+
+.district-grid,
+.people-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.district-card,
+.person-card {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 8px 22px rgba(31, 42, 68, .08);
+}
+
+.district-card {
+  background: rgba(138, 192, 229, .25);
+}
+
+.district-card img {
+  width: 84px;
+  height: 84px;
+  margin-bottom: 14px;
+  border-radius: 8px;
+  object-fit: contain;
+  background: #fff;
+}
+
+.person-card img {
+  width: 132px;
+  height: 132px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--mist);
+}
+
+.headshot-placeholder {
+  display: inline-grid;
+  width: 132px;
+  height: 132px;
+  place-items: center;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  background: var(--sky);
+  color: var(--navy);
+  font-family: "Poppins", sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.district-card h3,
+.person-card h3 {
+  margin-bottom: 8px;
+  color: var(--blue);
+  font-size: 17px;
+  line-height: 1.25;
+}
+
+.district-card p,
+.person-card p {
+  margin-bottom: 4px;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.district-card p:first-of-type,
+.person-card p:first-of-type {
+  font-weight: 700;
+}
+
+.alumni-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-top: 14px;
+}
+
+.alumni-list span {
+  color: var(--ink);
 }
 
 .footer {
@@ -936,6 +1095,11 @@ img {
     grid-template-columns: 1fr;
   }
 
+  .district-grid,
+  .people-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .unit-card {
     padding: 22px;
   }
@@ -976,6 +1140,11 @@ img {
     width: 100%;
     flex: none;
     min-width: 0;
+  }
+
+  .district-grid,
+  .people-grid {
+    grid-template-columns: 1fr;
   }
 
   .curriculum-hero h1 {
