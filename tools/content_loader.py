@@ -622,8 +622,8 @@ def validate_tables(tables: dict[str, list[dict[str, str]]]) -> list[str]:
     for index, row in enumerate(tables.get("curricula", [])):
         status = clean(row.get("status")).lower()
         slug = clean(row.get("slug"))
-        if status not in {"published", "hidden"}:
-            errors.append(f"{row_label('curricula', index)}: status must be 'published' or 'hidden'.")
+        if status not in {"published", "hidden", "development"}:
+            errors.append(f"{row_label('curricula', index)}: status must be 'published', 'development', or 'hidden'.")
         if slug and not slug.endswith(".html"):
             errors.append(f"{row_label('curricula', index)}: slug must be an .html filename, such as 'test-remote.html'.")
 
@@ -666,8 +666,8 @@ def validate_tables(tables: dict[str, list[dict[str, str]]]) -> list[str]:
         button_label = clean(row.get("button_label"))
         status_label = clean(row.get("status_label"))
         bullets = bullet_points(row.get("bullet_points"))
-        if len(bullets) > 3:
-            errors.append(f"{row_label('homepage_cards', index)}: bullet_points should contain 3 or fewer items.")
+        if len(bullets) > 4:
+            errors.append(f"{row_label('homepage_cards', index)}: bullet_points should contain 4 or fewer items.")
         if button_label and curriculum_id not in published_curricula:
             errors.append(
                 f"{row_label('homepage_cards', index)}: button_label requires curriculum_id '{curriculum_id}' to be a published curriculum."

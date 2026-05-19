@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Contact | Computing and AI for All Curriculum</title>
-  <link rel="stylesheet" href="assets/site.css">
+  <title>Contact Us | Computing and AI for All Curriculum</title>
+  <link rel="stylesheet" href="assets/site.css?v=20260518-team2">
 </head>
 <body>
 
 <header class="site-header">
   <div class="nav-inner">
-    <a class="brand" href="index.html"><img alt="" src="assets/generated-images/1e-ozIK3UJyEslsldsgYF64ZLcCqhLDTN.png"><span>CAIforALL Curriculum</span></a>
+    <a class="brand" href="index.html"><img alt="" src="content/drive-image-library/site/logo.png"><span>CAIforALL Curriculum</span></a>
     <nav class="site-nav" aria-label="Site">
       <a href="index.html">Home</a>
       <div class="dropdown">
@@ -22,32 +22,48 @@
 <a href="science-inquiry-studio.html">Science Inquiry Studio</a>
 <a href="scratch-basics.html">Scratch Basics</a></div>
       </div>
+      <a href="pd.html">PD</a>
       <div class="dropdown">
         <button class="dropdown-toggle" type="button">About</button>
-        <div class="dropdown-menu"><a href="about.html">Project Overview</a>
+        <div class="dropdown-menu"><a href="https://www.computingandaiforall.org/" target="_blank" rel="noopener">Project Overview</a>
 <a href="team.html">Team &amp; Partners</a></div>
       </div>
-      <a href="help.html" aria-current="page">Contact</a>
+      <a href="help.html" aria-current="page">Contact Us</a>
     </nav>
   </div>
 </header>
 
 <main class="home-section">
   <div class="page-shell">
-    <div class="about-card">
-      <h1 style="font-size:48px;line-height:1.05">Contact</h1>
-      <section class="help-section">
-        <h2>Contact Us</h2>
-        <p>For questions about the curriculum collection, email the Computing and AI for All team.</p>
-        <a class="btn outline" href="mailto:ECforALL@uci.edu">ECforALL@uci.edu</a>
-        <p>For questions about CreatiCode or the CreatiCode curriculum, email the CreatiCode team.</p>
-        <a class="btn outline" href="mailto:info@creaticode.com">info@creaticode.com</a>
-      </section>
-      <section class="help-section">
-        <h2>Feedback Form</h2>
-        <p>Share curriculum feedback, report issues, or suggest improvements using the feedback form.</p>
-        <a class="btn" href="https://bit.ly/ECforALLfeedback">Open Feedback Form</a>
-      </section>
+    <div class="contact-content">
+      <h1>Contact Us</h1>
+      <p>Please fill out the form below to send an email to CAIforAll Team. Someone will follow up with you ASAP.</p>
+      <p>You may also send an email to <a href="mailto:ECforALL@uci.edu">ECforALL@uci.edu</a>.</p>
+      <form class="native-interest-form contact-form" data-google-form action="https://docs.google.com/forms/d/e/1FAIpQLSf77OMxLi81HAw0FSxT6OvZInLNTSEi4jchm88xljdFNbmCFg/formResponse" method="post" target="contact-form-target">
+        <div class="form-grid">
+          <label>Your Name <span class="required-star">*</span><input name="entry.1749716936" type="text" autocomplete="name" required></label>
+          <label>Your Email <span class="required-star">*</span><input name="entry.398155858" type="email" autocomplete="email" required></label>
+        </div>
+        <fieldset data-required-group="entry.1791142999">
+          <legend>Related Curricular Pathway <span class="required-star">*</span></legend>
+          <label><input name="entry.1791142999" type="checkbox" value="ACT 1"> ACT 1</label>
+          <label><input name="entry.1791142999" type="checkbox" value="ACT 2"> ACT 2</label>
+          <label><input name="entry.1791142999" type="checkbox" value="ACT 3"> ACT 3</label>
+          <label><input name="entry.1791142999" type="checkbox" value="Coding+AI"> Coding+AI</label>
+          <label><input name="entry.1791142999" type="checkbox" value="Science Inquiry Studio"> Science Inquiry Studio</label>
+          <label><input name="entry.1791142999" type="checkbox" value="Scratch Basics"> Scratch Basics</label>
+        </fieldset>
+        <label>Unit &amp; Lesson <span class="required-star">*</span><input name="entry.1884896097" type="text" placeholder="Example: 2.3, Lesson 2.3, Unit 2 Lesson 2.3" required></label>
+        <label>Message <span class="required-star">*</span>
+          <textarea name="entry.1233495853" rows="6" required></textarea>
+        </label>
+        <input type="hidden" name="fvv" value="1">
+        <input type="hidden" name="pageHistory" value="0">
+        <input type="hidden" name="fbzx" value="-8373193682794724951">
+        <button class="btn primary" type="submit">Send Message</button>
+        <p class="form-status" role="status" aria-live="polite"></p>
+      </form>
+      <iframe class="hidden-form-target" name="contact-form-target" title="Contact form submission"></iframe>
     </div>
   </div>
 </main>

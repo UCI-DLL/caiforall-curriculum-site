@@ -7,7 +7,7 @@ import re
 import sys
 from pathlib import Path
 
-from content_loader import HomeCard, Image, Link, Page, Unit, drive_image_resolver, drive_file_id, image_url, load_content
+from content_loader import HomeCard, Image, Link, Page, Unit, drive_image_resolver, drive_file_id, image_url, load_content, looks_like_url
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -60,8 +60,15 @@ def localize_drive_image(src: str, cache: dict[str, str]) -> str:
 
 
 def localize_image(image: Image | None, cache: dict[str, str]) -> None:
-    if image and image.src and "drive.google.com" in image.src:
+    if not image or not image.src:
+        return
+    if "drive.google.com" in image.src:
         image.src = localize_drive_image(image.src, cache)
+        return
+    if not looks_like_url(image.src) and not image.src.startswith(("assets/", "content/")):
+        local_path = Path("content/drive-image-library") / image.src
+        if (ROOT / local_path).exists():
+            image.src = local_path.as_posix()
 
 
 def localize_site_images(pages: list[Page], cards: list[HomeCard]) -> None:
@@ -77,8 +84,12 @@ def localize_site_images(pages: list[Page], cards: list[HomeCard]) -> None:
 def site_logo_url() -> str:
     configured_url = os.environ.get("SITE_LOGO_IMAGE_URL", "")
     configured_path = os.environ.get("SITE_LOGO_ASSET_PATH", "site/logo.png")
-    if configured_url or drive_image_resolver().configured():
+    if configured_url:
         return localize_drive_image(image_url(configured_url, configured_path), LOCALIZED_IMAGE_CACHE)
+    if (ROOT / FALLBACK_LOGO).exists():
+        return FALLBACK_LOGO
+    if drive_image_resolver().configured():
+        return localize_drive_image(image_url("", configured_path), LOCALIZED_IMAGE_CACHE)
     return FALLBACK_LOGO
 
 
@@ -123,7 +134,7 @@ def page_head(title: str) -> str:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{esc(title)} | {esc(SITE_TITLE)}</title>
-  <link rel="stylesheet" href="assets/site.css">
+  <link rel="stylesheet" href="assets/site.css?v=20260518-team2">
 </head>
 <body>
 """
@@ -133,6 +144,7 @@ def nav(active_file: str, pages: list[Page]) -> str:
     logo = site_logo_url()
     curricula_links = "\n".join(f'<a href="{page.file}">{esc(display_title(page.title))}</a>' for page in pages if page.status.lower() != "hidden")
     home_class = ' aria-current="page"' if active_file == "index.html" else ""
+    pd_class = ' aria-current="page"' if active_file == "pd.html" else ""
     about_class = ' aria-current="page"' if active_file in {"about.html", "team.html"} else ""
     about_overview_class = ' aria-current="page"' if active_file == "about.html" else ""
     team_class = ' aria-current="page"' if active_file == "team.html" else ""
@@ -147,12 +159,13 @@ def nav(active_file: str, pages: list[Page]) -> str:
         <button class="dropdown-toggle" type="button">Curricula</button>
         <div class="dropdown-menu">{curricula_links}</div>
       </div>
+      <a href="pd.html"{pd_class}>PD</a>
       <div class="dropdown">
         <button class="dropdown-toggle" type="button"{about_class}>About</button>
-        <div class="dropdown-menu"><a href="about.html"{about_overview_class}>Project Overview</a>
+        <div class="dropdown-menu"><a href="{PROJECT_URL}" target="_blank" rel="noopener">Project Overview</a>
 <a href="team.html"{team_class}>Team &amp; Partners</a></div>
       </div>
-      <a href="help.html"{help_class}>Contact</a>
+      <a href="help.html"{help_class}>Contact Us</a>
     </nav>
   </div>
 </header>
@@ -316,7 +329,11 @@ def render_home_card(card: HomeCard) -> str:
         image = f'<img src="{esc(card.image.src)}" alt="{esc(card.image.alt or card.title)}">'
     else:
         image = f'<div class="upcoming-art">{esc(card.title)}</div>'
-    status_class = " status-chip-supplementary" if card.status_label.lower() == "supplementary" else ""
+    status_class = ""
+    if card.status_label.lower() == "supplementary":
+        status_class = " status-chip-supplementary"
+    elif card.status_label.lower() == "in development":
+        status_class = " status-chip-development"
     status = f'<span class="status-chip{status_class}">{esc(card.status_label)}</span>' if card.status_label else ""
     button = f'<a class="btn outline" href="{esc(card.page.file)}">{esc(card.button_label or "Open Curriculum")}</a>' if card.page else ""
     upcoming_class = " upcoming" if not card.page else ""
@@ -344,7 +361,7 @@ def render_home(pages: list[Page], cards: list[HomeCard]) -> str:
     <div>
       <h1>{esc(SITE_TITLE)}</h1>
       <p>Grounded in research and built for real classrooms,<br>our free K–8 curricula are designed for any educator and learner with any background to use with confidence.</p>
-      <p class="hero-key-points">Project-based learning · Block-based coding · AI literacy · Culturally relevant · Free</p>
+      <p class="hero-key-points">Project-Based Learning · Block-Based Coding · AI Literacy · Culturally Relevant · Free</p>
       <div class="btn-row">
         <a class="btn" href="#curricula">Explore the curriculum</a>
         <a class="btn secondary" href="{PROJECT_URL}" target="_blank" rel="noopener">Learn about our research</a>
@@ -414,24 +431,124 @@ def render_team(pages: list[Page]) -> str:
     return page_head("Team") + nav("team.html", pages) + (main.group(1) if main else "") + footer()
 
 
+def render_pd(pages: list[Page]) -> str:
+    return page_head("PD") + nav("pd.html", pages) + f"""
+<section class="pd-hero">
+  <div class="page-shell">
+    <h1>Professional Development</h1>
+  </div>
+</section>
+
+<main class="home-section pd-page">
+  <div class="page-shell">
+    <div class="pd-content">
+      <section class="help-section">
+        <h2>Self-Paced PD</h2>
+        <p>This free, self-paced professional development program will help you learn both the computer science elements and the pedagogical strategies for teaching computational thinking to diverse K-8 students. All those who complete the professional development will be able to implement our curriculum in the classroom.</p>
+        <div class="pd-card-grid">
+          <article class="pathway-card pd-card pd-card-wide">
+            <h3>Unit 0: Introduction to Computing and AI for ALL</h3>
+            <p class="pd-card-note">Learn the basics of Scratch block-based coding, the CAI curriculum structure, supporting pedagogy, and how to set up a Scratch classroom.</p>
+            <div class="pd-resource-list">
+              <a href="https://www.proprofs.com/training/course/?title=copy-of-unit-0-introduction-to-ecforall-and-scratch_68717a6779f53" target="_blank" rel="noopener">Unit 0 Registration</a>
+            </div>
+          </article>
+          <article class="pathway-card pd-card">
+            <h3>ACT 1: Scratch Create</h3>
+            <div class="pd-resource-list">
+              <a href="https://www.proprofstraining.com/app/course/?title=copy-of-act-1-unit-pd_687174ccb0524" target="_blank" rel="noopener">Unit 1: Scratch Basics</a>
+              <a href="https://www.proprofstraining.com/app/course/?title=act-unit-2_67feb62ce08b1" target="_blank" rel="noopener">Unit 2: Sequence</a>
+              <a href="https://www.proprofstraining.com/app/course/?title=act-unit-3-review_6801676447e51" target="_blank" rel="noopener">Unit 3: Events</a>
+              <a href="https://www.proprofstraining.com/app/course/?title=copy-of-act-unit-4-review-in-progress_68717a8528d2d" target="_blank" rel="noopener">Unit 4: Loops</a>
+            </div>
+          </article>
+          <article class="pathway-card pd-card">
+            <h3>ACT 2: Scratch Design</h3>
+            <div class="pd-resource-list">
+              <a href="https://www.proprofstraining.com/app/course/?title=act-2-unit-1-edit-in-progress_6882b341c9df8" target="_blank" rel="noopener">Unit 1: Animation</a>
+              <a href="https://www.proprofstraining.com/app/course/?title=act-2-unit-edit-in-progress_6882b37f5b0eb" target="_blank" rel="noopener">Unit 2: Loops with Conditions</a>
+              <a href="https://www.proprofstraining.com/app/course/?title=act-2-unit-3-edit-in-progress_6882b45a780c4" target="_blank" rel="noopener">Unit 3: Parallelism and Synchronization</a>
+              <a href="https://www.proprofstraining.com/app/course/?title=act-2-unit-4-edit-in-progress_6882b4b7e3265" target="_blank" rel="noopener">Unit 4: Variables</a>
+            </div>
+          </article>
+          <article class="pathway-card pd-card">
+            <h3>ACT 3: Scratch Impact</h3>
+            <div class="pd-resource-list">
+              <a href="https://www.proprofstraining.com/app/course/?title=variables-pd_69b2efd7434c1" target="_blank" rel="noopener">Variables</a>
+              <a href="https://www.proprofstraining.com/app/course/?title=variables-pd_69b2ef4d255b6" target="_blank" rel="noopener">If Then-Else Conditional Loops</a>
+              <a href="https://www.proprofstraining.com/app/course/?title=act-3-unit-edit-in-progress_6882b6bc54264" target="_blank" rel="noopener">Functions</a>
+            </div>
+          </article>
+        </div>
+        <p class="pd-contact-note">PD for additional pathways is in development. For questions, please visit the <a href="help.html">Contact</a> page.</p>
+      </section>
+      <section class="help-section">
+        <h2>For Research Participants</h2>
+        <p>Educators and facilitators participating in our research project receive tailored professional development, including training before the course starts and ongoing support throughout implementation. Details vary by cohort.</p>
+        <div class="pd-interest">
+          <h3>Interested in Participating?</h3>
+          <form class="native-interest-form" data-google-form action="https://docs.google.com/forms/d/e/1FAIpQLSeQmgtcbVPH2adjibYN8st1PXsf0b0tlZr2nkN1ueepUsmlsQ/formResponse" method="post" target="interest-form-target">
+            <div class="form-grid">
+              <label>Your Name <span class="required-star">*</span><input name="entry.1749716936" type="text" autocomplete="name" required></label>
+              <label>Your Email <span class="required-star">*</span><input name="entry.398155858" type="email" autocomplete="email" required></label>
+              <label>Your School <span class="required-star">*</span><input name="entry.186915610" type="text" required></label>
+              <label>Your District <span class="required-star">*</span><input name="entry.846008202" type="text" required></label>
+            </div>
+            <fieldset data-required-group="entry.1791142999">
+              <legend>Project you are interested in <span class="required-star">*</span></legend>
+              <label><input name="entry.1791142999" type="checkbox" value="5th Grade: ACT 3"> 5th Grade: ACT 3</label>
+              <label><input name="entry.1791142999" type="checkbox" value="6th-8th: Science Inquiry Studio"> 6th-8th: Science Inquiry Studio</label>
+              <label><input name="entry.1791142999" type="checkbox" value="6th-8th: Coding+AI"> 6th-8th: Coding+AI</label>
+            </fieldset>
+            <input type="hidden" name="fvv" value="1">
+            <input type="hidden" name="pageHistory" value="0">
+            <input type="hidden" name="fbzx" value="8190185445833508264">
+            <button class="btn primary" type="submit">Submit Interest Form</button>
+            <p class="form-status" role="status" aria-live="polite"></p>
+          </form>
+          <iframe class="hidden-form-target" name="interest-form-target" title="Research participant interest form submission"></iframe>
+          <p class="section-note">Prefer Google Forms? <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQmgtcbVPH2adjibYN8st1PXsf0b0tlZr2nkN1ueepUsmlsQ/viewform?usp=header" target="_blank" rel="noopener">Open the original form in a new tab</a>.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+""" + footer()
+
+
 def render_help(pages: list[Page]) -> str:
-    return page_head("Contact") + nav("help.html", pages) + f"""
+    return page_head("Contact Us") + nav("help.html", pages) + f"""
 <main class="home-section">
   <div class="page-shell">
-    <div class="about-card">
-      <h1 style="font-size:48px;line-height:1.05">Contact</h1>
-      <section class="help-section">
-        <h2>Contact Us</h2>
-        <p>For questions about the curriculum collection, email the Computing and AI for All team.</p>
-        <a class="btn outline" href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>
-        <p>For questions about CreatiCode or the CreatiCode curriculum, email the CreatiCode team.</p>
-        <a class="btn outline" href="mailto:{CREATICODE_EMAIL}">{CREATICODE_EMAIL}</a>
-      </section>
-      <section class="help-section">
-        <h2>Feedback Form</h2>
-        <p>Share curriculum feedback, report issues, or suggest improvements using the feedback form.</p>
-        <a class="btn" href="{FEEDBACK_URL}">Open Feedback Form</a>
-      </section>
+    <div class="contact-content">
+      <h1>Contact Us</h1>
+      <p>Please fill out the form below to send an email to CAIforAll Team. Someone will follow up with you ASAP.</p>
+      <p>You may also send an email to <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>.</p>
+      <form class="native-interest-form contact-form" data-google-form action="https://docs.google.com/forms/d/e/1FAIpQLSf77OMxLi81HAw0FSxT6OvZInLNTSEi4jchm88xljdFNbmCFg/formResponse" method="post" target="contact-form-target">
+        <div class="form-grid">
+          <label>Your Name <span class="required-star">*</span><input name="entry.1749716936" type="text" autocomplete="name" required></label>
+          <label>Your Email <span class="required-star">*</span><input name="entry.398155858" type="email" autocomplete="email" required></label>
+        </div>
+        <fieldset data-required-group="entry.1791142999">
+          <legend>Related Curricular Pathway <span class="required-star">*</span></legend>
+          <label><input name="entry.1791142999" type="checkbox" value="ACT 1"> ACT 1</label>
+          <label><input name="entry.1791142999" type="checkbox" value="ACT 2"> ACT 2</label>
+          <label><input name="entry.1791142999" type="checkbox" value="ACT 3"> ACT 3</label>
+          <label><input name="entry.1791142999" type="checkbox" value="Coding+AI"> Coding+AI</label>
+          <label><input name="entry.1791142999" type="checkbox" value="Science Inquiry Studio"> Science Inquiry Studio</label>
+          <label><input name="entry.1791142999" type="checkbox" value="Scratch Basics"> Scratch Basics</label>
+        </fieldset>
+        <label>Unit &amp; Lesson <span class="required-star">*</span><input name="entry.1884896097" type="text" placeholder="Example: 2.3, Lesson 2.3, Unit 2 Lesson 2.3" required></label>
+        <label>Message <span class="required-star">*</span>
+          <textarea name="entry.1233495853" rows="6" required></textarea>
+        </label>
+        <input type="hidden" name="fvv" value="1">
+        <input type="hidden" name="pageHistory" value="0">
+        <input type="hidden" name="fbzx" value="-8373193682794724951">
+        <button class="btn primary" type="submit">Send Message</button>
+        <p class="form-status" role="status" aria-live="polite"></p>
+      </form>
+      <iframe class="hidden-form-target" name="contact-form-target" title="Contact form submission"></iframe>
     </div>
   </div>
 </main>
@@ -440,7 +557,7 @@ def render_help(pages: list[Page]) -> str:
 
 def main() -> None:
     try:
-        content = load_content()
+        content = load_content(resolve_images=False)
     except Exception as exc:
         print(exc, file=sys.stderr)
         raise SystemExit(1)
@@ -459,6 +576,7 @@ def main() -> None:
     (ROOT / "index.html").write_text(render_home(content.pages, content.homepage_cards), encoding="utf-8")
     (ROOT / "about.html").write_text(render_about(content.pages), encoding="utf-8")
     (ROOT / "team.html").write_text(render_team(content.pages), encoding="utf-8")
+    (ROOT / "pd.html").write_text(render_pd(content.pages), encoding="utf-8")
     (ROOT / "help.html").write_text(render_help(content.pages), encoding="utf-8")
     print(f"Built {len(content.pages) + 3} pages from structured content")
 
