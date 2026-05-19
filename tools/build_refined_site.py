@@ -108,7 +108,7 @@ HERO_PILLS_BY_ID = {
     "act1": ["Scratch", "Grade 4", "Coding Fundamentals"],
     "act2": ["Scratch", "Grade 5", "Animation & Variables"],
     "act3": ["Scratch", "Grades 5–6", "Environment & Data"],
-    "act4": ["CreatiCode", "Grades 6–8", "Agentic Coding"],
+    "act4": ["CreatiCode", "Grades 6–8", "AI Assisted&Agentic Coding"],
     "science_inquiry_studio": ["CreatiCode", "Grades 6–8", "Science & Coding"],
     "scratch": ["Scratch", "Beginner", "Beginner Scratch"],
 }
