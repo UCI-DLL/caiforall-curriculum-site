@@ -31,6 +31,8 @@ jobs:
           find . -maxdepth 1 -name "*.html" -exec cp {} dist/ \;
           cp robots.txt dist/
           cp -R assets dist/assets
+          mkdir -p dist/content
+          cp -R content/drive-image-library dist/content/drive-image-library
           if grep -R -n -E "wixstatic|webpackJsonp|ssrInfo|renderBodyTime" dist; then
             echo "Unexpected Wix artifact found in public site output."
             exit 1
