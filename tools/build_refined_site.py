@@ -16,11 +16,13 @@ GENERATED_IMAGE_DIR = ROOT / "assets" / "generated-images"
 FALLBACK_LOGO = "content/drive-image-library/site/logo.png"
 PROJECT_URL = "https://www.computingandaiforall.org/"
 SITE_TITLE = "Computing and AI for All Curriculum"
+HOME_HERO_TITLE = "Computing and AI for All Curriculum"
 HEADER_TITLE = "CAIforALL Curriculum"
 DIGITAL_LEARNING_LAB_URL = "https://www.digitallearninglab.org/"
 CONTACT_EMAIL = "ECforALL@uci.edu"
 CREATICODE_EMAIL = "info@creaticode.com"
 FEEDBACK_URL = "https://bit.ly/ECforALLfeedback"
+ASSET_VERSION = "20260519-footer"
 LOCALIZED_IMAGE_CACHE: dict[str, str] = {}
 
 
@@ -134,15 +136,19 @@ def page_head(title: str) -> str:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{esc(title)} | {esc(SITE_TITLE)}</title>
-  <link rel="stylesheet" href="assets/site.css?v=20260518-team2">
+  <link rel="stylesheet" href="assets/site.css?v={ASSET_VERSION}">
 </head>
 <body>
 """
 
 
+def local_href(file: str) -> str:
+    return f"{file}?v={ASSET_VERSION}"
+
+
 def nav(active_file: str, pages: list[Page]) -> str:
     logo = site_logo_url()
-    curricula_links = "\n".join(f'<a href="{page.file}">{esc(display_title(page.title))}</a>' for page in pages if page.status.lower() != "hidden")
+    curricula_links = "\n".join(f'<a href="{local_href(page.file)}">{esc(display_title(page.title))}</a>' for page in pages if page.status.lower() != "hidden")
     home_class = ' aria-current="page"' if active_file == "index.html" else ""
     pd_class = ' aria-current="page"' if active_file == "pd.html" else ""
     about_class = ' aria-current="page"' if active_file in {"about.html", "team.html"} else ""
@@ -152,20 +158,20 @@ def nav(active_file: str, pages: list[Page]) -> str:
     return f"""
 <header class="site-header">
   <div class="nav-inner">
-    <a class="brand" href="index.html"><img alt="" src="{logo}"><span>{esc(HEADER_TITLE)}</span></a>
+    <a class="brand" href="{local_href("index.html")}"><img alt="" src="{logo}"><span>{esc(HEADER_TITLE)}</span></a>
     <nav class="site-nav" aria-label="Site">
-      <a href="index.html"{home_class}>Home</a>
+      <a href="{local_href("index.html")}"{home_class}>Home</a>
       <div class="dropdown">
         <button class="dropdown-toggle" type="button">Curricula</button>
         <div class="dropdown-menu">{curricula_links}</div>
       </div>
-      <a href="pd.html"{pd_class}>PD</a>
+      <a href="{local_href("pd.html")}"{pd_class}>PD</a>
       <div class="dropdown">
         <button class="dropdown-toggle" type="button"{about_class}>About</button>
-        <div class="dropdown-menu"><a href="{PROJECT_URL}" target="_blank" rel="noopener">Project Overview</a>
-<a href="team.html"{team_class}>Team &amp; Partners</a></div>
+        <div class="dropdown-menu"><a href="{PROJECT_URL}" target="_blank" rel="noopener">CAIforAll Project</a>
+<a href="{local_href("team.html")}"{team_class}>Team &amp; Partners</a></div>
       </div>
-      <a href="help.html"{help_class}>Contact Us</a>
+      <a href="{local_href("help.html")}"{help_class}>Contact Us</a>
     </nav>
   </div>
 </header>
@@ -176,9 +182,9 @@ def footer() -> str:
     return """
 <footer class="footer">
   <div class="page-shell">
-    <p>Computing and AI for All and its curriculum and other materials are licensed under a Creative Commons Attribution NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0).</p>
-    <p>Under this license, you may use and adapt this work non-commercially as long as you attribute the work to Computing and AI for All and license it under identical terms. You may not use or adapt this work for commercial purposes.</p>
-    <p>© 2025, Computing and AI for All</p>
+    <p>Computing and AI for All and its curriculum and other materials are licensed under a Creative Commons Attribution NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0). Under this license, you may use and adapt this work non-commercially as long as you attribute the work to Computing and AI for All and license it under identical terms. You may not use or adapt this work for commercial purposes.</p>
+    <p>This curriculum is supported in part by the National Science Foundation through Grants #2317832 and #1923136 and by the United States Department of Education through Grant #U411C190092.</p>
+    <p>© 2026, Computing and AI for All</p>
   </div>
 </footer>
 <script src="assets/site.js"></script>
@@ -299,8 +305,9 @@ def render_lesson(lesson, open_first: bool) -> str:
     open_attr = " open" if open_first else ""
     duration = f'<span class="duration">{esc(lesson.duration)}</span>' if lesson.duration else ""
     objectives = lesson.objective_bullets or []
+    objective_heading = "Learning Objective" if len(objectives) == 1 else "Learning Objectives"
     objective_html = (
-        '<div class="lesson-objectives"><h3>Learning Objectives</h3><ul>'
+        f'<div class="lesson-objectives"><h3>{objective_heading}</h3><ul>'
         + "".join(f"<li>{esc(item)}</li>" for item in objectives[:5])
         + "</ul></div>"
         if objectives
@@ -335,7 +342,7 @@ def render_home_card(card: HomeCard) -> str:
     elif card.status_label.lower() == "in development":
         status_class = " status-chip-development"
     status = f'<span class="status-chip{status_class}">{esc(card.status_label)}</span>' if card.status_label else ""
-    button = f'<a class="btn outline" href="{esc(card.page.file)}">{esc(card.button_label or "Open Curriculum")}</a>' if card.page else ""
+    button = f'<a class="btn outline" href="{esc(card.page.file)}">{esc(card.button_label or "Explore Curriculum")}</a>' if card.page else ""
     upcoming_class = " upcoming" if not card.page else ""
     summary = (
         '<ul class="card-bullets">' + "".join(f"<li>{esc(point)}</li>" for point in card.bullet_points) + "</ul>"
@@ -359,8 +366,8 @@ def render_home(pages: list[Page], cards: list[HomeCard]) -> str:
 <section class="home-hero">
   <div class="page-shell">
     <div>
-      <h1>{esc(SITE_TITLE)}</h1>
-      <p>Grounded in research and built for real classrooms,<br>our free K–8 curricula are designed for any educator and learner with any background to use with confidence.</p>
+      <h1>{esc(HOME_HERO_TITLE)}</h1>
+      <p>Grounded in NSF-funded research and built for real classrooms,<br>our free K–8 curricula are designed for educators and learners with any background to use with confidence.</p>
       <p class="hero-key-points">Project-Based Learning · Block-Based Coding · AI Literacy · Culturally Relevant · Free</p>
       <div class="btn-row">
         <a class="btn" href="#curricula">Explore the curriculum</a>
@@ -372,7 +379,7 @@ def render_home(pages: list[Page], cards: list[HomeCard]) -> str:
 </section>
 <section class="home-section" id="curricula">
   <div class="page-shell">
-    <h2>Curriculum Pathways</h2>
+    <h2>Curricular Pathways</h2>
     <p>Choose the pathway that matches your grade level and learning goals.</p>
     <div class="home-grid">{card_html}</div>
   </div>
@@ -399,7 +406,7 @@ def render_development_page(page: Page, all_pages: list[Page]) -> str:
       </ul>
       <p>This pathway is currently in development. More units, classroom materials, and teacher resources will be added as they become ready.</p>
       <div class="btn-row">
-        <a class="btn outline" href="index.html#curricula">Back to Curriculum Pathways</a>
+        <a class="btn outline" href="index.html#curricula">Back to Curricular Pathways</a>
       </div>
     </section>
   </div>
