@@ -373,7 +373,7 @@ def render_home(pages: list[Page], cards: list[HomeCard]) -> str:
         <a class="btn" href="#curricula">Explore the curriculum</a>
         <a class="btn secondary" href="{PROJECT_URL}" target="_blank" rel="noopener">Learn about our research</a>
       </div>
-      <p class="hero-credit">Created by the Computing and AI for All team at UC Irvine's <a href="{DIGITAL_LEARNING_LAB_URL}">Digital Learning Lab</a>.</p>
+      <p class="hero-credit">Created by the <a href="{PROJECT_URL}" target="_blank" rel="noopener">Computing and AI for All</a> team at UC Irvine's <a href="{DIGITAL_LEARNING_LAB_URL}">Digital Learning Lab</a>.</p>
     </div>
   </div>
 </section>
