@@ -240,7 +240,7 @@ def render_objectives(text: str) -> str:
 
 
 def short_unit_title(title: str) -> str:
-    match = re.match(r"^(Unit\s*\d+)", title, re.I)
+    match = re.match(r"^(Unit\s*\d+[A-Za-z]?)", title, re.I)
     return re.sub(r"\s+", " ", match.group(1)) if match else title
 
 

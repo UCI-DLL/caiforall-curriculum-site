@@ -5,6 +5,7 @@ import tempfile
 from pathlib import Path
 
 from content_loader import ContentError, build_content, read_csv_tables
+from build_refined_site import short_unit_title
 
 
 def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
@@ -224,9 +225,14 @@ def test_invalid_status_is_caught() -> None:
     try:
         build_from_rows(tables)
     except ContentError as exc:
-        assert "status must be 'published' or 'hidden'" in str(exc)
+        assert "status must be 'published', 'development', or 'hidden'" in str(exc)
     else:
         raise AssertionError("Invalid status should fail validation.")
+
+
+def test_unit_letter_suffix_is_preserved() -> None:
+    assert short_unit_title("Unit 5A: Advanced AI Apps") == "Unit 5A"
+    assert short_unit_title("Unit 5B: Agentic Coding Tools") == "Unit 5B"
 
 
 def main() -> None:
@@ -235,6 +241,7 @@ def main() -> None:
         test_add_new_curriculum,
         test_add_unit_and_resource,
         test_invalid_status_is_caught,
+        test_unit_letter_suffix_is_preserved,
     ]
     for test in tests:
         test()

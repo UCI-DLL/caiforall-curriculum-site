@@ -373,6 +373,15 @@ def thumbnail_url(file_id: str) -> str:
     return f"https://drive.google.com/thumbnail?id={file_id}&sz=w1200"
 
 
+def local_image_asset(asset_path: str) -> str:
+    """Return the public local path when a CMS image is bundled in the repo."""
+    normalized = "/".join(part for part in clean(asset_path).strip("/").split("/") if part)
+    if not normalized:
+        return ""
+    relative = Path("content") / "drive-image-library" / normalized
+    return relative.as_posix() if (ROOT / relative).is_file() else ""
+
+
 def image_url(value: str, asset_path: str = "", resolve_drive_paths: bool = True) -> str:
     value = clean(value)
     asset_path = clean(asset_path)
@@ -385,6 +394,9 @@ def image_url(value: str, asset_path: str = "", resolve_drive_paths: bool = True
         return value
     path = asset_path or value
     if path:
+        local_path = local_image_asset(path)
+        if local_path:
+            return local_path
         if not resolve_drive_paths:
             return path
         return drive_image_resolver().thumbnail_for_path(path)
@@ -603,7 +615,7 @@ def read_google_tables(sheet_id: str | None = None) -> dict[str, list[dict[str, 
     return tables
 
 
-def validate_tables(tables: dict[str, list[dict[str, str]]]) -> list[str]:
+def validate_tables(tables: dict[str, list[dict[str, str]]], resolve_images: bool = True) -> list[str]:
     errors: list[str] = []
     for table, columns in REQUIRED_COLUMNS.items():
         if table not in tables:
@@ -688,7 +700,7 @@ def validate_tables(tables: dict[str, list[dict[str, str]]]) -> list[str]:
                 errors.append(
                     f"{row_label(table, index)}: image link must start with http:// or https:// unless GOOGLE_DRIVE_IMAGE_ROOT_ID is set."
                 )
-            elif asset_path and not drive_image_resolver().configured() and not value:
+            elif resolve_images and asset_path and not local_image_asset(asset_path) and not drive_image_resolver().configured() and not value:
                 errors.append(f"{row_label(table, index)}: image_asset_path requires GOOGLE_DRIVE_IMAGE_ROOT_ID.")
 
     return errors
@@ -699,7 +711,7 @@ def sorted_rows(rows: Iterable[dict[str, str]], table: str, errors: list[str]) -
 
 
 def build_content(tables: dict[str, list[dict[str, str]]], resolve_images: bool = True) -> SiteContent:
-    errors = validate_tables(tables)
+    errors = validate_tables(tables, resolve_images=resolve_images)
     if errors:
         raise ContentError("Content validation failed:\n" + "\n".join(f"- {error}" for error in errors))
 
