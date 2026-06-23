@@ -14,7 +14,7 @@ PAGES = [
     ("act1", "act-1.html", "ACT 1", "published", 1),
     ("act2", "act-2.html", "ACT 2", "published", 2),
     ("act3", "act-3.html", "ACT 3", "published", 3),
-    ("act4", "act-4.html", "Coding+AI", "published", 4),
+    ("act4", "act-4.html", "Computing+AI", "published", 4),
     ("scratch", "scratch-basics.html", "Scratch Basics", "published", 5),
 ]
 

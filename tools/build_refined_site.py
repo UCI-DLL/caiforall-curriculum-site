@@ -505,7 +505,7 @@ def render_pd(pages: list[Page]) -> str:
               <legend>Project you are interested in <span class="required-star">*</span></legend>
               <label><input name="entry.1791142999" type="checkbox" value="5th Grade: ACT 3"> 5th Grade: ACT 3</label>
               <label><input name="entry.1791142999" type="checkbox" value="6th-8th: Science+AI"> 6th-8th: Science+AI</label>
-              <label><input name="entry.1791142999" type="checkbox" value="6th-8th: Coding+AI"> 6th-8th: Coding+AI</label>
+              <label><input name="entry.1791142999" type="checkbox" value="6th-8th: Coding+AI"> 6th-8th: Computing+AI</label>
             </fieldset>
             <input type="hidden" name="fvv" value="1">
             <input type="hidden" name="pageHistory" value="0">
@@ -541,7 +541,7 @@ def render_help(pages: list[Page]) -> str:
           <label><input name="entry.1791142999" type="checkbox" value="ACT 1"> ACT 1</label>
           <label><input name="entry.1791142999" type="checkbox" value="ACT 2"> ACT 2</label>
           <label><input name="entry.1791142999" type="checkbox" value="ACT 3"> ACT 3</label>
-          <label><input name="entry.1791142999" type="checkbox" value="Coding+AI"> Coding+AI</label>
+          <label><input name="entry.1791142999" type="checkbox" value="Coding+AI"> Computing+AI</label>
           <label><input name="entry.1791142999" type="checkbox" value="Science+AI"> Science+AI</label>
           <label><input name="entry.1791142999" type="checkbox" value="Scratch Basics"> Scratch Basics</label>
         </fieldset>
