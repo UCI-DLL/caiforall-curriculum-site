@@ -48,6 +48,10 @@ act3,unit-5,Unit 5 Communicating Science,"In this unit, students will create a p
 Craft a message supported by survey findings.
 Build a Scratch PSA that includes a data visualization.
 Reflect on, revise, and share projects with an audience.",5,curricula/act3/units/unit-5-unit-5-communicating-science.png
+act4,unit-0,Unit 0: Optional Block Coding Foundations,"This optional unit gives students a short bridge into block-based coding before they begin the main Computing+AI sequence. It is intended for classes that need extra practice with core ideas such as sequences, events, loops, variables, conditionals, functions, and debugging. The activities should be adapted for the CreatiCode environment, while selected ACT3 Scratch materials can be used as reference versions until CreatiCode-specific lesson plans and starter projects are finalized.","Navigate a block-based coding environment.
+Use sequences, events, and loops to control program behavior.
+Use variables, conditionals, and functions in simple interactive projects.
+Debug code by predicting, running, observing, and revising.",0,curricula/act4/units/unit-1-unit-0-prerequisites.jpg
 act4,unit-1,Unit 1: Introduction,,,1,curricula/act4/units/unit-1-unit-0-prerequisites.jpg
 act4,unit-2,Unit 2: AI-Assisted Creation,,,2,curricula/act4/units/unit-2-unit-1-generative-ai-tools.jpg
 act4,unit-3,Unit 3: Text-Based AI Apps,,,3,curricula/act4/units/unit-3-unit-2-basic-generative-ai-apps.png
