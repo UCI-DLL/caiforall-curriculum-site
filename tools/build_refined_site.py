@@ -234,6 +234,8 @@ def render_objectives(text: str) -> str:
     if not text:
         return ""
     lines = [re.sub(r"^\s*\d+[.)]\s*", "", line).strip() for line in re.split(r"\n+|(?:\s*;\s*)", text) if line.strip()]
+    if len(lines) == 1 and re.search(r"\.\s+[A-Z]", text):
+        lines = [line.strip() for line in re.split(r"(?<=\.)\s+(?=[A-Z])", text) if line.strip()]
     if len(lines) > 1:
         return "<ol>" + "".join(f"<li>{esc(line)}</li>" for line in lines) + "</ol>"
     return f"<p>{esc(text)}</p>"
@@ -284,6 +286,8 @@ def render_unit(unit: Unit, index: int) -> str:
     image = f'<img src="{esc(unit.image.src)}" alt="{esc(unit.image.alt or unit.title)}">' if unit.image and unit.image.src else '<div class="image-placeholder">Curriculum image</div>'
     lessons = "".join(render_lesson(lesson, i == 0) for i, lesson in enumerate(unit.lessons))
     overview = f'<p class="unit-overview">{esc(unit.description)}</p>' if unit.description else ""
+    objectives = render_objectives(unit.objectives)
+    objective_html = f'<div class="unit-learning"><h3>Learning Objectives</h3>{objectives}</div>' if objectives else ""
     hidden = "" if index == 1 else " hidden"
     active = " active" if index == 1 else ""
     return f"""
@@ -294,6 +298,7 @@ def render_unit(unit: Unit, index: int) -> str:
   <div class="unit-main">
     <h2>{esc(unit.title)}</h2>
     {overview}
+    {objective_html}
     {render_resource_links(unit.links, 4)}
     <div class="lessons">{lessons}</div>
   </div>
@@ -303,6 +308,7 @@ def render_unit(unit: Unit, index: int) -> str:
 
 def render_lesson(lesson, open_first: bool) -> str:
     open_attr = " open" if open_first else ""
+    description = f'<p class="lesson-description">{esc(lesson.description)}</p>' if lesson.description else ""
     duration = f'<span class="duration">{esc(lesson.duration)}</span>' if lesson.duration else ""
     objectives = lesson.objective_bullets or []
     objective_heading = "Learning Objective" if len(objectives) == 1 else "Learning Objectives"
@@ -317,6 +323,7 @@ def render_lesson(lesson, open_first: bool) -> str:
 <details class="lesson"{open_attr}>
   <summary class="lesson-summary">{esc(lesson.title)}</summary>
   <div class="lesson-body">
+    {description}
     {objective_html}
     {duration}
     {render_resource_links(lesson.links, 6)}
