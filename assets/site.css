@@ -576,6 +576,12 @@ img {
   margin: 0 0 14px;
 }
 
+.unit-learning {
+  padding: 14px 16px;
+  border-left: 5px solid var(--gold);
+  background: var(--cream);
+}
+
 .unit-learning p,
 .lesson-objectives p {
   margin-bottom: 6px;
@@ -700,6 +706,11 @@ img {
 
 .lesson-body {
   padding: 0 24px 24px 68px;
+  color: #333;
+}
+
+.lesson-description {
+  margin: 0 0 12px;
   color: #333;
 }
 
