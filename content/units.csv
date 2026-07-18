@@ -58,6 +58,9 @@ act4,unit-3,Unit 3: Text-Based AI Apps,,,3,curricula/act4/units/unit-3-unit-2-ba
 act4,unit-4,Unit 4: Voice & Vision AI Apps,,,4,curricula/act4/units/unit-4-unit-3-voice-and-vision-ai-apps.png
 act4,unit-5a,Unit 5A: Advanced AI Apps,,,5,curricula/act4/units/unit-5-unit-4-advanced-generative-ai-apps.jpg
 act4,unit-5b,Unit 5B: Agentic Coding Tools,,,6,curricula/act4/units/unit-6-unit-5-advanced-ai-topics.jpg
+ai_literacy,unit-1,Unit 1: How AI Works,"Students investigate how AI generates answers through prediction, how training data can introduce bias, and why confident-sounding answers still need to be checked.","Explain next-word prediction and the data-to-prediction pipeline.
+Connect one-sided training data to biased outcomes.
+Identify reasons to double-check AI-generated answers.",1,
 scratch,unit-1,Overview,,,1,curricula/scratch/units/unit-1-overview.jpg
 scratch,unit-2,Scratch Projects and Lessons,This section provides example lessons of how Scratch can be used in the classroom across the curriculum. These projects support students in developing their computational thinking and language abilities.,,2,curricula/scratch/units/unit-2-scratch-projects-and-lessons.png
 scratch,unit-3,Change-Maker Project,Students research people who have made an impact in the world. Students create a project that teaches others about the change maker of their choice and the impact they made. Duration: 10 hours,,3,curricula/scratch/units/unit-3-change-maker-project.png
