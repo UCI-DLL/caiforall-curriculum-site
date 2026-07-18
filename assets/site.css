@@ -827,8 +827,16 @@ img {
 
 .home-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 18px;
+}
+
+.home-grid .pathway-card {
+  grid-column: span 4;
+}
+
+.home-grid .pathway-card:nth-child(n + 4) {
+  grid-column: span 3;
 }
 
 .pathway-card {
@@ -1422,6 +1430,11 @@ img {
 
   .home-grid {
     grid-template-columns: 1fr;
+  }
+
+  .home-grid .pathway-card,
+  .home-grid .pathway-card:nth-child(n + 4) {
+    grid-column: auto;
   }
 
   .pd-card-grid {
