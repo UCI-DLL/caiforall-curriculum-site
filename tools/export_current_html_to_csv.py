@@ -21,7 +21,7 @@ PAGES = [
 HOMEPAGE_EXTRA = [
     {
         "curriculum_id": "science_inquiry_studio",
-        "title": "Science+AI",
+        "title": "Science Inquiry Studio",
         "description": "A new curriculum pathway for science investigation, data-rich inquiry, and classroom-ready exploration.",
         "bullet_points": "",
         "status_label": "In development",

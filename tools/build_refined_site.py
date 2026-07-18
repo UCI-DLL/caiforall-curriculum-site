@@ -405,7 +405,7 @@ def render_development_page(page: Page, all_pages: list[Page]) -> str:
     </section>
     <section class="development-panel curriculum-block">
       <h2>Pathway Overview</h2>
-      <p>Science+AI is being designed as a middle school pathway for science investigation, data-rich inquiry, and AI-assisted coding. The curriculum will support learners in using computing to ask questions, model systems, analyze evidence, and communicate scientific ideas.</p>
+      <p>Science Inquiry Studio is being designed as a middle school pathway for science investigation, data-rich inquiry, and AI-assisted coding. The curriculum will support learners in using computing to ask questions, model systems, analyze evidence, and communicate scientific ideas.</p>
       <ul class="card-bullets">
         <li>Grades 6–8</li>
         <li>Aligned with NGSS middle school standards</li>
@@ -511,7 +511,7 @@ def render_pd(pages: list[Page]) -> str:
             <fieldset data-required-group="entry.1791142999">
               <legend>Project you are interested in <span class="required-star">*</span></legend>
               <label><input name="entry.1791142999" type="checkbox" value="5th Grade: ACT 3"> 5th Grade: ACT 3</label>
-              <label><input name="entry.1791142999" type="checkbox" value="6th-8th: Science+AI"> 6th-8th: Science+AI</label>
+              <label><input name="entry.1791142999" type="checkbox" value="6th-8th: Science Inquiry Studio"> 6th-8th: Science Inquiry Studio</label>
               <label><input name="entry.1791142999" type="checkbox" value="6th-8th: Coding+AI"> 6th-8th: Computing+AI</label>
             </fieldset>
             <input type="hidden" name="fvv" value="1">
@@ -549,7 +549,7 @@ def render_help(pages: list[Page]) -> str:
           <label><input name="entry.1791142999" type="checkbox" value="ACT 2"> ACT 2</label>
           <label><input name="entry.1791142999" type="checkbox" value="ACT 3"> ACT 3</label>
           <label><input name="entry.1791142999" type="checkbox" value="Coding+AI"> Computing+AI</label>
-          <label><input name="entry.1791142999" type="checkbox" value="Science+AI"> Science+AI</label>
+          <label><input name="entry.1791142999" type="checkbox" value="Science Inquiry Studio"> Science Inquiry Studio</label>
           <label><input name="entry.1791142999" type="checkbox" value="Scratch Basics"> Scratch Basics</label>
         </fieldset>
         <label>Unit &amp; Lesson <span class="required-star">*</span><input name="entry.1884896097" type="text" placeholder="Example: 2.3, Lesson 2.3, Unit 2 Lesson 2.3" required></label>
