@@ -801,7 +801,7 @@ def build_content(tables: dict[str, list[dict[str, str]]], resolve_images: bool 
                 status_label=row.get("status_label", ""),
                 image=image,
                 button_label=row.get("button_label", ""),
-                page=page if page and page.status.lower() == "published" else None,
+                page=page,
             )
         )
         if page and row.get("bullet_points"):

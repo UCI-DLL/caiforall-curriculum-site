@@ -343,14 +343,21 @@ def render_home_card(card: HomeCard) -> str:
         image = f'<img src="{esc(card.image.src)}" alt="{esc(card.image.alt or card.title)}">'
     else:
         image = f'<div class="upcoming-art">{esc(card.title)}</div>'
+    if card.page:
+        target = esc(card.page.file)
+        image = f'<a class="card-media-link" href="{target}">{image}</a>'
+        title = f'<h3><a class="card-title-link" href="{target}">{esc(card.title)}</a></h3>'
+    else:
+        title = f'<h3>{esc(card.title)}</h3>'
     status_class = ""
     if card.status_label.lower() == "supplementary":
         status_class = " status-chip-supplementary"
     elif card.status_label.lower() == "in development":
         status_class = " status-chip-development"
     status = f'<span class="status-chip{status_class}">{esc(card.status_label)}</span>' if card.status_label else ""
-    button = f'<a class="btn outline" href="{esc(card.page.file)}">{esc(card.button_label or "Explore Curriculum")}</a>' if card.page else ""
-    upcoming_class = " upcoming" if not card.page else ""
+    is_published = bool(card.page and card.page.status.lower() == "published")
+    button = f'<a class="btn outline" href="{esc(card.page.file)}">{esc(card.button_label or "Explore Curriculum")}</a>' if is_published else ""
+    upcoming_class = " upcoming" if not is_published else ""
     summary = (
         '<ul class="card-bullets">' + "".join(f"<li>{esc(point)}</li>" for point in card.bullet_points) + "</ul>"
         if card.bullet_points
@@ -359,7 +366,7 @@ def render_home_card(card: HomeCard) -> str:
     return f"""
 <article class="pathway-card{upcoming_class}">
   {image}
-  <h3>{esc(card.title)}</h3>
+  {title}
   {status}
   {summary}
   {button}
