@@ -247,11 +247,21 @@ def short_unit_title(title: str) -> str:
 
 
 def render_curriculum(page: Page, all_pages: list[Page]) -> str:
-    tabs = "".join(
+    show_lessons_directly = page.id == "ai_literacy" and len(page.units) == 1
+    tabs = "" if show_lessons_directly else "".join(
         f'<button class="unit-tab{" active" if i == 0 else ""}" id="unit-tab-{i+1}" type="button" data-unit-target="unit-{i+1}" role="tab" aria-controls="unit-{i+1}" aria-selected="{"true" if i == 0 else "false"}">{esc(short_unit_title(unit.title))}</button>'
         for i, unit in enumerate(page.units)
     )
-    unit_html = "".join(render_unit(unit, i + 1) for i, unit in enumerate(page.units))
+    unit_html = (
+        render_unit(page.units[0], 1, heading="Lessons", standalone=True)
+        if show_lessons_directly
+        else "".join(render_unit(unit, i + 1) for i, unit in enumerate(page.units))
+    )
+    tabs_html = "" if show_lessons_directly else f"""
+      <div class="unit-tabs" role="tablist" aria-label="Curriculum units">
+        {tabs}
+      </div>"""
+    unit_browser_attr = "" if show_lessons_directly else " data-unit-browser"
     resource_links = render_quick_resources(page.links)
     resource_bar = f"""
     <section class="teacher-resources curriculum-block">
@@ -268,10 +278,8 @@ def render_curriculum(page: Page, all_pages: list[Page]) -> str:
       <h1>{esc(display_title(page.heading))}</h1>
       <p>{esc(page.summary)}</p>
     </section>
-    <section class="unit-browser curriculum-block" data-unit-browser>
-      <div class="unit-tabs" role="tablist" aria-label="Curriculum units">
-        {tabs}
-      </div>
+    <section class="unit-browser curriculum-block"{unit_browser_attr}>
+      {tabs_html}
       <div class="unit-panels">
         {unit_html}
       </div>
@@ -282,21 +290,23 @@ def render_curriculum(page: Page, all_pages: list[Page]) -> str:
 """ + footer()
 
 
-def render_unit(unit: Unit, index: int) -> str:
+def render_unit(unit: Unit, index: int, heading: str | None = None, standalone: bool = False) -> str:
     image = f'<img src="{esc(unit.image.src)}" alt="{esc(unit.image.alt or unit.title)}">' if unit.image and unit.image.src else '<div class="image-placeholder">Curriculum image</div>'
     lessons = "".join(render_lesson(lesson, i == 0) for i, lesson in enumerate(unit.lessons))
     overview = f'<p class="unit-overview">{esc(unit.description)}</p>' if unit.description else ""
     objectives = render_objectives(unit.objectives)
     objective_html = f'<div class="unit-learning"><h3>Learning Objectives</h3>{objectives}</div>' if objectives else ""
-    hidden = "" if index == 1 else " hidden"
-    active = " active" if index == 1 else ""
+    hidden = "" if standalone or index == 1 else " hidden"
+    active = "" if standalone else (" active" if index == 1 else "")
+    panel_class = f"unit-card{' unit-panel' if not standalone else ''}{active}"
+    panel_attrs = f'id="unit-{index}"' if standalone else f'id="unit-{index}" role="tabpanel" aria-labelledby="unit-tab-{index}"'
     return f"""
-<section class="unit-card unit-panel{active}" id="unit-{index}" role="tabpanel" aria-labelledby="unit-tab-{index}"{hidden}>
+<section class="{panel_class}" {panel_attrs}{hidden}>
   <aside class="unit-media">
     {image}
   </aside>
   <div class="unit-main">
-    <h2>{esc(unit.title)}</h2>
+    <h2>{esc(heading or unit.title)}</h2>
     {overview}
     {objective_html}
     {render_resource_links(unit.links, 4)}
