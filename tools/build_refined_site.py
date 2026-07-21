@@ -23,6 +23,7 @@ CONTACT_EMAIL = "ECforALL@uci.edu"
 CREATICODE_EMAIL = "info@creaticode.com"
 FEEDBACK_URL = "https://bit.ly/ECforALLfeedback"
 ASSET_VERSION = "20260519-footer"
+FAVICON_VERSION = "20260721-favicon"
 LOCALIZED_IMAGE_CACHE: dict[str, str] = {}
 
 
@@ -136,6 +137,9 @@ def page_head(title: str) -> str:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{esc(title)} | {esc(SITE_TITLE)}</title>
+  <link rel="icon" href="favicon.ico?v={FAVICON_VERSION}" sizes="any">
+  <link rel="icon" type="image/png" href="assets/favicon.png?v={FAVICON_VERSION}">
+  <link rel="shortcut icon" href="favicon.ico?v={FAVICON_VERSION}">
   <link rel="stylesheet" href="assets/site.css?v={ASSET_VERSION}">
 </head>
 <body>
@@ -257,8 +261,7 @@ def render_curriculum(page: Page, all_pages: list[Page]) -> str:
         if show_lessons_directly
         else "".join(render_unit(unit, i + 1) for i, unit in enumerate(page.units))
     )
-    tabs_html = "" if show_lessons_directly else f"""
-      <div class="unit-tabs" role="tablist" aria-label="Curriculum units">
+    tabs_html = "" if show_lessons_directly else f"""<div class="unit-tabs" role="tablist" aria-label="Curriculum units">
         {tabs}
       </div>"""
     unit_browser_attr = "" if show_lessons_directly else " data-unit-browser"
