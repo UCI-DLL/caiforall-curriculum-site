@@ -57,7 +57,7 @@ act4,unit-2,Unit 2: AI-Assisted Creation,,,2,curricula/act4/units/unit-2-unit-1-
 act4,unit-3,Unit 3: Text-Based AI Apps,,,3,curricula/act4/units/unit-3-unit-2-basic-generative-ai-apps.png
 act4,unit-4,Unit 4: Voice & Vision AI Apps,,,4,curricula/act4/units/unit-4-unit-3-voice-and-vision-ai-apps.png
 act4,unit-5a,Unit 5A: Advanced AI Apps,,,5,curricula/act4/units/unit-5-unit-4-advanced-generative-ai-apps.jpg
-act4,unit-5b,Unit 5B: Agentic Coding Tools,,,6,curricula/act4/units/unit-6-unit-5-advanced-ai-topics.jpg
+act4,unit-5b,Unit 5B: Agentic Coding Tools,,,6,curricula/act4/units/unit-7-unit-5b-agentic-coding-tools.png
 ai_literacy,unit-1,Unit 1: How AI Works,"Students investigate how AI generates answers through prediction, how training data can introduce bias, and why confident-sounding answers still need to be checked.","Explain next-word prediction and the data-to-prediction pipeline.
 Connect one-sided training data to biased outcomes.
 Identify reasons to double-check AI-generated answers.",1,
