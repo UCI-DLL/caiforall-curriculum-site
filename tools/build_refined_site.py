@@ -158,6 +158,7 @@ def nav(active_file: str, pages: list[Page]) -> str:
     curricula_links = "\n".join(f'<a href="{local_href(page.file)}">{esc(display_title(page.title))}</a>' for page in pages if page.status.lower() != "hidden")
     home_class = ' aria-current="page"' if active_file == "index.html" else ""
     pd_class = ' aria-current="page"' if active_file == "pd.html" else ""
+    media_class = ' aria-current="page"' if active_file == "media.html" else ""
     about_class = ' aria-current="page"' if active_file in {"about.html", "team.html"} else ""
     about_overview_class = ' aria-current="page"' if active_file == "about.html" else ""
     team_class = ' aria-current="page"' if active_file == "team.html" else ""
@@ -173,6 +174,7 @@ def nav(active_file: str, pages: list[Page]) -> str:
         <div class="dropdown-menu">{curricula_links}</div>
       </div>
       <a href="{local_href("pd.html")}"{pd_class}>PD</a>
+      <a href="{local_href("media.html")}"{media_class}>Media</a>
       <div class="dropdown">
         <button class="dropdown-toggle" type="button"{about_class}>About</button>
         <div class="dropdown-menu"><a href="{PROJECT_URL}" target="_blank" rel="noopener">CAIforAll Project</a>
@@ -276,13 +278,6 @@ def render_curriculum(page: Page, all_pages: list[Page]) -> str:
         {resource_links}
       </div>
     </section>""" if page.links else ""
-    introduction_video = f"""    <section class="curriculum-block" aria-labelledby="computing-ai-video-title" style="width:min(820px, 100%);padding:clamp(16px, 2.2vw, 26px);">
-      <h2 id="computing-ai-video-title" style="margin:0 0 18px;text-align:center;font-size:clamp(24px, 3vw, 32px);line-height:1.2;">Computing+AI Curriculum Overview</h2>
-      <div class="video-embed" style="position:relative;overflow:hidden;width:100%;margin:0 auto;border:1px solid rgba(31, 42, 68, .12);border-radius:16px;background:#1f2a44;box-shadow:0 12px 28px rgba(31, 42, 68, .14);aspect-ratio:16 / 9;">
-        <iframe src="{COMPUTING_AI_VIDEO_EMBED_URL}" title="Computing+AI curriculum overview video" allow="autoplay; fullscreen" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>
-      </div>
-    </section>
-""" if page.id == "act4" else ""
     return page_head(page.title) + nav(page.file, all_pages) + f"""
 <main>
   <div class="page-shell">
@@ -291,13 +286,31 @@ def render_curriculum(page: Page, all_pages: list[Page]) -> str:
       <h1>{esc(display_title(page.heading))}</h1>
       <p>{esc(page.summary)}</p>
     </section>
-{introduction_video}    <section class="unit-browser curriculum-block"{unit_browser_attr}>
+    <section class="unit-browser curriculum-block"{unit_browser_attr}>
       {tabs_html}
       <div class="unit-panels">
         {unit_html}
       </div>
     </section>
     {resource_bar}
+  </div>
+</main>
+""" + footer()
+
+
+def render_media(pages: list[Page]) -> str:
+    return page_head("Media") + nav("media.html", pages) + f"""
+<main>
+  <div class="page-shell">
+    <section class="curriculum-hero">
+      <h1>Media</h1>
+    </section>
+    <section class="curriculum-block" aria-labelledby="computing-ai-video-title" style="width:min(820px, 100%);padding:clamp(16px, 2.2vw, 26px);">
+      <h2 id="computing-ai-video-title" style="margin:0 0 18px;text-align:center;font-size:clamp(24px, 3vw, 32px);line-height:1.2;">Computing+AI Curriculum Overview</h2>
+      <div class="video-embed" style="position:relative;overflow:hidden;width:100%;margin:0 auto;border:1px solid rgba(31, 42, 68, .12);border-radius:16px;background:#1f2a44;box-shadow:0 12px 28px rgba(31, 42, 68, .14);aspect-ratio:16 / 9;">
+        <iframe src="{COMPUTING_AI_VIDEO_EMBED_URL}" title="Computing+AI curriculum video" allow="autoplay; fullscreen" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>
+      </div>
+    </section>
   </div>
 </main>
 """ + footer()
@@ -625,8 +638,9 @@ def main() -> None:
     (ROOT / "about.html").write_text(render_about(content.pages), encoding="utf-8")
     (ROOT / "team.html").write_text(render_team(content.pages), encoding="utf-8")
     (ROOT / "pd.html").write_text(render_pd(content.pages), encoding="utf-8")
+    (ROOT / "media.html").write_text(render_media(content.pages), encoding="utf-8")
     (ROOT / "help.html").write_text(render_help(content.pages), encoding="utf-8")
-    print(f"Built {len(content.pages) + 3} pages from structured content")
+    print(f"Built {len(content.pages) + 6} pages from structured content")
 
 
 if __name__ == "__main__":
