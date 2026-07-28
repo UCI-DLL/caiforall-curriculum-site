@@ -164,7 +164,7 @@ def nav(active_file: str, pages: list[Page]) -> str:
     return f"""
 <header class="site-header">
   <div class="nav-inner">
-    <a class="brand" href="{local_href("index.html")}"><img alt="" src="{logo}"><span>{esc(HEADER_TITLE)}</span></a>
+    <a class="brand" href="{PROJECT_URL}"><img alt="" src="{logo}"><span>{esc(HEADER_TITLE)}</span></a>
     <nav class="site-nav" aria-label="Site">
       <a href="{local_href("index.html")}"{home_class}>Home</a>
       <div class="dropdown">
