@@ -276,9 +276,9 @@ def render_curriculum(page: Page, all_pages: list[Page]) -> str:
         {resource_links}
       </div>
     </section>""" if page.links else ""
-    introduction_video = f"""    <section class="curriculum-block" aria-labelledby="computing-ai-video-title">
-      <h2 id="computing-ai-video-title">Computing+AI Curriculum Overview</h2>
-      <div class="video-embed" style="position:relative;overflow:hidden;width:100%;margin:22px 0 0;border:1px solid rgba(31, 42, 68, .12);border-radius:20px;background:#1f2a44;box-shadow:0 12px 28px rgba(31, 42, 68, .14);aspect-ratio:16 / 9;">
+    introduction_video = f"""    <section class="curriculum-block" aria-labelledby="computing-ai-video-title" style="width:min(820px, 100%);padding:clamp(16px, 2.2vw, 26px);">
+      <h2 id="computing-ai-video-title" style="margin:0 0 18px;text-align:center;font-size:clamp(24px, 3vw, 32px);line-height:1.2;">Computing+AI Curriculum Overview</h2>
+      <div class="video-embed" style="position:relative;overflow:hidden;width:100%;margin:0 auto;border:1px solid rgba(31, 42, 68, .12);border-radius:16px;background:#1f2a44;box-shadow:0 12px 28px rgba(31, 42, 68, .14);aspect-ratio:16 / 9;">
         <iframe src="{COMPUTING_AI_VIDEO_EMBED_URL}" title="Computing+AI curriculum overview video" allow="autoplay; fullscreen" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>
       </div>
     </section>
