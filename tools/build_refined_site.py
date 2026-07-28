@@ -24,6 +24,7 @@ CREATICODE_EMAIL = "info@creaticode.com"
 FEEDBACK_URL = "https://bit.ly/ECforALLfeedback"
 ASSET_VERSION = "20260519-footer"
 FAVICON_VERSION = "20260721-favicon"
+SCIENCE_INQUIRY_STUDIO_IMAGE = "content/drive-image-library/curricula/science-inquiry-studio-activity-gallery.jpg"
 SCIENCE_INQUIRY_STUDIO_VIDEO_EMBED_URL = "https://drive.google.com/file/d/1diF7zR3Dzehxteb8BNUzfhlgY9xVkgo_/preview"
 LOCALIZED_IMAGE_CACHE: dict[str, str] = {}
 
@@ -427,6 +428,7 @@ def render_development_page(page: Page, all_pages: list[Page]) -> str:
     <section class="development-panel curriculum-block">
       <h2>Pathway Overview</h2>
       <p>Science Inquiry Studio is being designed as a middle school pathway for science investigation, data-rich inquiry, and AI-assisted coding. The curriculum will support learners in using computing to ask questions, model systems, analyze evidence, and communicate scientific ideas.</p>
+      <img src="{SCIENCE_INQUIRY_STUDIO_IMAGE}" alt="Science Inquiry Studio activity gallery featuring The Plant Builder and Yellowstone: What Makes Plants Grow?" width="1166" height="590" decoding="async" style="display:block;width:100%;height:auto;margin:22px 0;border:1px solid rgba(31, 42, 68, .12);border-radius:20px;box-shadow:0 12px 28px rgba(31, 42, 68, .14);">
       <div class="video-embed" style="position:relative;overflow:hidden;width:100%;margin:22px 0;border:1px solid rgba(31, 42, 68, .12);border-radius:20px;background:#1f2a44;box-shadow:0 12px 28px rgba(31, 42, 68, .14);aspect-ratio:16 / 9;">
         <iframe src="{SCIENCE_INQUIRY_STUDIO_VIDEO_EMBED_URL}" title="Science Inquiry Studio video" allow="autoplay; fullscreen" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>
       </div>
