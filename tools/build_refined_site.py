@@ -26,6 +26,7 @@ ASSET_VERSION = "20260519-footer"
 FAVICON_VERSION = "20260721-favicon"
 SCIENCE_INQUIRY_STUDIO_IMAGE = "content/drive-image-library/curricula/science-inquiry-studio-activity-gallery.jpg"
 SCIENCE_INQUIRY_STUDIO_VIDEO_EMBED_URL = "https://drive.google.com/file/d/1diF7zR3Dzehxteb8BNUzfhlgY9xVkgo_/preview"
+COMPUTING_AI_VIDEO_EMBED_URL = "https://drive.google.com/file/d/1EoL1eso6JUeuDWGrYqMDcehvSP6Sm7kh/preview"
 LOCALIZED_IMAGE_CACHE: dict[str, str] = {}
 
 
@@ -275,6 +276,13 @@ def render_curriculum(page: Page, all_pages: list[Page]) -> str:
         {resource_links}
       </div>
     </section>""" if page.links else ""
+    introduction_video = f"""    <section class="curriculum-block" aria-labelledby="computing-ai-video-title">
+      <h2 id="computing-ai-video-title">Computing+AI Curriculum Overview</h2>
+      <div class="video-embed" style="position:relative;overflow:hidden;width:100%;margin:22px 0 0;border:1px solid rgba(31, 42, 68, .12);border-radius:20px;background:#1f2a44;box-shadow:0 12px 28px rgba(31, 42, 68, .14);aspect-ratio:16 / 9;">
+        <iframe src="{COMPUTING_AI_VIDEO_EMBED_URL}" title="Computing+AI curriculum overview video" allow="autoplay; fullscreen" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>
+      </div>
+    </section>
+""" if page.id == "act4" else ""
     return page_head(page.title) + nav(page.file, all_pages) + f"""
 <main>
   <div class="page-shell">
@@ -283,7 +291,7 @@ def render_curriculum(page: Page, all_pages: list[Page]) -> str:
       <h1>{esc(display_title(page.heading))}</h1>
       <p>{esc(page.summary)}</p>
     </section>
-    <section class="unit-browser curriculum-block"{unit_browser_attr}>
+{introduction_video}    <section class="unit-browser curriculum-block"{unit_browser_attr}>
       {tabs_html}
       <div class="unit-panels">
         {unit_html}
