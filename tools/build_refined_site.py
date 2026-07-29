@@ -23,6 +23,7 @@ CONTACT_EMAIL = "ECforALL@uci.edu"
 CREATICODE_EMAIL = "info@creaticode.com"
 FEEDBACK_URL = "https://bit.ly/ECforALLfeedback"
 ASSET_VERSION = "20260519-footer"
+RESOURCE_CHOICE_ASSET_VERSION = "20260729-resource-choice"
 FAVICON_VERSION = "20260721-favicon"
 SCIENCE_INQUIRY_STUDIO_IMAGE = "content/drive-image-library/curricula/science-inquiry-studio-activity-gallery.jpg"
 SCIENCE_INQUIRY_STUDIO_VIDEO_EMBED_URL = "https://drive.google.com/file/d/1diF7zR3Dzehxteb8BNUzfhlgY9xVkgo_/preview"
@@ -133,7 +134,7 @@ def is_excluded_resource(label: str) -> bool:
     return normalized in {"creaticode platform", "give feedback", "give feedback form", "feedback form"}
 
 
-def page_head(title: str) -> str:
+def page_head(title: str, asset_version: str = ASSET_VERSION) -> str:
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -143,7 +144,7 @@ def page_head(title: str) -> str:
   <link rel="icon" href="favicon.ico?v={FAVICON_VERSION}" sizes="any">
   <link rel="icon" type="image/png" href="assets/favicon.png?v={FAVICON_VERSION}">
   <link rel="shortcut icon" href="favicon.ico?v={FAVICON_VERSION}">
-  <link rel="stylesheet" href="assets/site.css?v={ASSET_VERSION}">
+  <link rel="stylesheet" href="assets/site.css?v={asset_version}">
 </head>
 <body>
 """
@@ -227,15 +228,65 @@ def render_quick_resources(links: list[Link]) -> str:
     standard = [link for link in selected if not is_spanish_resource(link.label)]
     spanish = [link for link in selected if is_spanish_resource(link.label)]
 
+    def choice_parts(link: Link) -> tuple[str, str] | None:
+        match = re.fullmatch(r"(.+?)\s+(Video|Slides)", link.label.strip(), re.I)
+        if not match:
+            return None
+        return match.group(1).strip(), match.group(2).casefold()
+
+    def items_html(row_links: list[Link]) -> str:
+        choices: dict[str, dict[str, Link | str]] = {}
+        for link in row_links:
+            parts = choice_parts(link)
+            if not parts:
+                continue
+            base, kind = parts
+            group = choices.setdefault(base.casefold(), {"label": base})
+            group[kind] = link
+
+        rendered: list[str] = []
+        completed: set[str] = set()
+        for link in row_links:
+            parts = choice_parts(link)
+            if parts:
+                base, _ = parts
+                key = base.casefold()
+                group = choices[key]
+                if key not in completed and isinstance(group.get("video"), Link) and isinstance(group.get("slides"), Link):
+                    video = group["video"]
+                    slides = group["slides"]
+                    rendered.append(
+                        f'<details class="quick-resource-choice">'
+                        f'<summary>{esc(str(group["label"]))}</summary>'
+                        f'<div class="quick-resource-choice-options" role="group" aria-label="{esc(str(group["label"]))} options">'
+                        f'<a href="{esc(video.href)}" target="_blank" rel="noopener">Watch Video</a>'
+                        f'<a href="{esc(slides.href)}" target="_blank" rel="noopener">View Slides</a>'
+                        f'</div></details>'
+                    )
+                    completed.add(key)
+                    continue
+                if key in completed:
+                    continue
+            rendered.append(
+                f'<a href="{esc(link.href)}" target="_blank" rel="noopener">{esc(link.label)}</a>'
+            )
+        return "".join(rendered)
+
     def row_html(row_links: list[Link], extra_class: str = "") -> str:
         if not row_links:
             return ""
-        return f'<div class="quick-resource-row{extra_class}">' + "".join(
-            f'<a href="{esc(link.href)}" target="_blank" rel="noopener">{esc(link.label)}</a>'
-            for link in row_links
-        ) + "</div>"
+        return f'<div class="quick-resource-row{extra_class}">' + items_html(row_links) + "</div>"
 
     return row_html(standard) + row_html(spanish, " quick-resource-row-spanish")
+
+
+def has_quick_resource_choice(links: list[Link]) -> bool:
+    kinds_by_label: dict[str, set[str]] = {}
+    for link in links:
+        match = re.fullmatch(r"(.+?)\s+(Video|Slides)", link.label.strip(), re.I)
+        if match:
+            kinds_by_label.setdefault(match.group(1).strip().casefold(), set()).add(match.group(2).casefold())
+    return any({"video", "slides"} <= kinds for kinds in kinds_by_label.values())
 
 
 def render_objectives(text: str) -> str:
@@ -278,7 +329,8 @@ def render_curriculum(page: Page, all_pages: list[Page]) -> str:
         {resource_links}
       </div>
     </section>""" if page.links else ""
-    return page_head(page.title) + nav(page.file, all_pages) + f"""
+    asset_version = RESOURCE_CHOICE_ASSET_VERSION if has_quick_resource_choice(page.links) else ASSET_VERSION
+    return page_head(page.title, asset_version) + nav(page.file, all_pages) + f"""
 <main>
   <div class="page-shell">
     <section class="curriculum-hero">
