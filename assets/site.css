@@ -446,6 +446,7 @@ img {
 
 .quick-resource-row {
   display: flex;
+  align-items: flex-start;
   flex-wrap: wrap;
   gap: 10px;
   width: 100%;
@@ -468,7 +469,8 @@ img {
   font-weight: 800;
 }
 
-.quick-resources a {
+.quick-resources a,
+.quick-resource-choice summary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -486,10 +488,53 @@ img {
   box-shadow: 0 4px 12px rgba(31, 42, 68, .06);
 }
 
-.quick-resources a:hover {
+.quick-resources a:hover,
+.quick-resource-choice summary:hover {
   border-color: var(--blue);
   color: var(--blue);
   transform: translateY(-1px);
+}
+
+.quick-resource-choice {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.quick-resource-choice summary {
+  gap: 10px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.quick-resource-choice summary::-webkit-details-marker {
+  display: none;
+}
+
+.quick-resource-choice summary::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  margin: -4px 2px 0 4px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.quick-resource-choice[open] summary::after {
+  margin-top: 4px;
+  transform: rotate(225deg);
+}
+
+.quick-resource-choice-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid rgba(31, 42, 68, .12);
+  border-radius: 18px;
+  background: rgba(238, 244, 248, .72);
 }
 
 .teacher-resources .quick-resources {
@@ -1530,6 +1575,12 @@ img {
     width: 100%;
     flex: none;
     min-width: 0;
+  }
+
+  .quick-resource-choice,
+  .quick-resource-choice summary,
+  .quick-resource-choice-options {
+    width: 100%;
   }
 
   .district-grid,
