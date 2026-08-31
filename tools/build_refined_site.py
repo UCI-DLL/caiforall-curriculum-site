@@ -315,7 +315,14 @@ def render_curriculum(page: Page, all_pages: list[Page]) -> str:
     unit_html = (
         render_unit(page.units[0], 1, heading="Lessons", standalone=True)
         if show_lessons_directly
-        else "".join(render_unit(unit, i + 1) for i, unit in enumerate(page.units))
+        else "".join(
+            render_unit(
+                unit,
+                i + 1,
+                hide_lessons_without_resources=page.id == "act4" and unit.id == "unit-5b",
+            )
+            for i, unit in enumerate(page.units)
+        )
     )
     tabs_html = "" if show_lessons_directly else f"""<div class="unit-tabs" role="tablist" aria-label="Curriculum units">
         {tabs}
@@ -368,9 +375,16 @@ def render_media(pages: list[Page]) -> str:
 """ + footer()
 
 
-def render_unit(unit: Unit, index: int, heading: str | None = None, standalone: bool = False) -> str:
+def render_unit(
+    unit: Unit,
+    index: int,
+    heading: str | None = None,
+    standalone: bool = False,
+    hide_lessons_without_resources: bool = False,
+) -> str:
     image = f'<img src="{esc(unit.image.src)}" alt="{esc(unit.image.alt or unit.title)}">' if unit.image and unit.image.src else '<div class="image-placeholder">Curriculum image</div>'
-    lessons = "".join(render_lesson(lesson, i == 0) for i, lesson in enumerate(unit.lessons))
+    visible_lessons = [lesson for lesson in unit.lessons if lesson.links or not hide_lessons_without_resources]
+    lessons = "".join(render_lesson(lesson, i == 0) for i, lesson in enumerate(visible_lessons))
     overview = f'<p class="unit-overview">{esc(unit.description)}</p>' if unit.description else ""
     objectives = render_objectives(unit.objectives)
     objective_html = f'<div class="unit-learning"><h3>Learning Objectives</h3>{objectives}</div>' if objectives else ""
