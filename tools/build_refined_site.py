@@ -725,7 +725,9 @@ def main() -> None:
         raise SystemExit(1)
 
     for page in content.pages:
-        if page.status.lower() == "published":
+        if page.id == "science_inquiry_studio":
+            (ROOT / page.file).write_text(render_development_page(page, content.pages), encoding="utf-8")
+        elif page.status.lower() == "published":
             (ROOT / page.file).write_text(render_curriculum(page, content.pages), encoding="utf-8")
         elif page.status.lower() == "development":
             (ROOT / page.file).write_text(render_development_page(page, content.pages), encoding="utf-8")
