@@ -28,6 +28,7 @@ FAVICON_VERSION = "20260721-favicon"
 SCIENCE_INQUIRY_STUDIO_IMAGE = "content/drive-image-library/curricula/science-inquiry-studio-activity-gallery.jpg"
 SCIENCE_INQUIRY_STUDIO_VIDEO_EMBED_URL = "https://drive.google.com/file/d/1diF7zR3Dzehxteb8BNUzfhlgY9xVkgo_/preview"
 COMPUTING_AI_VIDEO_EMBED_URL = "https://drive.google.com/file/d/1EoL1eso6JUeuDWGrYqMDcehvSP6Sm7kh/preview"
+SCIENCE_INQUIRY_STUDIO_URL = "https://sinq.studio/"
 LOCALIZED_IMAGE_CACHE: dict[str, str] = {}
 
 
@@ -504,6 +505,34 @@ def render_home(pages: list[Page], cards: list[HomeCard]) -> str:
 
 
 def render_development_page(page: Page, all_pages: list[Page]) -> str:
+    if page.id == "science_inquiry_studio":
+        return page_head(page.title) + nav(page.file, all_pages) + f"""
+<main>
+  <div class="page-shell">
+    <section class="curriculum-hero">
+      <div class="hero-pills">{"".join(f'<span>{esc(pill)}</span>' for pill in hero_pills(page))}</div>
+      <h1>{esc(display_title(page.heading))}</h1>
+      <p>{esc(page.summary)}</p>
+    </section>
+    <section class="development-panel curriculum-block">
+      <h2>Science Inquiry Studio Platform</h2>
+      <p>Science Inquiry Studio supports active science learning with AI-powered activities. Students investigate phenomena, test ideas with simulations, create artifacts, and explain their thinking with evidence while teachers guide the classroom experience.</p>
+      <ul class="card-bullets">
+        <li>Ready-to-use science activity library</li>
+        <li>Teacher-guided AI for classroom inquiry</li>
+        <li>Science learning and AI literacy in one environment</li>
+        <li>Support for games, simulations, 2D and 3D models, visuals, and charts</li>
+      </ul>
+      <p>Use the official platform to browse activities, create classes, assign work, and launch student experiences.</p>
+      <div class="btn-row">
+        <a class="btn" href="{SCIENCE_INQUIRY_STUDIO_URL}" target="_blank" rel="noopener">Open Science Inquiry Studio</a>
+        <a class="btn outline" href="index.html#curricula">Back to Curricular Pathways</a>
+      </div>
+    </section>
+  </div>
+</main>
+""" + footer()
+
     return page_head(page.title) + nav(page.file, all_pages) + f"""
 <main>
   <div class="page-shell">
