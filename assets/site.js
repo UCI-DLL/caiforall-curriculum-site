@@ -73,7 +73,7 @@
     form.addEventListener("submit", (event) => {
       event.preventDefault();
       const data = new FormData(form);
-      const recipient = form.dataset.contactEmail || "ECforALL@uci.edu";
+      const recipient = form.dataset.contactEmail || "caiforall@uci.edu";
       const name = data.get("name") || "";
       const email = data.get("email") || "";
       const curriculum = data.get("curriculum") || "";
