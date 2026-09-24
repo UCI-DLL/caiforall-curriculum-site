@@ -884,6 +884,17 @@ img {
   grid-column: span 3;
 }
 
+.curriculum-contact-note {
+  margin: 24px 0 0;
+  color: var(--muted);
+  font-size: 17px;
+}
+
+.curriculum-contact-note a {
+  color: var(--blue);
+  font-weight: 800;
+}
+
 .pathway-card {
   display: flex;
   min-height: 100%;
