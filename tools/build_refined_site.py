@@ -499,6 +499,7 @@ def render_home(pages: list[Page], cards: list[HomeCard]) -> str:
     <h2>Curricular Pathways</h2>
     <p>Choose the pathway that matches your grade level and learning goals.</p>
     <div class="home-grid">{card_html}</div>
+    <p class="curriculum-contact-note">Have questions about the curriculum? Contact us at <a href="mailto:caiforall@uci.edu">caiforall@uci.edu</a>.</p>
   </div>
 </section>
 """ + footer()
