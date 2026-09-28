@@ -27,7 +27,7 @@ RESOURCE_CHOICE_ASSET_VERSION = "20260729-resource-choice"
 FAVICON_VERSION = "20260721-favicon"
 SCIENCE_INQUIRY_STUDIO_IMAGE = "content/drive-image-library/curricula/science-inquiry-studio-activity-gallery.jpg"
 SCIENCE_INQUIRY_STUDIO_VIDEO_EMBED_URL = "https://drive.google.com/file/d/1diF7zR3Dzehxteb8BNUzfhlgY9xVkgo_/preview"
-COMPUTING_AI_VIDEO_EMBED_URL = "https://drive.google.com/file/d/1EoL1eso6JUeuDWGrYqMDcehvSP6Sm7kh/preview"
+COMPUTING_AI_VIDEO_EMBED_URL = "https://www.youtube-nocookie.com/embed/0ZzRmtUHbZ0"
 SCIENCE_INQUIRY_STUDIO_URL = "https://sinq.studio/"
 LOCALIZED_IMAGE_CACHE: dict[str, str] = {}
 
